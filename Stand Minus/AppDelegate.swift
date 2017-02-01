@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import HealthKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,6 +42,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func applicationShouldRequestHealthAuthorization(_ application: UIApplication) {
+        let store = HKHealthStore()
+        store.handleAuthorizationForExtension { (success, error) in
+            if error == nil {
+                if !success {
+                    print("user cancel the request authorization window")
+                }
+            }
+        }
+    }
 }
 
