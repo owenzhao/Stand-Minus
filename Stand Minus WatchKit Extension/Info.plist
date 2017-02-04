@@ -42,11 +42,11 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>
 	</dict>
-	<key>WKExtensionDelegateClassName</key>
-	<string>$(PRODUCT_MODULE_NAME).ExtensionDelegate</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
+	<key>WKExtensionDelegateClassName</key>
+	<string>$(PRODUCT_MODULE_NAME).ExtensionDelegate</string>
 </dict>
 </plist>

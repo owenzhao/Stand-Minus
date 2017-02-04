@@ -27,6 +27,11 @@
 		DC0831AA1E40A59A00A62520 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0831A91E40A59A00A62520 /* TaskManager.swift */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
 		DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF61E41824D00C7ED60 /* HealthKit.framework */; };
+		DCDAC5B71E43246B004D6F10 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */; };
+		DCDAC5B91E43247D004D6F10 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */; };
+		DCDAC5BF1E4324ED004D6F10 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5BB1E4324ED004D6F10 /* libXG-SDK.a */; };
+		DCDAC5C01E4324EE004D6F10 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = DCDAC5BC1E4324ED004D6F10 /* ReleaseNotes.txt */; };
+		DCDAC5C21E432508004D6F10 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5C11E432508004D6F10 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,8 +92,8 @@
 
 /* Begin PBXFileReference section */
 		DC08314B1E407B7F00A62520 /* Stand Minus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stand Minus.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC08314E1E407B7F00A62520 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DC0831501E407B7F00A62520 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DC08314E1E407B7F00A62520 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		DC0831501E407B7F00A62520 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC0831531E407B8000A62520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DC0831551E407B8000A62520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DC0831581E407B8000A62520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -105,18 +110,26 @@
 		DC08317D1E407B8000A62520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC0831821E407B8000A62520 /* Stand Minus WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Stand Minus WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC0831881E407B8000A62520 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		DC0831891E407B8000A62520 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		DC0831891E407B8000A62520 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = InterfaceController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC08318B1E407B8000A62520 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		DC08318D1E407B8000A62520 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
-		DC08318F1E407B8000A62520 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		DC08318F1E407B8000A62520 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ComplicationController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC0831911E407B8000A62520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DC0831931E407B8000A62520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC0831A71E407CDD00A62520 /* BudgetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetManager.swift; sourceTree = "<group>"; };
-		DC0831A91E40A59A00A62520 /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		DC0831A91E40A59A00A62520 /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TaskManager.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC788AF11E417BD000C7ED60 /* Stand Minus WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		DC788AF31E417BD000C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.1.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		DC788AF51E41824D00C7ED60 /* Stand Minus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus.entitlements"; sourceTree = "<group>"; };
 		DC788AF61E41824D00C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		DCDAC5BB1E4324ED004D6F10 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
+		DCDAC5BC1E4324ED004D6F10 /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
+		DCDAC5BD1E4324ED004D6F10 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
+		DCDAC5BE1E4324ED004D6F10 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
+		DCDAC5C11E432508004D6F10 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		DCDAC5C31E434660004D6F10 /* Stand Minus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stand Minus-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +137,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCDAC5B71E43246B004D6F10 /* CoreTelephony.framework in Frameworks */,
+				DCDAC5B91E43247D004D6F10 /* SystemConfiguration.framework in Frameworks */,
 				DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */,
+				DCDAC5C21E432508004D6F10 /* libz.tbd in Frameworks */,
+				DCDAC5BF1E4324ED004D6F10 /* libXG-SDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,6 +173,7 @@
 		DC0831421E407B7F00A62520 = {
 			isa = PBXGroup;
 			children = (
+				DCDAC5BA1E4324ED004D6F10 /* sdk */,
 				DC08314D1E407B7F00A62520 /* Stand Minus */,
 				DC0831621E407B8000A62520 /* Stand MinusTests */,
 				DC08316D1E407B8000A62520 /* Stand MinusUITests */,
@@ -188,6 +206,7 @@
 				DC0831551E407B8000A62520 /* Assets.xcassets */,
 				DC0831571E407B8000A62520 /* LaunchScreen.storyboard */,
 				DC08315A1E407B8000A62520 /* Info.plist */,
+				DCDAC5C31E434660004D6F10 /* Stand Minus-Bridging-Header.h */,
 			);
 			path = "Stand Minus";
 			sourceTree = "<group>";
@@ -248,10 +267,24 @@
 		DC788AF21E417BD000C7ED60 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DCDAC5C11E432508004D6F10 /* libz.tbd */,
+				DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */,
+				DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */,
 				DC788AF61E41824D00C7ED60 /* HealthKit.framework */,
 				DC788AF31E417BD000C7ED60 /* HealthKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DCDAC5BA1E4324ED004D6F10 /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				DCDAC5BB1E4324ED004D6F10 /* libXG-SDK.a */,
+				DCDAC5BC1E4324ED004D6F10 /* ReleaseNotes.txt */,
+				DCDAC5BD1E4324ED004D6F10 /* XGPush.h */,
+				DCDAC5BE1E4324ED004D6F10 /* XGSetting.h */,
+			);
+			path = sdk;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,9 +392,16 @@
 					DC08314A1E407B7F00A62520 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 96NM39SGJ5;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.HealthKit = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -382,13 +422,24 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 96NM39SGJ5;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes.watchos.app = {
+								enabled = 0;
+							};
+						};
 					};
 					DC0831811E407B8000A62520 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 96NM39SGJ5;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes.watchos.extension = {
+								enabled = 0;
+							};
 							com.apple.HealthKit.watchos = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -422,6 +473,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCDAC5C01E4324EE004D6F10 /* ReleaseNotes.txt in Resources */,
 				DC0831591E407B8000A62520 /* LaunchScreen.storyboard in Resources */,
 				DC0831561E407B8000A62520 /* Assets.xcassets in Resources */,
 				DC0831541E407B8000A62520 /* Main.storyboard in Resources */,
@@ -720,12 +772,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Stand Minus/Stand Minus.entitlements";
 				DEVELOPMENT_TEAM = 96NM39SGJ5;
 				INFOPLIST_FILE = "Stand Minus/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/sdk",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-Minus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Stand Minus/Stand Minus-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -734,12 +793,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Stand Minus/Stand Minus.entitlements";
 				DEVELOPMENT_TEAM = 96NM39SGJ5;
 				INFOPLIST_FILE = "Stand Minus/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/sdk",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-Minus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Stand Minus/Stand Minus-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
