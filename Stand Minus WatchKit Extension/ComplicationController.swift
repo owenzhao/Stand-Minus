@@ -10,6 +10,7 @@ import ClockKit
 import HealthKit
 import WatchKit
 import WatchConnectivity
+import UserNotifications
 
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
@@ -108,6 +109,27 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
     }
     
+    fileprivate func makeLocalNotificationImmediately() { // if not network, this will notify user
+        let center = UNUserNotificationCenter.current()
+        if center.delegate == nil { center.delegate = self }
+        center.getNotificationSettings { (notificationSettings) in
+            let id = UUID().uuidString
+            let content = { () -> UNMutableNotificationContent in
+                let mc = UNMutableNotificationContent()
+                mc.title = NSLocalizedString("Stand Up Notification", comment: "Stand Up Notification Title")
+                mc.body = NSLocalizedString("Please stand up and do some activice for one minute", comment: "Stand Up Notification Body")
+                
+                if notificationSettings.soundSetting == .enabled {
+                    mc.sound = UNNotificationSound.default()
+                }
+                
+                return mc
+            }()
+            let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
+            center.add(request, withCompletionHandler: nil)
+        }
+    }
+    
     /// These methods will no longer be called for clients adopting the WKRefreshBackgroundTask APIs, which are the recommended means of scheduling updates.
     /// In a future release these methods will no longer be called.
     
@@ -137,10 +159,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             NSLog("next whole hour runs.")
             
             handler(fireDate)
-        }
-        
-        func makeLocalNotificationImmediately() {
-            
         }
         
         let data = ComplicationData.shared()
@@ -216,11 +234,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
     }
     
-    // MARK: - notify user
-    func notifyUser() {
-        
-    }
-    
     func updateComplications() {
         let server = CLKComplicationServer.sharedInstance()
         server.activeComplications?.forEach { server.reloadTimeline(for: $0) }
@@ -261,13 +274,19 @@ extension ComplicationController: WCSessionDelegate {
                 query?.start(at: date, completeHandler: { 
                     let data = ComplicationData.shared()
                     if !data.hasStood {
-                        self.notifyUser()
+                        self.makeLocalNotificationImmediately()
                     }
                     self.updateComplications()
                     ExtensionCurrentHourState.shared = .alreadyNotifiedUser
                 })
             }
         }
+    }
+}
+
+extension ComplicationController:UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert,.sound])
     }
 }
 
