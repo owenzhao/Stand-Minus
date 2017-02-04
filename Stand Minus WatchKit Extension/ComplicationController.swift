@@ -13,6 +13,10 @@ import WatchConnectivity
 
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
+    deinit {
+        ComplicationQuery.terminated()
+        ComplicationData.terminate()
+    }
 //    var now = Date()
 //    let cal = Calendar(identifier: .gregorian)
 //    var cps:DateComponents? = nil
@@ -60,7 +64,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         case .modularSmall:
             let now = Date()
             
-            let handler = {
+            let completeHandler = {
                 let data = ComplicationData.shared()
                 handler(data.entry!)
             }
@@ -68,10 +72,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if query == nil {
                 query = ComplicationQuery.shared()
                 
-                query!.start(at: now, completeHandler: handler)
+                query!.start(at: now, completeHandler: completeHandler)
             }
             else {
-                handler()
+                completeHandler()
             }
         default:
             handler(nil)
@@ -94,7 +98,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // This method will be called once per supported complication, and the results will be cached
         switch complication.family {
         case .modularSmall:
-            let provider = CLKSimpleTextProvider(text: "10")
+            let provider = CLKSimpleTextProvider(text: "-")
             let template = CLKComplicationTemplateModularSmallRingText()
             template.textProvider = provider
             
@@ -125,6 +129,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             }
             if self.session.activationState == .activated {
                 self.handler?()
+            }
+            else {
+                self.session.activate()
             }
             
             NSLog("next whole hour runs.")
@@ -296,6 +303,10 @@ class ComplicationData {
         return shared()
     }
     
+    class func terminate() {
+        instance = nil
+    }
+    
     private var _samples:[HKCategorySample] = []
     private var _stoodCount = 0
     private var _hasStood = false
@@ -388,6 +399,10 @@ class ComplicationQuery {
         return instance!
     }
     
+    class func terminated() {
+        instance = nil
+    }
+    
     private var anchor:HKQueryAnchor? = nil
     
     private var lastQueryDate:Date! = nil
@@ -410,54 +425,58 @@ class ComplicationQuery {
     
     func start(at now:Date, completeHandler: @escaping () -> ()) {
         func createPredicate() {
-            func creatAnchorQuery() {
-                anchorQuery = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
-                    if error == nil {
-                        defer {
-                            self.anchor = nextAnchor
-                            completeHandler()
-                            self._shouldUpdateComplication = false
-                        }
-                        
-                        if self.anchor == nil {
-                            defer { self._shouldUpdateComplication = true }
-                            
-                            let data = ComplicationData.invalidate()
-                            data.assign(samples as! [HKCategorySample])
-                            data.update(at: now)
-                        }
-                        else {
-                            let data = ComplicationData.shared()
-                            
-                            if let deletedObjects = deletedObjects, !deletedObjects.isEmpty {
-                                data.delete(deletedObjects)
-                                self._shouldUpdateComplication = true
-                            }
-                            if let samples = samples as? [HKCategorySample] {
-                                data.append(samples)
-                                if !self._shouldUpdateComplication { self._shouldUpdateComplication = true }
-                            }
-                            
-                            if self._shouldUpdateComplication { data.update(at: now) }
-                        }
-                    }
-                }
-            }
-            
             let cps = cal.dateComponents([.year, .month, .day], from: now)
             let midnight = cal.date(from: cps)!
             
             predicate = HKQuery.predicateForSamples(withStart: midnight, end: midnight.addingTimeInterval(24 * 60 * 60), options: .strictStartDate)
-            
-            creatAnchorQuery()
         }
         
-        if anchor == nil || (lastQueryDate != nil && hourOf(lastQueryDate!) != hourOf(now)) {
+        func creatAnchorQuery() {
+            anchorQuery = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
+                if error == nil {
+                    defer {
+                        self.anchor = nextAnchor
+                        completeHandler()
+                        self._shouldUpdateComplication = false
+                    }
+                    
+                    if self.anchor == nil {
+                        defer { self._shouldUpdateComplication = true }
+                        
+                        let data = ComplicationData.invalidate()
+                        data.assign(samples as! [HKCategorySample])
+                        data.update(at: now)
+                    }
+                    else {
+                        let data = ComplicationData.shared()
+                        
+                        if let deletedObjects = deletedObjects, !deletedObjects.isEmpty {
+                            data.delete(deletedObjects)
+                            self._shouldUpdateComplication = true
+                        }
+                        if let samples = samples as? [HKCategorySample] {
+                            data.append(samples)
+                            if !self._shouldUpdateComplication { self._shouldUpdateComplication = true }
+                        }
+                        
+                        if self._shouldUpdateComplication { data.update(at: now) }
+                    }
+                }
+            }
+        }
+        
+        if anchor == nil
+            || (lastQueryDate != nil && hourOf(lastQueryDate!) != hourOf(now))
+            || predicate == nil
+            || anchorQuery == nil
+        {
             lastQueryDate = now
             anchor = nil
             
             createPredicate()
         }
+        
+        creatAnchorQuery()
         
         store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
             if error == nil && success {
