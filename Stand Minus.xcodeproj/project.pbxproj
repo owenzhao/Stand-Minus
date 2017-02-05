@@ -27,11 +27,6 @@
 		DC0831AA1E40A59A00A62520 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0831A91E40A59A00A62520 /* TaskManager.swift */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
 		DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF61E41824D00C7ED60 /* HealthKit.framework */; };
-		DCDAC5B71E43246B004D6F10 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */; };
-		DCDAC5B91E43247D004D6F10 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */; };
-		DCDAC5BF1E4324ED004D6F10 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5BB1E4324ED004D6F10 /* libXG-SDK.a */; };
-		DCDAC5C01E4324EE004D6F10 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = DCDAC5BC1E4324ED004D6F10 /* ReleaseNotes.txt */; };
-		DCDAC5C21E432508004D6F10 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5C11E432508004D6F10 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,10 +119,6 @@
 		DC788AF61E41824D00C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		DCDAC5BB1E4324ED004D6F10 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
-		DCDAC5BC1E4324ED004D6F10 /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
-		DCDAC5BD1E4324ED004D6F10 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
-		DCDAC5BE1E4324ED004D6F10 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
 		DCDAC5C11E432508004D6F10 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DCDAC5C31E434660004D6F10 /* Stand Minus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stand Minus-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,11 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCDAC5B71E43246B004D6F10 /* CoreTelephony.framework in Frameworks */,
-				DCDAC5B91E43247D004D6F10 /* SystemConfiguration.framework in Frameworks */,
 				DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */,
-				DCDAC5C21E432508004D6F10 /* libz.tbd in Frameworks */,
-				DCDAC5BF1E4324ED004D6F10 /* libXG-SDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +160,6 @@
 		DC0831421E407B7F00A62520 = {
 			isa = PBXGroup;
 			children = (
-				DCDAC5BA1E4324ED004D6F10 /* sdk */,
 				DC08314D1E407B7F00A62520 /* Stand Minus */,
 				DC0831621E407B8000A62520 /* Stand MinusTests */,
 				DC08316D1E407B8000A62520 /* Stand MinusUITests */,
@@ -274,17 +260,6 @@
 				DC788AF31E417BD000C7ED60 /* HealthKit.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DCDAC5BA1E4324ED004D6F10 /* sdk */ = {
-			isa = PBXGroup;
-			children = (
-				DCDAC5BB1E4324ED004D6F10 /* libXG-SDK.a */,
-				DCDAC5BC1E4324ED004D6F10 /* ReleaseNotes.txt */,
-				DCDAC5BD1E4324ED004D6F10 /* XGPush.h */,
-				DCDAC5BE1E4324ED004D6F10 /* XGSetting.h */,
-			);
-			path = sdk;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -473,7 +448,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCDAC5C01E4324EE004D6F10 /* ReleaseNotes.txt in Resources */,
 				DC0831591E407B8000A62520 /* LaunchScreen.storyboard in Resources */,
 				DC0831561E407B8000A62520 /* Assets.xcassets in Resources */,
 				DC0831541E407B8000A62520 /* Main.storyboard in Resources */,

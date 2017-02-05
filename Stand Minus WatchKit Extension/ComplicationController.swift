@@ -9,7 +9,6 @@
 import ClockKit
 import HealthKit
 import WatchKit
-import WatchConnectivity
 import UserNotifications
 
 
@@ -18,14 +17,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         ComplicationQuery.terminated()
         ComplicationData.terminate()
     }
-//    var now = Date()
-//    let cal = Calendar(identifier: .gregorian)
-//    var cps:DateComponents? = nil
-//    var midNight:Date? = nil
-    fileprivate var query:ComplicationQuery? = nil
+
+    private var isFirstStart = true
+    private var now:Date! = nil
     
-    private let session = WCSession.default()
-    fileprivate var handler:(()->())? = nil
+    fileprivate var query:ComplicationQuery? = nil
     
     // MARK: - Timeline Configuration
     
@@ -56,23 +52,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // Call the handler with the current timeline entry
         NSLog("complication updates")
         
-        if session.delegate == nil {
-            session.delegate = self
-            session.activate()
-        }
-        
         switch complication.family {
         case .modularSmall:
-            let now = Date()
+            now = Date()
             
             let completeHandler = {
                 let data = ComplicationData.shared()
                 handler(data.entry!)
             }
-            
-            if query == nil {
+
+            if isFirstStart {
+                defer { isFirstStart = false }
                 query = ComplicationQuery.shared()
-                
                 query!.start(at: now, completeHandler: completeHandler)
             }
             else {
@@ -138,67 +129,75 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     public func getNextRequestedUpdateDate(handler: @escaping (Date?) -> Swift.Void) {
         NSLog("next request update date runs")
-        let now = Date()
-        let fireDate:Date
+        if now == nil { now = Date() }
         
-        var cps = cal.dateComponents([.year, .month, .day, .hour], from: now)
-        
-        func nextWholeHour() {
-            cps.hour! += 1
-            let fireDate = cal.date(from: cps)!
-            self.handler = {
-                self.session.sendMessage(["whole hour notification":fireDate], replyHandler: nil, errorHandler: nil)
+        func calculateNextFireDate() -> Date {
+            let data = ComplicationData.shared()
+            let cal = Calendar(identifier: .gregorian)
+            
+            func shouldNotifyUser() -> Bool {
+                return data.shouldNotifyUser
             }
-            if self.session.activationState == .activated {
-                self.handler?()
+            func hasStood() -> Bool {
+                return data.hasStood
+            }
+            func nextWholeHour() -> Date {
+                var cps = cal.dateComponents([.year, .month, .day, .hour], from: now)
+                cps.hour! += 1
+                
+                return cal.date(from: cps)!
+            }
+            func currentMinute() -> Int {
+                return cal.component(.minute, from: now)
+            }
+            func notifyUser() {
+                let center = UNUserNotificationCenter.current()
+                if center.delegate == nil { center.delegate = self }
+                center.getNotificationSettings { (notificationSettings) in
+                    let id = UUID().uuidString
+                    let content = { () -> UNMutableNotificationContent in
+                        let mc = UNMutableNotificationContent()
+                        mc.title = NSLocalizedString("Stand Up Notification", comment: "Stand Up Notification Title")
+                        mc.body = NSLocalizedString("Please stand up and do some activice for one minute", comment: "Stand Up Notification Body")
+                        
+                        if notificationSettings.soundSetting == .enabled {
+                            mc.sound = UNNotificationSound.default()
+                        }
+                        
+                        return mc
+                    }()
+                    let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
+                    center.add(request, withCompletionHandler: nil)
+                }
+            }
+            
+            if shouldNotifyUser() || !hasStood() {
+                let minute = currentMinute()
+                switch minute {
+                case 0..<50:
+                    var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+                    cps.minute = 50
+                    let date = cal.date(from: cps)!
+                    ExtensionCurrentHourState.shared = .notNotifyUser
+                    
+                    return date
+                default: //(50..<60)
+                    if ExtensionCurrentHourState.shared != .alreadyNotifyUser {
+                        notifyUser()
+                        ExtensionCurrentHourState.shared = .alreadyNotifyUser
+                    }
+                    return nextWholeHour()
+                }
             }
             else {
-                self.session.activate()
+                return nextWholeHour()
             }
             
-            NSLog("next whole hour runs.")
-            
-            handler(fireDate)
         }
         
-        let data = ComplicationData.shared()
-        if data.hasStood {
-            nextWholeHour()
-        }
-        else {
-            let minute = cal.component(.minute, from: now)
-            switch minute {
-            case 0..<30:
-                cps.minute = 30
-                let fireDate = cal.date(from: cps)!
-                handler(fireDate)
-            case 30..<50:
-                if data.shouldNotifyUser && ExtensionCurrentHourState.shared == .notArrangeRemoteNotification {
-                    cps.minute = 50
-                    fireDate = cal.date(from: cps)!
-                    self.handler = {
-                        self.session.sendMessage(["notify user":fireDate], replyHandler: nil, errorHandler: nil)
-                        ExtensionCurrentHourState.shared = .alreadySetNotification
-                    }
-                    if self.session.activationState == .activated {
-                        self.handler?()
-                    }
-                    handler(fireDate)
-                }
-                else {
-                    nextWholeHour()
-                }
-            case 50..<60:
-                if data.shouldNotifyUser && ExtensionCurrentHourState.shared != .alreadyNotifiedUser {
-                    makeLocalNotificationImmediately()
-                    ExtensionCurrentHourState.shared = .alreadyNotifiedUser
-                }
-                
-                nextWholeHour()
-            default:
-                fatalError()
-            }
-        }
+        let fireDate = calculateNextFireDate()
+        
+        handler(fireDate)
     }
     
     /// This method will be called when you are woken due to a requested update. If your complication data has changed you can
@@ -206,15 +205,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     public func requestedUpdateDidBegin() {
         NSLog("requested update did begin runs")
-        let now = Date()
-        if query == nil {
-            query = ComplicationQuery.shared()
-        }
+        now = Date()
         
         query!.start(at: now) { [unowned self] () -> () in
             if self.query!.shouldUpdateComplication {
                 let server = CLKComplicationServer.sharedInstance()
-                server.activeComplications?.forEach { server.reloadTimeline(for: $0) }
+                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
             }
         }
     }
@@ -225,11 +221,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     public func requestedUpdateBudgetExhausted() {
         NSLog("requested update budget exhausted")
-        let now = Date()
+        now = Date()
+        
         query!.start(at: now) { [unowned self] () -> () in
             if self.query!.shouldUpdateComplication {
                 let server = CLKComplicationServer.sharedInstance()
-                server.activeComplications?.forEach { server.reloadTimeline(for: $0) }
+                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
             }
         }
     }
@@ -240,68 +237,17 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 }
 
-extension ComplicationController: WCSessionDelegate {
-    
-    /** Called when the session has completed activation. If session state is WCSessionActivationStateNotActivated there will be an error with more details. */
-    
-    public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        guard error == nil else { fatalError(error!.localizedDescription) }
-        if session.activationState == .activated {
-            self.handler?()
-            handler = nil
-        }
-    }
-    
-    
-    /** ------------------------- Interactive Messaging ------------------------- */
-    
-    /** Called when the reachable state of the counterpart app changes. The receiver should check the reachable property on receiving this delegate callback. */
-    public func sessionReachabilityDidChange(_ session: WCSession) {
-        
-    }
-    
-    
-    /** Called on the delegate of the receiver. Will be called on startup if the incoming message caused the receiver to launch. */
-    public func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        if let key = message.keys.first, let date = message.values.first as? Date {
-            if key == "whole hour notification" {
-                query?.start(at: date, completeHandler: { 
-                    self.updateComplications()
-                    ExtensionCurrentHourState.shared = .notArrangeRemoteNotification
-                })
-            }
-            else if key == "notify user" {
-                query?.start(at: date, completeHandler: { 
-                    let data = ComplicationData.shared()
-                    if !data.hasStood {
-                        self.makeLocalNotificationImmediately()
-                    }
-                    self.updateComplications()
-                    ExtensionCurrentHourState.shared = .alreadyNotifiedUser
-                })
-            }
-        }
-    }
-}
-
 extension ComplicationController:UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert,.sound])
     }
 }
 
-let cal = Calendar(identifier: .gregorian)
-//func logPrint(_ text:String) {
-//    let now = Date()
-//    print("\(DateFormatter.localizedString(from: now, dateStyle: .medium, timeStyle: .medium)): \(text)")
-//}
-
 enum ExtensionCurrentHourState {
-    case notArrangeRemoteNotification
-    case alreadySetNotification
-    case alreadyNotifiedUser
+    case notNotifyUser
+    case alreadyNotifyUser
     
-    static var shared:ExtensionCurrentHourState = .notArrangeRemoteNotification
+    static var shared:ExtensionCurrentHourState = .notNotifyUser
 }
 
 class ComplicationData {
@@ -317,10 +263,10 @@ class ComplicationData {
         return instance!
     }
     
-    class func invalidate() -> ComplicationData {
-        instance = nil
-        return shared()
-    }
+//    class func invalidate() -> ComplicationData {
+//        instance = nil
+//        return shared()
+//    }
     
     class func terminate() {
         instance = nil
@@ -329,6 +275,7 @@ class ComplicationData {
     private var _samples:[HKCategorySample] = []
     private var _stoodCount = 0
     private var _hasStood = false
+    private let cal = Calendar(identifier: .gregorian)
     
     var sample:[HKCategorySample]? {
         return _samples
@@ -422,6 +369,7 @@ class ComplicationQuery {
         instance = nil
     }
     
+    private var isFirstQuery = true
     private var anchor:HKQueryAnchor? = nil
     
     private var lastQueryDate:Date! = nil
@@ -438,8 +386,8 @@ class ComplicationQuery {
         return _shouldUpdateComplication
     }
     
-    private func hourOf(_ date:Date) -> Int {
-        return cal.component(.hour, from: date)
+    private func dayOf(_ date:Date) -> Int {
+        return cal.component(.day, from: date)
     }
     
     func start(at now:Date, completeHandler: @escaping () -> ()) {
@@ -453,42 +401,45 @@ class ComplicationQuery {
         func creatAnchorQuery() {
             anchorQuery = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
                 if error == nil {
+                    let data = ComplicationData.shared()
+                    
                     defer {
                         self.anchor = nextAnchor
+                        if self._shouldUpdateComplication {
+                            let data = ComplicationData.shared()
+                            data.update(at: now)
+                        }
                         completeHandler()
                         self._shouldUpdateComplication = false
                     }
                     
-                    if self.anchor == nil {
-                        defer { self._shouldUpdateComplication = true }
+                    if self.isFirstQuery {
+                        defer {
+                            self._shouldUpdateComplication = true
+                            self.isFirstQuery = false
+                        }
                         
-                        let data = ComplicationData.invalidate()
+//                        let data = ComplicationData.invalidate()
                         data.assign(samples as! [HKCategorySample])
-                        data.update(at: now)
                     }
                     else {
-                        let data = ComplicationData.shared()
-                        
                         if let deletedObjects = deletedObjects, !deletedObjects.isEmpty {
                             data.delete(deletedObjects)
                             self._shouldUpdateComplication = true
                         }
                         if let samples = samples as? [HKCategorySample] {
                             data.append(samples)
-                            if !self._shouldUpdateComplication { self._shouldUpdateComplication = true }
+                            self._shouldUpdateComplication = true
                         }
-                        
-                        if self._shouldUpdateComplication { data.update(at: now) }
                     }
                 }
             }
         }
         
-        if anchor == nil
-            || (lastQueryDate != nil && hourOf(lastQueryDate!) != hourOf(now))
-            || predicate == nil
-            || anchorQuery == nil
+        if isFirstQuery || (dayOf(lastQueryDate!) != dayOf(now))
         {
+            defer { isFirstQuery = true }
+            
             lastQueryDate = now
             anchor = nil
             

@@ -29,4 +29,48 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         ComplicationQuery.terminated()
         ComplicationData.terminate()
     }
+    
+    func standardPrecedure() {
+        let server = CLKComplicationServer.sharedInstance()
+        let now = Date()
+        let query = ComplicationQuery.shared()
+        
+        func queryStandup() {
+            query.start(at: now) {
+                let hasComplication = _hasComplication()
+                if hasComplication {
+                    updateComplications()
+                }
+                self.updateUI()
+            }
+        }
+        
+        func _hasComplication() -> Bool {
+            if let complications = server.activeComplications, !complications.isEmpty {
+                return true
+            }
+            
+            return false
+        }
+        
+        func updateComplications() {
+            if shouldUpdateComplications() {
+                updateComplicationsNow()
+            }
+        }
+        
+        func shouldUpdateComplications() -> Bool {
+            return query.shouldUpdateComplication
+        }
+        
+        func updateComplicationsNow() {
+            server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
+        }
+        
+        queryStandup()
+    }
+    
+    func updateUI() {
+        
+    }
 }

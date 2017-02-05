@@ -14,12 +14,16 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="update complicaton" id="WQc-EK-BOh">
+                        <label width="136" alignment="left" text="0" textAlignment="right" id="AUt-C6-Gyn"/>
+                        <button width="1" alignment="left" title="count active complications" id="a9n-jO-ury">
                             <connections>
-                                <action selector="updateComplicationButtonClicked" destination="AgC-eL-Hgc" id="BOi-Eg-DD3"/>
+                                <action selector="countActiveComplications" destination="AgC-eL-Hgc" id="1xO-bM-N6A"/>
                             </connections>
                         </button>
                     </items>
+                    <connections>
+                        <outlet property="complicationsCountLabel" destination="AUt-C6-Gyn" id="RAJ-3g-Wxp"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="220" y="345"/>
