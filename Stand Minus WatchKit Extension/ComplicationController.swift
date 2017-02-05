@@ -21,7 +21,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     private var isFirstStart = true
     private var now:Date! = nil
     
-    fileprivate var query:ComplicationQuery? = nil
+    fileprivate let query = ComplicationQuery.shared()
     
     // MARK: - Timeline Configuration
     
@@ -63,8 +63,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
 
             if isFirstStart {
                 defer { isFirstStart = false }
-                query = ComplicationQuery.shared()
-                query!.start(at: now, completeHandler: completeHandler)
+                query.start(at: now, completeHandler: completeHandler)
             }
             else {
                 completeHandler()
@@ -97,27 +96,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             handler(template)
         default:
             handler(nil)
-        }
-    }
-    
-    fileprivate func makeLocalNotificationImmediately() { // if not network, this will notify user
-        let center = UNUserNotificationCenter.current()
-        if center.delegate == nil { center.delegate = self }
-        center.getNotificationSettings { (notificationSettings) in
-            let id = UUID().uuidString
-            let content = { () -> UNMutableNotificationContent in
-                let mc = UNMutableNotificationContent()
-                mc.title = NSLocalizedString("Stand Up Notification", comment: "Stand Up Notification Title")
-                mc.body = NSLocalizedString("Please stand up and do some activice for one minute", comment: "Stand Up Notification Body")
-                
-                if notificationSettings.soundSetting == .enabled {
-                    mc.sound = UNNotificationSound.default()
-                }
-                
-                return mc
-            }()
-            let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
-            center.add(request, withCompletionHandler: nil)
         }
     }
     
@@ -172,7 +150,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 }
             }
             
-            if shouldNotifyUser() || !hasStood() {
+            if shouldNotifyUser() && !hasStood() {
                 let minute = currentMinute()
                 switch minute {
                 case 0..<50:
@@ -208,8 +186,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         NSLog("requested update did begin runs")
         now = Date()
         
-        query!.start(at: now) { [unowned self] () -> () in
-            if self.query!.shouldUpdateComplication {
+        query.start(at: now) { [unowned self] () -> () in
+            if self.query.shouldUpdateComplication {
                 let server = CLKComplicationServer.sharedInstance()
                 server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
             }
@@ -224,8 +202,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         NSLog("requested update budget exhausted")
         now = Date()
         
-        query!.start(at: now) { [unowned self] () -> () in
-            if self.query!.shouldUpdateComplication {
+        query.start(at: now) { [unowned self] () -> () in
+            if self.query.shouldUpdateComplication {
                 let server = CLKComplicationServer.sharedInstance()
                 server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
             }

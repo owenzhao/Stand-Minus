@@ -24,7 +24,6 @@
 		DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08318F1E407B8000A62520 /* ComplicationController.swift */; };
 		DC0831921E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831911E407B8000A62520 /* Assets.xcassets */; };
 		DC0831A81E407CDD00A62520 /* BudgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0831A71E407CDD00A62520 /* BudgetManager.swift */; };
-		DC0831AA1E40A59A00A62520 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0831A91E40A59A00A62520 /* TaskManager.swift */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
 		DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF61E41824D00C7ED60 /* HealthKit.framework */; };
 /* End PBXBuildFile section */
@@ -112,7 +111,6 @@
 		DC0831911E407B8000A62520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DC0831931E407B8000A62520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC0831A71E407CDD00A62520 /* BudgetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetManager.swift; sourceTree = "<group>"; };
-		DC0831A91E40A59A00A62520 /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TaskManager.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC788AF11E417BD000C7ED60 /* Stand Minus WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		DC788AF31E417BD000C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.1.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		DC788AF51E41824D00C7ED60 /* Stand Minus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus.entitlements"; sourceTree = "<group>"; };
@@ -237,7 +235,6 @@
 				DC0831931E407B8000A62520 /* Info.plist */,
 				DC0831871E407B8000A62520 /* Supporting Files */,
 				DC0831A71E407CDD00A62520 /* BudgetManager.swift */,
-				DC0831A91E40A59A00A62520 /* TaskManager.swift */,
 			);
 			path = "Stand Minus WatchKit Extension";
 			sourceTree = "<group>";
@@ -517,7 +514,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC0831AA1E40A59A00A62520 /* TaskManager.swift in Sources */,
 				DC0831A81E407CDD00A62520 /* BudgetManager.swift in Sources */,
 				DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */,
 				DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */,
