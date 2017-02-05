@@ -27,7 +27,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     }
     
     deinit {
-        ComplicationQuery.terminated()
+        ComplicationQuery.terminate()
         ComplicationData.terminate()
     }
     

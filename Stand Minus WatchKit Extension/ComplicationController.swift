@@ -14,7 +14,7 @@ import UserNotifications
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     deinit {
-        ComplicationQuery.terminated()
+        ComplicationQuery.terminate()
         ComplicationData.terminate()
     }
 
@@ -345,7 +345,7 @@ class ComplicationQuery {
         return instance!
     }
     
-    class func terminated() {
+    class func terminate() {
         instance = nil
     }
     
