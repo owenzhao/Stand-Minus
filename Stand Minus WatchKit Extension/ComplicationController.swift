@@ -144,6 +144,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             func nextWholeHour() -> Date {
                 var cps = cal.dateComponents([.year, .month, .day, .hour], from: now)
                 cps.hour! += 1
+                ExtensionCurrentHourState.shared = .alreadyStood
                 
                 return cal.date(from: cps)!
             }
@@ -182,7 +183,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     
                     return date
                 default: //(50..<60)
-                    if ExtensionCurrentHourState.shared != .alreadyNotifyUser {
+                    if ExtensionCurrentHourState.shared == .notNotifyUser {
                         notifyUser()
                         ExtensionCurrentHourState.shared = .alreadyNotifyUser
                     }
@@ -246,6 +247,7 @@ extension ComplicationController:UNUserNotificationCenterDelegate {
 enum ExtensionCurrentHourState {
     case notNotifyUser
     case alreadyNotifyUser
+    case alreadyStood
     
     static var shared:ExtensionCurrentHourState = .notNotifyUser
 }
