@@ -14,19 +14,37 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <label width="136" alignment="left" text="0" textAlignment="right" id="AUt-C6-Gyn"/>
-                        <button width="1" alignment="left" title="count active complications" id="a9n-jO-ury">
+                        <button width="1" alignment="left" title="nows" id="iGl-YO-54d">
                             <connections>
-                                <action selector="countActiveComplications" destination="AgC-eL-Hgc" id="1xO-bM-N6A"/>
+                                <action selector="nowsButtonClicked" destination="AgC-eL-Hgc" id="NCQ-tE-IZ4"/>
                             </connections>
                         </button>
+                        <button width="1" alignment="left" title="firedates" id="uDb-vp-yPy">
+                            <connections>
+                                <action selector="firedatesButtonClicked" destination="AgC-eL-Hgc" id="jT8-Bq-5DI"/>
+                            </connections>
+                        </button>
+                        <table alignment="left" id="sKL-H0-jaV">
+                            <items>
+                                <tableRow identifier="rowType" id="7t2-yq-bqq" customClass="RowType" customModule="Stand_Minus_WatchKit_Extension">
+                                    <group key="rootItem" width="1" height="28" alignment="left" id="Lcf-U7-7mE">
+                                        <items>
+                                            <label width="136" height="45" alignment="left" text="Label" textAlignment="center" id="gh0-4p-UQr"/>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="label" destination="gh0-4p-UQr" id="WWh-fl-DqT"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
                     </items>
                     <connections>
-                        <outlet property="complicationsCountLabel" destination="AUt-C6-Gyn" id="RAJ-3g-Wxp"/>
+                        <outlet property="tableController" destination="sKL-H0-jaV" id="RmD-9y-bs4"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="220" y="345"/>
+            <point key="canvasLocation" x="220" y="382"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
