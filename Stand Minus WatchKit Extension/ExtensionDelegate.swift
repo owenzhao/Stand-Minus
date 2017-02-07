@@ -57,38 +57,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     }
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
-        func arrangeNextBackgroundTaskInCaseDeviceIsLocked(_ now:Date) {
-            func nextWholeHour( cps:inout DateComponents) {
-                cps.hour! += 1
-                cps.minute = 0
-            }
-            
-            let hasComplication = _hasComplication()
-            if hasComplication {
-                var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
-                switch cps.hour! {
-                case 0..<12:
-                    nextWholeHour(cps: &cps)
-                default: // 12...23
-                    switch cps.minute! {
-                    case 0..<50:
-                        cps.minute = 50
-                    default: // 50 - 60
-                        nextWholeHour(cps: &cps)
-                    }
-                }
-                
-                let fireDate = cal.date(from: cps)!
-                arrangeDate.date = fireDate
-                arrangeDates.append(arrangeDate)
-                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
-                    if error == nil {
-                        let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
-                        NSLog("arrange background task at %@", ds)
-                    }
-                }
-            }
-        }
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
         for task in backgroundTasks {
             // Use a switch statement to check the task type
@@ -97,10 +65,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the background task once you’re done.
                 let now = Date()
                 fireDates.append(now)
-                arrangeDate = ArrangeDate(by:"if device locked")
-                arrangeNextBackgroundTaskInCaseDeviceIsLocked(now)
+
+                self.arrangeDate = ArrangeDate(by: "after query")
                 queryStandup(at: now, shouldArrangeBackgroundTask: true)
-                arrangeDate = ArrangeDate(by:"after query")
                 
                 backgroundTask.setTaskCompleted()
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:

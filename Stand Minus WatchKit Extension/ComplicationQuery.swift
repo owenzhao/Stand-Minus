@@ -8,6 +8,7 @@
 
 import Foundation
 import HealthKit
+import WatchKit
 
 
 class ComplicationQuery {
@@ -46,6 +47,41 @@ class ComplicationQuery {
     }
     
     func start(at now:Date, completeHandler: @escaping () -> ()) {
+        func arrangeNextBackgroundTaskWhenDeviceIsLocked() {
+            func nextWholeHour( cps:inout DateComponents) {
+                cps.hour! += 1
+                cps.minute = 0
+            }
+            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+            
+            let hasComplication = delegate._hasComplication()
+            if hasComplication {
+                var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+                switch cps.hour! {
+                case 0..<12:
+                    nextWholeHour(cps: &cps)
+                default: // 12...23
+                    switch cps.minute! {
+                    case 0..<50:
+                        cps.minute = 50
+                    default: // 50 - 60
+                        nextWholeHour(cps: &cps)
+                    }
+                }
+                
+                let fireDate = cal.date(from: cps)!
+                var arrangeDate = ArrangeDate(by:"device is locked")
+                arrangeDate.date = fireDate
+                delegate.arrangeDates.append(arrangeDate)
+                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
+                    if error == nil {
+                        let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
+                        NSLog("arrange background task at %@", ds)
+                    }
+                }
+            }
+        }
+        
         func createPredicate() {
             let cps = cal.dateComponents([.year, .month, .day], from: now)
             let midnight = cal.date(from: cps)!
@@ -86,6 +122,9 @@ class ComplicationQuery {
                             self._shouldUpdateComplication = true
                         }
                     }
+                }
+                else { // device is locked. **query failed, reason: Protected health data is inaccessible**
+                    arrangeNextBackgroundTaskWhenDeviceIsLocked()
                 }
             }
         }
