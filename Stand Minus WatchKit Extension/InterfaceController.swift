@@ -29,6 +29,7 @@ class InterfaceController: WKInterfaceController {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
         
+        delegate.arrangeDate = ArrangeDate(by: "app rearange")
         delegate.arrangeNextBackgroundTask(at: Date())
     }
 
@@ -42,8 +43,8 @@ class InterfaceController: WKInterfaceController {
         tableController.setNumberOfRows(delegate.arrangeDates.count, withRowType: "rowType")
         for index in 0 ..< delegate.arrangeDates.count {
             let row = tableController.rowController(at: index) as! RowType
-            let turple = delegate.arrangeDates[index]
-            row.label.setText("\(turple.0)\n\(dateString(turple.1))")
+            let arrangeDate = delegate.arrangeDates[index]
+            row.label.setText("\(arrangeDate.by)\n\(dateString(arrangeDate.date))")
         }
     }
     

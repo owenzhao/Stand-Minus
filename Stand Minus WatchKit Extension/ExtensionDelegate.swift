@@ -10,6 +10,15 @@ import WatchKit
 import ClockKit
 import UserNotifications
 
+struct ArrangeDate {
+    var date:Date! = nil
+    let by:String
+    
+    init(by:String) {
+        self.by = by
+    }
+}
+
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private let cal = Calendar(identifier: .gregorian)
     
@@ -21,7 +30,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         return false
     }
     
-    var arrangeDates:[(String,Date)] = [] // reason, date
+    var arrangeDate:ArrangeDate! = nil
+    var arrangeDates:[ArrangeDate] = [] // by, date
     var fireDates:[Date] = []
 
     func applicationDidFinishLaunching() {
@@ -69,7 +79,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 }
                 
                 let fireDate = cal.date(from: cps)!
-                self.fireDates.append(fireDate)
+                arrangeDate.date = fireDate
+                arrangeDates.append(arrangeDate)
                 WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
                     if error == nil {
                         let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
@@ -85,12 +96,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
                 let now = Date()
-                var turple = ("if device locked", now)
-                arrangeDates.append(turple)
+                fireDates.append(now)
+                arrangeDate = ArrangeDate(by:"if device locked")
                 arrangeNextBackgroundTaskInCaseDeviceIsLocked(now)
                 queryStandup(at: now, shouldArrangeBackgroundTask: true)
-                turple = ("after query", now)
-                self.arrangeDates.append(turple)
+                arrangeDate = ArrangeDate(by:"after query")
                 
                 backgroundTask.setTaskCompleted()
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
@@ -214,7 +224,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     }
                 }
                 else {
-                    cps.hour! += 12 - total()
+                    cps.hour! += 12 - total() + (hasStood() ? 1 : 0)
                     if cps.hour! > 23 {
                         twelveFiftyInNextDay(cps: &cps)
                     }
@@ -229,7 +239,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
         
         let fireDate = calculateNextFireDate()
-        self.fireDates.append(fireDate)
+        arrangeDate.date = fireDate
+        arrangeDates.append(arrangeDate)
         WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
             if error == nil {
                 let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)

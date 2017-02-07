@@ -57,8 +57,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             if isFirstStart {
                 let now = Date()
                 let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-                let turple = ("first run", now)
-                delegate.arrangeDates.append(turple)
+                delegate.fireDates.append(now)
+                delegate.arrangeDate = ArrangeDate(by:"first run")
                 delegate.arrangeNextBackgroundTask(at: now)
                 
                 query.start(at: now, completeHandler: completeHandler(now) )
