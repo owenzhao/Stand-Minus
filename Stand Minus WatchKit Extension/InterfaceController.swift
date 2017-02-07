@@ -21,11 +21,15 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
+        
+        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: false)
     }
     
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+        
+        delegate.arrangeNextBackgroundTask(at: Date())
     }
 
     // MARK: - UI
@@ -34,12 +38,12 @@ class InterfaceController: WKInterfaceController {
         return DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
     }
     
-    @IBAction func nowsButtonClicked() {
-        tableController.setNumberOfRows(delegate.nows.count, withRowType: "rowType")
-        for index in 0 ..< delegate.nows.count {
+    @IBAction func arrangeDatesButtonClicked() {
+        tableController.setNumberOfRows(delegate.arrangeDates.count, withRowType: "rowType")
+        for index in 0 ..< delegate.arrangeDates.count {
             let row = tableController.rowController(at: index) as! RowType
-            let now = delegate.nows[index]
-            row.label.setText(dateString(now))
+            let turple = delegate.arrangeDates[index]
+            row.label.setText("\(turple.0)\n\(dateString(turple.1))")
         }
     }
     

@@ -14,12 +14,12 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="nows" id="iGl-YO-54d">
+                        <button width="1" alignment="left" title="arrange dates" id="iGl-YO-54d">
                             <connections>
-                                <action selector="nowsButtonClicked" destination="AgC-eL-Hgc" id="NCQ-tE-IZ4"/>
+                                <action selector="arrangeDatesButtonClicked" destination="AgC-eL-Hgc" id="3TT-CA-OK8"/>
                             </connections>
                         </button>
-                        <button width="1" alignment="left" title="firedates" id="uDb-vp-yPy">
+                        <button width="1" alignment="left" title="fire dates" id="uDb-vp-yPy">
                             <connections>
                                 <action selector="firedatesButtonClicked" destination="AgC-eL-Hgc" id="jT8-Bq-5DI"/>
                             </connections>
@@ -27,9 +27,9 @@
                         <table alignment="left" id="sKL-H0-jaV">
                             <items>
                                 <tableRow identifier="rowType" id="7t2-yq-bqq" customClass="RowType" customModule="Stand_Minus_WatchKit_Extension">
-                                    <group key="rootItem" width="1" height="28" alignment="left" id="Lcf-U7-7mE">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="Lcf-U7-7mE">
                                         <items>
-                                            <label width="136" height="45" alignment="left" text="Label" textAlignment="center" id="gh0-4p-UQr"/>
+                                            <label width="1" alignment="left" text="Label" textAlignment="center" numberOfLines="2" id="gh0-4p-UQr"/>
                                         </items>
                                     </group>
                                     <connections>
