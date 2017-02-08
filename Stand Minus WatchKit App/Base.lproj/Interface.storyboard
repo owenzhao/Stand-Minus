@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
-    <device id="watch42" orientation="portrait">
+    <device id="watch38" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -51,9 +51,9 @@
             <objects>
                 <notificationController id="YCC-NB-fut">
                     <items>
-                        <label alignment="left" text="Alert Label" id="IdU-wH-bcW"/>
+                        <label width="1" alignment="left" text="Alert Label" numberOfLines="8" id="IdU-wH-bcW"/>
                     </items>
-                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <notificationCategory key="notificationCategory" identifier="notify_user_category" id="JfB-70-Muf"/>
                     <color key="backgroundColor" red="0.098417662084102631" green="0.29838591814041138" blue="0.66122227907180786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="notificationAlertLabel" destination="IdU-wH-bcW" id="JKC-fr-R95"/>
@@ -66,12 +66,12 @@
         <!--Notification Controller-->
         <scene sceneID="ZPc-GJ-vnh">
             <objects>
-                <controller id="4sK-HA-Art" customClass="NotificationController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
+                <controller spacing="4" id="4sK-HA-Art" customClass="NotificationController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
                     <items>
                         <label alignment="left" text="Title" id="wkK-ml-v5L">
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <label alignment="left" text="Body" id="fVF-Ur-ZQq"/>
+                        <label width="1" alignment="left" text="Body" numberOfLines="8" id="fVF-Ur-ZQq"/>
                     </items>
                     <color key="backgroundColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>

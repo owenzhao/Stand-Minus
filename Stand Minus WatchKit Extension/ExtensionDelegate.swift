@@ -38,6 +38,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
         NSLog("app did finish launching")
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
+            if error == nil && success {
+                
+            }
+        }
     }
 
     func applicationDidBecomeActive() {
@@ -129,6 +135,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         let mc = UNMutableNotificationContent()
                         mc.title = NSLocalizedString("Stand Up!", comment: "Stand Up Notification Title")
                         mc.body = NSLocalizedString("Class begins!(Err, no...) Please do some activity for at least one minute.", comment: "Stand Up Notification Body")
+                        mc.categoryIdentifier = "notify_user_category"
                         
                         if notificationSettings.soundSetting == .enabled {
                             mc.sound = UNNotificationSound.default()
