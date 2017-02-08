@@ -22,15 +22,15 @@ class InterfaceController: WKInterfaceController {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
         
-        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: false)
+//        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: false)
     }
     
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
         
-        delegate.arrangeDate = ArrangeDate(by: "app rearange")
-        delegate.arrangeNextBackgroundTask(at: Date())
+//        delegate.arrangeDate = ArrangeDate(by: "app rearange")
+//        delegate.arrangeNextBackgroundTask(at: Date())
     }
 
     // MARK: - UI
