@@ -13,6 +13,7 @@ import WatchKit
 
 class ComplicationQuery {
     private static var instance:ComplicationQuery? = nil
+    unowned private let data = ComplicationData.shared()
     
     private init() { }
     
@@ -55,11 +56,39 @@ class ComplicationQuery {
             let delegate = WKExtension.shared().delegate as! ExtensionDelegate
             
             let hasComplication = delegate._hasComplication()
+            var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+            
             if hasComplication {
-                var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+                switch cps.hour! {
+                case 0..<6:
+                    nextWholeHour(cps: &cps)
+                case 6..<12:
+                    switch cps.minute! {
+                    case 0..<20:
+                        cps.minute = 20
+                    case 20..<40:
+                        cps.minute = 40
+                    default: // 40 - 60
+                        nextWholeHour(cps: &cps)
+                    }
+                default: // 12...23
+                    switch cps.minute! {
+                    case 0..<20:
+                        cps.minute = 20
+                    case 20..<40:
+                        cps.minute = 40
+                    case 40..<50:
+                        cps.minute = 50
+                    default: // 50 - 60
+                        nextWholeHour(cps: &cps)
+                    }
+                }
+            }
+            else {
                 switch cps.hour! {
                 case 0..<12:
-                    nextWholeHour(cps: &cps)
+                    cps.hour = 12
+                    cps.minute = 50
                 default: // 12...23
                     switch cps.minute! {
                     case 0..<50:
@@ -68,16 +97,16 @@ class ComplicationQuery {
                         nextWholeHour(cps: &cps)
                     }
                 }
-                
-                let fireDate = cal.date(from: cps)!
-                var arrangeDate = ArrangeDate(by:"device is locked")
-                arrangeDate.date = fireDate
-                delegate.arrangeDates.append(arrangeDate)
-                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
-                    if error == nil {
-                        let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
-                        NSLog("arrange background task at %@", ds)
-                    }
+            }
+            
+            let fireDate = cal.date(from: cps)!
+            var arrangeDate = ArrangeDate(by:"device is locked")
+            arrangeDate.date = fireDate
+            delegate.arrangeDates.append(arrangeDate)
+            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
+                if error == nil {
+                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
+                    NSLog("arrange background task at %@", ds)
                 }
             }
         }
@@ -92,13 +121,10 @@ class ComplicationQuery {
         func creatAnchorQuery() {
             anchorQuery = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
                 if error == nil {
-                    let data = ComplicationData.shared()
-                    
                     defer {
                         self.anchor = nextAnchor
                         if self._shouldUpdateComplication {
-                            let data = ComplicationData.shared()
-                            data.update(at: now)
+                            self.data.update(at: now)
                         }
                         completeHandler()
                         self._shouldUpdateComplication = false
@@ -110,15 +136,15 @@ class ComplicationQuery {
                             self.isFirstQuery = false
                         }
                         
-                        data.assign(samples as! [HKCategorySample])
+                        self.data.assign(samples as! [HKCategorySample])
                     }
                     else {
                         if let deletedObjects = deletedObjects, !deletedObjects.isEmpty {
-                            data.delete(deletedObjects)
+                            self.data.delete(deletedObjects)
                             self._shouldUpdateComplication = true
                         }
                         if let samples = samples as? [HKCategorySample] {
-                            data.append(samples)
+                            self.data.append(samples)
                             self._shouldUpdateComplication = true
                         }
                     }

@@ -11,7 +11,7 @@ import Foundation
 import ClockKit
 
 class InterfaceController: WKInterfaceController {
-    let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+    lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)

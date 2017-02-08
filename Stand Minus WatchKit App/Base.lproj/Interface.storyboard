@@ -24,7 +24,7 @@
                                 <action selector="firedatesButtonClicked" destination="AgC-eL-Hgc" id="jT8-Bq-5DI"/>
                             </connections>
                         </button>
-                        <table alignment="left" id="sKL-H0-jaV">
+                        <table alignment="left" pagingScroll="YES" id="sKL-H0-jaV">
                             <items>
                                 <tableRow identifier="rowType" id="7t2-yq-bqq" customClass="RowType" customModule="Stand_Minus_WatchKit_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" id="Lcf-U7-7mE">

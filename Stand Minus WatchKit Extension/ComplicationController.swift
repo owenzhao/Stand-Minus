@@ -16,6 +16,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 
     private var isFirstStart = true
+    unowned private let data = ComplicationData.shared()
     
     private let query = ComplicationQuery.shared()
     
@@ -48,9 +49,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             let completeHandler: (Date) -> () -> () = { [unowned self] now -> () -> () in
                return {
                     defer { self.isFirstStart = false }
-                    
-                    let data = ComplicationData.shared()
-                    handler(data.entry!)
+                
+                    handler(self.data.entry!)
                 }
             }
 
@@ -64,7 +64,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 query.start(at: now, completeHandler: completeHandler(now) )
             }
             else {
-                let data = ComplicationData.shared()
                 handler(data.entry!)
             }
         default:

@@ -21,6 +21,7 @@ struct ArrangeDate {
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private let cal = Calendar(identifier: .gregorian)
+    unowned private let data = ComplicationData.shared()
     
     var state:ExtensionCurrentHourState = .notSet
     
@@ -88,8 +89,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
     func arrangeNextBackgroundTask(at now:Date) {
         func calculateNextFireDate() -> Date {
-            let data = ComplicationData.shared()
-            
             func shouldNotifyUser() -> Bool {
                 return data.shouldNotifyUser
             }
@@ -128,7 +127,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     let id = UUID().uuidString
                     let content = { () -> UNMutableNotificationContent in
                         let mc = UNMutableNotificationContent()
-                        mc.title = NSLocalizedString("Stand Up Notification", comment: "Stand Up Notification Title")
+//                        mc.title = NSLocalizedString("Stand Up Notification", comment: "Stand Up Notification Title")
                         mc.body = NSLocalizedString("Please stand up and do some activice for one minute", comment: "Stand Up Notification Body")
                         
                         if notificationSettings.soundSetting == .enabled {
