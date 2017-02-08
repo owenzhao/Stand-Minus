@@ -30,14 +30,19 @@ class NotificationController: WKUserNotificationInterfaceController {
         super.didDeactivate()
     }
 
-    /*
     override func didReceive(_ notification: UNNotification, withCompletion completionHandler: @escaping (WKUserNotificationInterfaceType) -> Swift.Void) {
         // This method is called when a notification needs to be presented.
         // Implement it if you use a dynamic notification interface.
         // Populate your dynamic notification interface as quickly as possible.
         //
         // After populating your dynamic notification interface call the completion block.
+        let content = notification.request.content
+        titleLabel.setText(content.title)
+        bodyLabel.setText(content.body)
         completionHandler(.custom)
     }
-    */
+    
+    // MARK: - UI
+    @IBOutlet var titleLabel: WKInterfaceLabel!
+    @IBOutlet var bodyLabel: WKInterfaceLabel!
 }
