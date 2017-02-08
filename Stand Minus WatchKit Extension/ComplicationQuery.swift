@@ -89,12 +89,21 @@ class ComplicationQuery {
                 case 0..<12:
                     cps.hour = 12
                     cps.minute = 50
-                default: // 12...23
+                case 12..<23:
                     switch cps.minute! {
                     case 0..<50:
                         cps.minute = 50
                     default: // 50 - 60
                         nextWholeHour(cps: &cps)
+                    }
+                default: // 23
+                    switch cps.minute! {
+                    case 0..<50:
+                        cps.minute = 50
+                    default: // 50 - 60
+                        cps.day! += 1
+                        cps.hour = 12
+                        cps.minute = 50
                     }
                 }
             }
