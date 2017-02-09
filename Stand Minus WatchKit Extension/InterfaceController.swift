@@ -15,8 +15,12 @@ class InterfaceController: WKInterfaceController {
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
-        delegate.arrangeDate = ArrangeDate(by: "UI firstStart")
-        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: true) // run first time after reboot
+        
+        let now = Date()
+        delegate.fireDates.append(now)
+        
+        delegate.arrangeDate = ArrangeDate(by: "UI first start")
+        delegate.queryStandup(at: now, shouldArrangeBackgroundTask: true) // run first time after reboot
     }
     
     override func willActivate() {
