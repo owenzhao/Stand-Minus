@@ -171,6 +171,8 @@ class StandHourQuery {
             }
         }
         
+        _by = by
+        
         defer { delegate.lastQueryDate = now }
         
         if delegate == nil {
