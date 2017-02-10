@@ -1,5 +1,5 @@
 //
-//  ComplicationData.swift
+//  CurrentHourData.swift
 //  Stand Minus
 //
 //  Created by 肇鑫 on 2017-2-6.
@@ -10,14 +10,14 @@ import Foundation
 import HealthKit
 import ClockKit
 
-class ComplicationData {
-    private static var instance:ComplicationData? = nil
+class CurrentHourData {
+    private static var instance:CurrentHourData? = nil
     
     private init() { }
     
-    class func shared() -> ComplicationData {
+    class func shared() -> CurrentHourData {
         if instance == nil {
-            instance = ComplicationData()
+            instance = CurrentHourData()
         }
         
         return instance!
@@ -31,6 +31,8 @@ class ComplicationData {
     private var _stoodCount = 0
     private var _hasStood = false
     private let cal = Calendar(identifier: .gregorian)
+    
+    weak var delegate:CurrentHourDataDelegate? = nil
     
     var sample:[HKCategorySample]? {
         return _samples
@@ -53,14 +55,18 @@ class ComplicationData {
                 }
             }
         }
+        
+        delegate!.shouldUpdateData = true
     }
     
     func append(_ samples:[HKCategorySample]) {
         _samples.append(contentsOf: samples)
+        if delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func assign(_ samples:[HKCategorySample]) {
         _samples = samples
+        delegate!.shouldUpdateData = true
     }
     
     func update(at now:Date) {
@@ -87,10 +93,12 @@ class ComplicationData {
             }
         }
         
-        stoodCount()
-        hasStood()
-        
-        updateEntry(at: now)
+        if delegate!.shouldUpdateData {
+            stoodCount()
+            hasStood()
+            
+            updateEntry(at: now)
+        }
     }
     
     // MARK: - entry
@@ -108,4 +116,12 @@ class ComplicationData {
         
         _entry = CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
     }
+}
+
+protocol CurrentHourDataDelegate:class {
+    var shouldUpdateData:Bool { get set }
+}
+
+class CurrentHourDataHelper:CurrentHourDataDelegate {
+    var shouldUpdateData = false
 }

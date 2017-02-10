@@ -11,14 +11,13 @@ import WatchKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     deinit {
-        ComplicationQuery.terminate()
-        ComplicationData.terminate()
+        StandHourQuery.terminate()
+        CurrentHourData.terminate()
     }
 
-    private var isFirstStart = true
-    unowned private let data = ComplicationData.shared()
+    unowned private let data = CurrentHourData.shared()
     
-    private let query = ComplicationQuery.shared()
+    private let query = StandHourQuery.shared()
     
     // MARK: - Timeline Configuration
     
@@ -46,23 +45,15 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         switch complication.family {
         case .modularSmall:
-            let completeHandler: (Date) -> () -> () = { [unowned self] now -> () -> () in
-               return {
-                    defer { self.isFirstStart = false }
-                
-                    let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-                    delegate.fireDates.append(now)
-                    delegate.arrangeDate = ArrangeDate(by:"first run")
-                    delegate.arrangeNextBackgroundTask(at: now)
-                
-                    handler(self.data.entry!)
-                }
-            }
-
-            if isFirstStart {
+            if query.by != .backgroundTask {
                 let now = Date()
                 
-                query.start(at: now, completeHandler: completeHandler(now) )
+                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+                delegate.fireDates.append(now)
+                
+                delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
+                    handler(self.data.entry!)
+                }
             }
             else {
                 handler(data.entry!)

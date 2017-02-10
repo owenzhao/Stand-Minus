@@ -18,9 +18,8 @@ class InterfaceController: WKInterfaceController {
         
         let now = Date()
         delegate.fireDates.append(now)
-        
-        delegate.arrangeDate = ArrangeDate(by: "UI first start")
-        delegate.queryStandup(at: now, shouldArrangeBackgroundTask: true) // run first time after reboot
+
+        delegate.procedureStart(by: .viewController, at: now) // run first time after reboot
     }
     
     override func willActivate() {
@@ -49,7 +48,24 @@ class InterfaceController: WKInterfaceController {
         for index in 0 ..< delegate.arrangeDates.count {
             let row = tableController.rowController(at: index) as! RowType
             let arrangeDate = delegate.arrangeDates[index]
-            row.label.setText("\(arrangeDate.by)\n\(dateString(arrangeDate.date))")
+            let by:String
+            switch arrangeDate.by {
+            case .backgroundTask:
+                by = "background task"
+            case .complicationDirectly:
+                by = "complication"
+            case .deviceLocked:
+                by = "device locked"
+            case .dockAfterSystemRebooting:
+                by = "system reboot"
+            case .firstStart: // no value
+                by = "should not happen"
+            case .remoteNotification:
+                by = "remote notification"
+            case .viewController:
+                by = "extension UI"
+            }
+            row.label.setText("\(by)\n\(dateString(arrangeDate.date))")
         }
     }
     

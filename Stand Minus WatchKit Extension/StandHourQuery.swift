@@ -1,5 +1,5 @@
 //
-//  ComplicationQuery.swift
+//  StandHourQuery.swift
 //  Stand Minus
 //
 //  Created by 肇鑫 on 2017-2-6.
@@ -10,15 +10,24 @@ import Foundation
 import HealthKit
 import WatchKit
 
+enum QueryBy:Int {
+    case complicationDirectly = 0
+    case viewController
+    case backgroundTask
+    case remoteNotification
+    case dockAfterSystemRebooting // not useful as this can't know now
+    case firstStart // occupy for init
+    case deviceLocked
+}
 
-class ComplicationQuery {
-    private static var instance:ComplicationQuery? = nil
-    unowned private let data = ComplicationData.shared()
+class StandHourQuery {
+    private static var instance:StandHourQuery? = nil
+    unowned private let data = CurrentHourData.shared()
     
     private init() { }
     
-    class func shared() -> ComplicationQuery {
-        if instance == nil { instance = ComplicationQuery() }
+    class func shared() -> StandHourQuery {
+        if instance == nil { instance = StandHourQuery() }
         return instance!
     }
     
@@ -29,7 +38,6 @@ class ComplicationQuery {
     private var isFirstQuery = true
     private var anchor:HKQueryAnchor? = nil
     
-    private var lastQueryDate:Date! = nil
     private var predicate:NSPredicate! = nil
     private var anchorQuery:HKAnchoredObjectQuery! = nil
     
@@ -37,25 +45,35 @@ class ComplicationQuery {
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
     
-    private var _shouldUpdateComplication = false
+    private var _by:QueryBy = .firstStart
+    private var delegate:StandHourQueryHelper!
     
-    var shouldUpdateComplication:Bool {
-        return _shouldUpdateComplication
+    var by:QueryBy {
+        return _by
     }
     
-    private func dayOf(_ date:Date) -> Int {
-        return cal.component(.day, from: date)
-    }
+//    internal func dayOf(_ date:Date) -> Int {
+//        return cal.component(.day, from: date)
+//    }
     
-    func start(at now:Date, completeHandler: @escaping () -> ()) {
+    func start(by: QueryBy, at now:Date, completeHandler: @escaping () -> ()) {
         func arrangeNextBackgroundTaskWhenDeviceIsLocked() {
+            func _hasComplication() -> Bool {
+                let server = CLKComplicationServer.sharedInstance()
+                if let complications = server.activeComplications, !complications.isEmpty {
+                    return true
+                }
+                
+                return false
+            }
+            
             func nextWholeHour( cps:inout DateComponents) {
                 cps.hour! += 1
                 cps.minute = 0
             }
-            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+            let wkDelegate = WKExtension.shared().delegate as! ExtensionDelegate
             
-            let hasComplication = delegate._hasComplication()
+            let hasComplication = _hasComplication()
             var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
             
             if hasComplication {
@@ -109,9 +127,8 @@ class ComplicationQuery {
             }
             
             let fireDate = cal.date(from: cps)!
-            var arrangeDate = ArrangeDate(by:"device is locked")
-            arrangeDate.date = fireDate
-            delegate.arrangeDates.append(arrangeDate)
+            let arrangeDate = ArrangeDate(date: fireDate, by:.deviceLocked)
+            wkDelegate.arrangeDates.append(arrangeDate)
             WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
                 if error == nil {
                     let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
@@ -132,29 +149,19 @@ class ComplicationQuery {
                 if error == nil {
                     defer {
                         self.anchor = nextAnchor
-                        if self._shouldUpdateComplication {
-                            self.data.update(at: now)
-                        }
                         completeHandler()
-                        self._shouldUpdateComplication = false
                     }
                     
                     if self.isFirstQuery {
-                        defer {
-                            self._shouldUpdateComplication = true
-                            self.isFirstQuery = false
-                        }
-                        
+                        defer { self.isFirstQuery = false }
                         self.data.assign(samples as! [HKCategorySample])
                     }
                     else {
-                        if let deletedObjects = deletedObjects, !deletedObjects.isEmpty {
+                        if let deletedObjects = deletedObjects {
                             self.data.delete(deletedObjects)
-                            self._shouldUpdateComplication = true
                         }
                         if let samples = samples as? [HKCategorySample] {
                             self.data.append(samples)
-                            self._shouldUpdateComplication = true
                         }
                     }
                 }
@@ -164,11 +171,21 @@ class ComplicationQuery {
             }
         }
         
-        if isFirstQuery || (dayOf(lastQueryDate!) != dayOf(now))
+        defer { delegate.lastQueryDate = now }
+        
+        if delegate == nil {
+            delegate = StandHourQueryHelper(now)
+        }
+        else {
+            guard delegate.shouldQuery(at: now) else {
+                return
+            }
+        }
+        
+        if delegate.shouldRecreatePredicate(isFirstQuery, now)
         {
             defer { isFirstQuery = true }
             
-            lastQueryDate = now
             anchor = nil
             
             createPredicate()
@@ -181,5 +198,40 @@ class ComplicationQuery {
                 self.store.execute(self.anchorQuery!)
             }
         }
+    }
+}
+
+protocol StandHourQueryDelegate:class {
+    var lastQueryDate: Date { get set }
+    func shouldQuery(at now:Date) -> Bool
+    func shouldRecreatePredicate(_ isFirstQuery:Bool, _ now:Date) -> Bool
+}
+
+class StandHourQueryHelper:StandHourQueryDelegate {
+    var lastQueryDate: Date
+    unowned private let data = CurrentHourData.shared()
+
+    private let cal = Calendar(identifier: .gregorian)
+    
+    init(_ lastQueryDate:Date) {
+        self.lastQueryDate = lastQueryDate
+    }
+    
+    func shouldQuery(at now:Date) -> Bool {
+        func hourOf(_ date:Date) -> Int {
+            return cal.component(.hour, from: date)
+        }
+        
+        let value = !data.hasStood || (now.timeIntervalSince(lastQueryDate) < 60 * 60 && hourOf(lastQueryDate) == hourOf(now))
+        
+        return value
+    }
+    
+    func shouldRecreatePredicate(_ isFirstQuery:Bool, _ now:Date) -> Bool {
+        func dayOf(_ date:Date) -> Int {
+            return cal.component(.day, from: date)
+        }
+        
+        return isFirstQuery || (dayOf(lastQueryDate) != dayOf(now))
     }
 }
