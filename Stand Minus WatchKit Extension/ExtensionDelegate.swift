@@ -271,13 +271,8 @@ class UpdateComplicationHelper:UpdateComplicationDelegate {
     private let server = CLKComplicationServer.sharedInstance()
     private let data = CurrentHourData.shared()
     
-    private var stoodCount:Int
-    private var hasStood:Bool
-
-    init() {
-        stoodCount = data.stoodCount
-        hasStood = data.hasStood
-    }
+    private var stoodCount:Int! = nil
+    private var hasStood:Bool! = nil
     
     var hasComplication:Bool {
         if let complications = server.activeComplications, !complications.isEmpty { return true }
@@ -285,7 +280,7 @@ class UpdateComplicationHelper:UpdateComplicationDelegate {
     }
     
     func shouldUpdateComplications() -> Bool {
-        if stoodCount != data.stoodCount || hasStood != data.hasStood {
+        if stoodCount == nil || stoodCount != data.stoodCount || hasStood != data.hasStood {
             stoodCount = data.stoodCount
             hasStood = data.hasStood
             
