@@ -224,7 +224,7 @@ class StandHourQueryHelper:StandHourQueryDelegate {
             return cal.component(.hour, from: date)
         }
         
-        let value = !data.hasStood || (now.timeIntervalSince(lastQueryDate) < 60 * 60 && hourOf(lastQueryDate) == hourOf(now))
+        let value = !data.hasStood || !(now.timeIntervalSince(lastQueryDate) < 60 * 60 && hourOf(lastQueryDate) == hourOf(now))
         
         return value
     }
