@@ -45,7 +45,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         switch complication.family {
         case .modularSmall:
-            if query.by == .backgroundTask || WKExtension.shared().applicationState == .active {
+            if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
                 handler(data.entry!)
             }
             else {
