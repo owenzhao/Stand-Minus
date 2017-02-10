@@ -45,7 +45,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         switch complication.family {
         case .modularSmall:
-            if query.by != .backgroundTask {
+            if query.by == .backgroundTask || WKExtension.shared().applicationState == .active {
+                handler(data.entry!)
+            }
+            else {
                 let now = Date()
                 
                 let delegate = WKExtension.shared().delegate as! ExtensionDelegate
@@ -54,9 +57,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
                     handler(self.data.entry!)
                 }
-            }
-            else {
-                handler(data.entry!)
             }
         default:
             handler(nil)
