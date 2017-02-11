@@ -42,25 +42,68 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
         NSLog("complication updates")
+        let now = Date()
         
-        switch complication.family {
-        case .modularSmall:
-            if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
-                handler(data.entry!)
+        func entryOf(_ complication:CLKComplication) -> CLKComplicationTimelineEntry {
+            let template:CLKComplicationTemplate
+            let textProvider = CLKSimpleTextProvider(text: String(self.data.stoodCount))
+            switch complication.family {
+            case .circularSmall:
+                template = CLKComplicationTemplateCircularSmallRingText()
+            case .modularSmall:
+                template = CLKComplicationTemplateModularSmallRingText()
+            case .utilitarianSmallFlat:
+                template = CLKComplicationTemplateUtilitarianSmallFlat()
+            default: // utilitarianSmall
+                template = CLKComplicationTemplateUtilitarianSmallFlat() // CLKComplicationTemplateUtilitarianSmallRingText()
+            }
+            
+            if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
+                let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
+                let imageProvider = CLKImageProvider(onePieceImage: self.data.hasStood ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+                smallFlattemplate.imageProvider = imageProvider
+                smallFlattemplate.textProvider = textProvider
             }
             else {
-                let now = Date()
-                
-                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-                delegate.fireDates.append(now)
-                
-                delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
-                    handler(self.data.entry!)
-                }
+                let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
+                smallRingTextTemplate.ringStyle = .closed
+                smallRingTextTemplate.fillFraction = self.data.hasStood ? 1.0 : 0.5
+                smallRingTextTemplate.textProvider = textProvider
             }
-        default:
-            handler(nil)
+            
+            return CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
         }
+        
+        if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
+            handler(entryOf(complication))
+        }
+        else {
+            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+            delegate.fireDates.append(now)
+            
+            delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
+                handler(entryOf(complication))
+            }
+        }
+        
+//        switch complication.family {
+//        case .modularSmall:
+//            if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
+//                handler(data.entry!)
+//            }
+//            else {
+//                let now = Date()
+//                
+//                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+//                delegate.fireDates.append(now)
+//                
+//                delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
+//                    handler(self.data.entry!)
+//                }
+//            }
+//        default:
+//            handler(nil)
+//        }
     }
     
     func getTimelineEntries(for complication: CLKComplication, before date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
@@ -89,3 +132,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
     }
 }
+
+protocol SmallRingTextTemplateProtocol:class {
+    var textProvider: CLKTextProvider { get set }
+    var ringStyle: CLKComplicationRingStyle { get set }
+    var fillFraction: Float { get set }
+}
+
+//extension CLKComplicationTemplateExtraLargeRingText: SmallRingText {} // won't use now, as it can't show realtime results
+extension CLKComplicationTemplateModularSmallRingText: SmallRingTextTemplateProtocol {}
+extension CLKComplicationTemplateCircularSmallRingText: SmallRingTextTemplateProtocol {}
+extension CLKComplicationTemplateUtilitarianSmallRingText: SmallRingTextTemplateProtocol {}

@@ -97,25 +97,25 @@ class CurrentHourData {
             stoodCount()
             hasStood()
             
-            updateEntry(at: now)
+//            updateEntry(at: now)
         }
     }
     
-    // MARK: - entry
-    private var _entry: CLKComplicationTimelineEntry? = nil
-    var entry: CLKComplicationTimelineEntry? {
-        return _entry
-    }
-    
-    func updateEntry(at now:Date) {
-        let provider = CLKSimpleTextProvider(text: String(_stoodCount))
-        let template = CLKComplicationTemplateModularSmallRingText()
-        template.ringStyle = .closed
-        template.fillFraction = _hasStood ? 1.0 : 0.5
-        template.textProvider = provider
-        
-        _entry = CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
-    }
+//    // MARK: - entry
+//    private var _entry: CLKComplicationTimelineEntry? = nil
+//    var entry: CLKComplicationTimelineEntry? {
+//        return _entry
+//    }
+//    
+//    func updateEntry(at now:Date) {
+//        let provider = CLKSimpleTextProvider(text: String(_stoodCount))
+//        let template = CLKComplicationTemplateModularSmallRingText()
+//        template.ringStyle = .closed
+//        template.fillFraction = _hasStood ? 1.0 : 0.5
+//        template.textProvider = provider
+//        
+//        _entry = CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
+//    }
 }
 
 protocol CurrentHourDataDelegate:class {
