@@ -180,6 +180,7 @@ class StandHourQuery {
         }
         else {
             guard delegate.shouldQuery(at: now) else {
+                completeHandler()
                 return
             }
         }

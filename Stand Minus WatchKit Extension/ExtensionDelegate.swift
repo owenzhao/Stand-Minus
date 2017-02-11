@@ -99,7 +99,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         return false
     }
     
-    func procedureStart(by:QueryBy, at now:Date, updateOwenComplication:Bool = false, completeHandler:(()->())? = nil) {
+    func procedureStart(by:QueryBy, at now:Date, updateOwenComplication:Bool = false, completeHandler: @escaping ()->() = { }) {
         func arrangeNextBackgroundTask(at now:Date) {
             func calculateNextFireDate() -> Date {
                 func shouldNotifyUser() -> Bool {
@@ -247,7 +247,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
             arrangeNextBackgroundTask(at: now)
             
-            completeHandler?()
+            completeHandler()
         }
     }
 }
