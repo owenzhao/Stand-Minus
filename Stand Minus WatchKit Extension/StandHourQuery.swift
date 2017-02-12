@@ -71,7 +71,7 @@ class StandHourQuery {
                 cps.hour! += 1
                 cps.minute = 0
             }
-            let wkDelegate = WKExtension.shared().delegate as! ExtensionDelegate
+//            let wkDelegate = WKExtension.shared().delegate as! ExtensionDelegate
             
             let hasComplication = _hasComplication()
             var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
@@ -127,12 +127,12 @@ class StandHourQuery {
             }
             
             let fireDate = cal.date(from: cps)!
-            let arrangeDate = ArrangeDate(date: fireDate, by:.deviceLocked)
-            wkDelegate.arrangeDates.append(arrangeDate)
+//            let arrangeDate = ArrangeDate(date: fireDate, by:.deviceLocked)
+//            wkDelegate.arrangeDates.append(arrangeDate)
             WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
                 if error == nil {
-                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
-                    NSLog("arrange background task at %@", ds)
+//                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
+                    // NSLog("arrange background task at %@", ds)
                 }
             }
         }

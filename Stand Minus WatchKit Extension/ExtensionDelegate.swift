@@ -10,10 +10,10 @@ import WatchKit
 import ClockKit
 import UserNotifications
 
-struct ArrangeDate {
-    let date:Date
-    let by:QueryBy
-}
+//struct ArrangeDate {
+//    let date:Date
+//    let by:QueryBy
+//}
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private let cal = Calendar(identifier: .gregorian)
@@ -30,12 +30,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         return false
     }
     
-    var arrangeDates:[ArrangeDate] = [] // by, date
-    var fireDates:[Date] = []
+//    var arrangeDates:[ArrangeDate] = [] // by, date
+//    var fireDates:[Date] = []
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
-        NSLog("app did finish launching")
+        // NSLog("app did finish launching")
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
             if error == nil && success {
@@ -46,14 +46,14 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     func applicationDidBecomeActive() {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        NSLog("app did become active")
+        // NSLog("app did become active")
 //        standardPrecedure()
     }
 
     func applicationWillResignActive() {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, etc.
-        NSLog("app will resign active")
+        // NSLog("app will resign active")
     }
     
     deinit {
@@ -69,7 +69,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
                 let now = Date()
-                fireDates.append(now)
+//                fireDates.append(now)
 
                 procedureStart(by: .backgroundTask, at: now)
                 
@@ -219,12 +219,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
             
             let fireDate = calculateNextFireDate()
-            let arrangeDate = ArrangeDate(date: fireDate, by: by)
-            arrangeDates.append(arrangeDate)
+//            let arrangeDate = ArrangeDate(date: fireDate, by: by)
+//            arrangeDates.append(arrangeDate)
             WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
                 if error == nil {
-                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
-                    NSLog("arrange background task at %@", ds)
+//                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
+                    // NSLog("arrange background task at %@", ds)
                 }
             }
         }

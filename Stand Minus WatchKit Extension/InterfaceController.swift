@@ -17,7 +17,7 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         let now = Date()
-        delegate.fireDates.append(now)
+//        delegate.fireDates.append(now)
 
         delegate.procedureStart(by: .viewController, at: now) // run first time after reboot
     }
@@ -37,50 +37,50 @@ class InterfaceController: WKInterfaceController {
 //        delegate.arrangeNextBackgroundTask(at: Date())
     }
 
-    // MARK: - UI
-    
-    private func dateString(_ date:Date) -> String {
-        return DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
-    }
-    
-    @IBAction func arrangeDatesButtonClicked() {
-        tableController.setNumberOfRows(delegate.arrangeDates.count, withRowType: "rowType")
-        for index in 0 ..< delegate.arrangeDates.count {
-            let row = tableController.rowController(at: index) as! RowType
-            let arrangeDate = delegate.arrangeDates[index]
-            let by:String
-            switch arrangeDate.by {
-            case .backgroundTask:
-                by = "background task"
-            case .complicationDirectly:
-                by = "complication"
-            case .deviceLocked:
-                by = "device locked"
-            case .dockAfterSystemRebooting:
-                by = "system reboot"
-            case .firstStart: // no value
-                by = "should not happen"
-            case .remoteNotification:
-                by = "remote notification"
-            case .viewController:
-                by = "extension UI"
-            }
-            row.label.setText("\(by)\n\(dateString(arrangeDate.date))")
-        }
-    }
-    
-    @IBAction func firedatesButtonClicked() {
-        tableController.setNumberOfRows(delegate.fireDates.count, withRowType: "rowType")
-        for index in 0 ..< delegate.fireDates.count {
-            let row = tableController.rowController(at: index) as! RowType
-            let firedate = delegate.fireDates[index]
-            row.label.setText(dateString(firedate))
-        }
-    }
-    
-    @IBOutlet var tableController: WKInterfaceTable!
+//    // MARK: - UI
+//    
+//    private func dateString(_ date:Date) -> String {
+//        return DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
+//    }
+//    
+//    @IBAction func arrangeDatesButtonClicked() {
+//        tableController.setNumberOfRows(delegate.arrangeDates.count, withRowType: "rowType")
+//        for index in 0 ..< delegate.arrangeDates.count {
+//            let row = tableController.rowController(at: index) as! RowType
+//            let arrangeDate = delegate.arrangeDates[index]
+//            let by:String
+//            switch arrangeDate.by {
+//            case .backgroundTask:
+//                by = "background task"
+//            case .complicationDirectly:
+//                by = "complication"
+//            case .deviceLocked:
+//                by = "device locked"
+//            case .dockAfterSystemRebooting:
+//                by = "system reboot"
+//            case .firstStart: // no value
+//                by = "should not happen"
+//            case .remoteNotification:
+//                by = "remote notification"
+//            case .viewController:
+//                by = "extension UI"
+//            }
+//            row.label.setText("\(by)\n\(dateString(arrangeDate.date))")
+//        }
+//    }
+//    
+//    @IBAction func firedatesButtonClicked() {
+//        tableController.setNumberOfRows(delegate.fireDates.count, withRowType: "rowType")
+//        for index in 0 ..< delegate.fireDates.count {
+//            let row = tableController.rowController(at: index) as! RowType
+//            let firedate = delegate.fireDates[index]
+//            row.label.setText(dateString(firedate))
+//        }
+//    }
+//    
+//    @IBOutlet var tableController: WKInterfaceTable!
 }
 
-class RowType: NSObject {
-    @IBOutlet weak var label:WKInterfaceLabel!
-}
+//class RowType: NSObject {
+//    @IBOutlet weak var label:WKInterfaceLabel!
+//}

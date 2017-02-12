@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         store.handleAuthorizationForExtension { (success, error) in
             if error == nil {
                 if !success {
-                    NSLog("user cancel the request authorization window")
+                    // NSLog("user cancel the request authorization window")
                 }
             }
         }
