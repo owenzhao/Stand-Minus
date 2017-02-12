@@ -80,30 +80,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         else {
             let delegate = WKExtension.shared().delegate as! ExtensionDelegate
 //            delegate.fireDates.append(now)
+            delegate.fireDate = now
             
             delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
                 handler(entryOf(complication))
             }
         }
-        
-//        switch complication.family {
-//        case .modularSmall:
-//            if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
-//                handler(data.entry!)
-//            }
-//            else {
-//                let now = Date()
-//                
-//                let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-//                delegate.fireDates.append(now)
-//                
-//                delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
-//                    handler(self.data.entry!)
-//                }
-//            }
-//        default:
-//            handler(nil)
-//        }
     }
     
     func getTimelineEntries(for complication: CLKComplication, before date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {

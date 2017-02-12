@@ -23,6 +23,8 @@
 		DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08318D1E407B8000A62520 /* NotificationController.swift */; };
 		DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08318F1E407B8000A62520 /* ComplicationController.swift */; };
 		DC0831921E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831911E407B8000A62520 /* Assets.xcassets */; };
+		DC0BAF881E50620F0030C18C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831911E407B8000A62520 /* Assets.xcassets */; };
+		DC0BAF891E5062640030C18C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC08317B1E407B8000A62520 /* Assets.xcassets */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
 		DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF61E41824D00C7ED60 /* HealthKit.framework */; };
 		DC9AC4811E480D8000F52028 /* CurrentHourData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* CurrentHourData.swift */; };
@@ -473,6 +475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC08317C1E407B8000A62520 /* Assets.xcassets in Resources */,
+				DC0BAF881E50620F0030C18C /* Assets.xcassets in Resources */,
 				DC08317A1E407B8000A62520 /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,6 +484,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC0BAF891E5062640030C18C /* Assets.xcassets in Resources */,
 				DC0831921E407B8000A62520 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

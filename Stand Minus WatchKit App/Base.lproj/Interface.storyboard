@@ -14,33 +14,23 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="arrange dates" id="iGl-YO-54d">
-                            <connections>
-                                <action selector="arrangeDatesButtonClicked" destination="AgC-eL-Hgc" id="3TT-CA-OK8"/>
-                            </connections>
-                        </button>
-                        <button width="1" alignment="left" title="fire dates" id="uDb-vp-yPy">
-                            <connections>
-                                <action selector="firedatesButtonClicked" destination="AgC-eL-Hgc" id="jT8-Bq-5DI"/>
-                            </connections>
-                        </button>
-                        <table alignment="left" pagingScroll="YES" id="sKL-H0-jaV">
-                            <items>
-                                <tableRow identifier="rowType" id="7t2-yq-bqq" customClass="RowType" customModule="Stand_Minus_WatchKit_Extension">
-                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="Lcf-U7-7mE">
-                                        <items>
-                                            <label width="1" alignment="left" text="Label" textAlignment="center" numberOfLines="2" id="gh0-4p-UQr"/>
-                                        </items>
-                                    </group>
-                                    <connections>
-                                        <outlet property="label" destination="gh0-4p-UQr" id="WWh-fl-DqT"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
+                        <imageView alignment="center" image="ViewController Image" id="Jez-rl-RW9"/>
+                        <label width="1" alignment="left" text="Status" textAlignment="center" id="T1X-tj-Hcx">
+                            <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                        </label>
+                        <label width="1" alignment="left" text="Not stood yet" textAlignment="center" id="C5a-uD-hh4">
+                            <fontDescription key="font" style="UICTFontTextStyleBody"/>
+                        </label>
+                        <label width="1" alignment="left" text="Updated at" textAlignment="center" id="Lo6-sC-cko">
+                            <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                        </label>
+                        <label width="1" alignment="left" text="date" textAlignment="center" id="Y2v-iO-2R6"/>
                     </items>
                     <connections>
-                        <outlet property="tableController" destination="sKL-H0-jaV" id="RmD-9y-bs4"/>
+                        <outlet property="fireDateLabel" destination="Y2v-iO-2R6" id="UwT-qr-YS9"/>
+                        <outlet property="hasStoodLabel" destination="C5a-uD-hh4" id="iXv-XM-liz"/>
                     </connections>
                 </controller>
             </objects>

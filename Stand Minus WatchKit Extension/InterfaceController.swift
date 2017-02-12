@@ -12,21 +12,19 @@ import ClockKit
 
 class InterfaceController: WKInterfaceController {
     lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
+    unowned private let data = CurrentHourData.shared()
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        let now = Date()
-//        delegate.fireDates.append(now)
-
-        delegate.procedureStart(by: .viewController, at: now) // run first time after reboot
+        addMenuItem(with: .resume, title: NSLocalizedString("Update", comment: "Update"), action: #selector(updateButtonClicked))
+        query()
     }
     
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        
-//        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: false)
+        updateUI()
     }
     
     override func didDeactivate() {
@@ -37,7 +35,31 @@ class InterfaceController: WKInterfaceController {
 //        delegate.arrangeNextBackgroundTask(at: Date())
     }
 
-//    // MARK: - UI
+    // MARK: - UI
+    
+    @IBOutlet var hasStoodLabel: WKInterfaceLabel!
+    @IBOutlet var fireDateLabel: WKInterfaceLabel!
+    
+    @IBAction func updateButtonClicked() {
+        query()
+    }
+    
+    // MARK: - private functions
+    private func query() {
+        let now = Date()
+        //        delegate.fireDates.append(now)
+        delegate.fireDate = now
+        
+        delegate.procedureStart(by: .viewController, at: now) {[unowned self] in // run first time after reboot
+            self.updateUI()
+        }
+    }
+    
+    private func updateUI() {
+        fireDateLabel.setText(DateFormatter.localizedString(from: delegate.fireDate, dateStyle: .none, timeStyle: .medium))
+        hasStoodLabel.setText(data.hasStood ? NSLocalizedString("Already stood", comment: "Already stood") : NSLocalizedString("Not stood yet", comment: "Not stood yet"))
+        //        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: false)
+    }
 //    
 //    private func dateString(_ date:Date) -> String {
 //        return DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
