@@ -9,6 +9,7 @@
 import Foundation
 import HealthKit
 import ClockKit
+import WatchKit
 
 class CurrentHourData {
     private static var instance:CurrentHourData? = nil
@@ -29,7 +30,11 @@ class CurrentHourData {
     
     private var _samples:[HKCategorySample] = []
     private var _stoodCount = 0
-    private var _hasStood = false
+    private var _hasStood = false {
+        didSet {
+            (WKExtension.shared().rootInterfaceController as! InterfaceController).hasStood = _hasStood
+        }
+    }
     private let cal = Calendar(identifier: .gregorian)
     
     weak var delegate:CurrentHourDataDelegate? = nil

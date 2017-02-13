@@ -32,7 +32,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
 //    var arrangeDates:[ArrangeDate] = [] // by, date
 //    var fireDates:[Date] = []
-    var fireDate:Date! = nil
+//    var fireDate:Date! = nil
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
@@ -71,7 +71,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the background task once you’re done.
                 let now = Date()
 //                fireDates.append(now)
-                fireDate = now
+//                fireDate = now
+                (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
 
                 procedureStart(by: .backgroundTask, at: now)
                 

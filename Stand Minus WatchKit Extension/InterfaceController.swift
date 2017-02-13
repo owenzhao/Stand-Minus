@@ -11,8 +11,12 @@ import Foundation
 import ClockKit
 
 class InterfaceController: WKInterfaceController {
-    lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
-    unowned private let data = CurrentHourData.shared()
+    private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
+//    unowned private let data = CurrentHourData.shared()
+    
+    var hasStood:Bool? = nil
+    var fireDate:Date! = nil
+    
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
@@ -48,7 +52,7 @@ class InterfaceController: WKInterfaceController {
     private func query() {
         let now = Date()
         //        delegate.fireDates.append(now)
-        delegate.fireDate = now
+        fireDate = now
         
         delegate.procedureStart(by: .viewController, at: now) {[unowned self] in // run first time after reboot
             self.updateUI()
@@ -56,8 +60,12 @@ class InterfaceController: WKInterfaceController {
     }
     
     private func updateUI() {
-        fireDateLabel.setText(DateFormatter.localizedString(from: delegate.fireDate, dateStyle: .none, timeStyle: .medium))
-        hasStoodLabel.setText(data.hasStood ? NSLocalizedString("Already stood", comment: "Already stood") : NSLocalizedString("Not stood yet", comment: "Not stood yet"))
+        func labelOfHasStood() -> String {
+            if hasStood == nil { return NSLocalizedString("Watch Locked", comment: "Watch Locked") }
+            return hasStood! ? NSLocalizedString("Already stood", comment: "Already stood") : NSLocalizedString("Not stood yet", comment: "Not stood yet")
+        }
+        fireDateLabel.setText(DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium))
+        hasStoodLabel.setText(labelOfHasStood())
         //        delegate.queryStandup(at: Date(), shouldArrangeBackgroundTask: false)
     }
 //    

@@ -80,7 +80,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         else {
             let delegate = WKExtension.shared().delegate as! ExtensionDelegate
 //            delegate.fireDates.append(now)
-            delegate.fireDate = now
+            (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
             
             delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
                 handler(entryOf(complication))
