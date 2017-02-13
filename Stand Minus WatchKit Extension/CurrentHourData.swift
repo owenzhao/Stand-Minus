@@ -37,7 +37,7 @@ class CurrentHourData {
     }
     private let cal = Calendar(identifier: .gregorian)
     
-    weak var delegate:CurrentHourDataDelegate? = nil
+//    weak var delegate:CurrentHourDataDelegate? = nil
     
     var sample:[HKCategorySample]? {
         return _samples
@@ -60,18 +60,14 @@ class CurrentHourData {
                 }
             }
         }
-        
-        if !delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func append(_ samples:[HKCategorySample]) {
         _samples.append(contentsOf: samples)
-        if !delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func assign(_ samples:[HKCategorySample]) {
         _samples = samples
-        if !delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func update(at now:Date) {
@@ -98,12 +94,8 @@ class CurrentHourData {
             }
         }
         
-        if delegate!.shouldUpdateData {
-            stoodCount()
-            hasStood()
-            
-//            updateEntry(at: now)
-        }
+        stoodCount()
+        hasStood()
     }
     
 //    // MARK: - entry
@@ -123,10 +115,10 @@ class CurrentHourData {
 //    }
 }
 
-protocol CurrentHourDataDelegate:class {
-    var shouldUpdateData:Bool { get set }
-}
-
-class CurrentHourDataHelper:CurrentHourDataDelegate {
-    var shouldUpdateData = false
-}
+//protocol CurrentHourDataDelegate:class {
+//    var shouldUpdateData:Bool { get set }
+//}
+//
+//class CurrentHourDataHelper:CurrentHourDataDelegate {
+//    var shouldUpdateData = false
+//}

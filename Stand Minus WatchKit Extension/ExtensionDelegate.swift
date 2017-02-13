@@ -20,7 +20,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     unowned private let data = CurrentHourData.shared()
     lazy private var updateComplicationHelper:UpdateComplicationHelper = UpdateComplicationHelper()
     
-    private var dataHelper:CurrentHourDataHelper!
+//    private var dataHelper:CurrentHourDataHelper!
     
     var state:ExtensionCurrentHourState = .notSet
     
@@ -239,8 +239,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
         }
         
-        dataHelper = CurrentHourDataHelper()
-        data.delegate = dataHelper
+//        dataHelper = CurrentHourDataHelper()
+//        data.delegate = dataHelper
         let query = StandHourQuery.shared()
         
         query.start(by: by, at: now) { // query
