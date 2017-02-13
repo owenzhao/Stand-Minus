@@ -61,17 +61,17 @@ class CurrentHourData {
             }
         }
         
-        delegate!.shouldUpdateData = true
+        if !delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func append(_ samples:[HKCategorySample]) {
         _samples.append(contentsOf: samples)
-        if delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
+        if !delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func assign(_ samples:[HKCategorySample]) {
         _samples = samples
-        delegate!.shouldUpdateData = true
+        if !delegate!.shouldUpdateData { delegate!.shouldUpdateData = true }
     }
     
     func update(at now:Date) {

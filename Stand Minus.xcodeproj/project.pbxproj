@@ -134,6 +134,15 @@
 		DC788AF61E41824D00C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		DC9AC4801E480D8000F52028 /* CurrentHourData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CurrentHourData.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StandHourQuery.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		DCA8E9A91E5155E0004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		DCA8E9AA1E5155E0004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		DCA8E9AB1E5155E0004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		DCA8E9AC1E5155E0004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		DCA8E9AD1E5155E0004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		DCA8E9AE1E5155E0004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		DCA8E9AF1E5155E1004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		DCA8E9B01E5155E1004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		DCA8E9B11E5155E1004A3979 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Interface.strings"; sourceTree = "<group>"; };
 		DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DCDAC5C11E432508004D6F10 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -588,6 +597,7 @@
 			children = (
 				DC0831531E407B8000A62520 /* Base */,
 				DC0BAF8A1E506BCC0030C18C /* zh-Hans */,
+				DCA8E9AC1E5155E0004A3979 /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -597,6 +607,7 @@
 			children = (
 				DC0831581E407B8000A62520 /* Base */,
 				DC0BAF8B1E506BCC0030C18C /* zh-Hans */,
+				DCA8E9AB1E5155E0004A3979 /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -606,6 +617,7 @@
 			children = (
 				DC0831791E407B8000A62520 /* Base */,
 				DC0BAF8C1E506BCC0030C18C /* zh-Hans */,
+				DCA8E9B11E5155E1004A3979 /* zh-Hant */,
 			);
 			name = Interface.storyboard;
 			sourceTree = "<group>";
@@ -614,6 +626,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DC0BAF901E506D9B0030C18C /* zh-Hans */,
+				DCA8E9A91E5155E0004A3979 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -622,6 +635,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DC0BAF951E506D9B0030C18C /* zh-Hans */,
+				DCA8E9AA1E5155E0004A3979 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -630,6 +644,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DC0BAF9A1E506D9C0030C18C /* zh-Hans */,
+				DCA8E9AD1E5155E0004A3979 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -638,6 +653,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DC0BAF9F1E506D9C0030C18C /* zh-Hans */,
+				DCA8E9AE1E5155E0004A3979 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -646,6 +662,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DC0BAFA41E506D9D0030C18C /* zh-Hans */,
+				DCA8E9AF1E5155E1004A3979 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -654,6 +671,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DC0BAFA91E506D9D0030C18C /* zh-Hans */,
+				DCA8E9B01E5155E1004A3979 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

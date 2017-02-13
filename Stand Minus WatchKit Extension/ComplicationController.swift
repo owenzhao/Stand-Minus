@@ -102,16 +102,37 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getLocalizableSampleTemplate(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTemplate?) -> Void) {
         // This method will be called once per supported complication, and the results will be cached
-        switch complication.family {
-        case .modularSmall:
-            let provider = CLKSimpleTextProvider(text: "-")
-            let template = CLKComplicationTemplateModularSmallRingText()
-            template.textProvider = provider
+        func templateOf() -> CLKComplicationTemplate {
+            let template:CLKComplicationTemplate
+            let textProvider = CLKSimpleTextProvider(text: String(self.data.stoodCount))
+            switch complication.family {
+            case .circularSmall:
+                template = CLKComplicationTemplateCircularSmallRingText()
+            case .modularSmall:
+                template = CLKComplicationTemplateModularSmallRingText()
+            case .utilitarianSmallFlat:
+                template = CLKComplicationTemplateUtilitarianSmallFlat()
+            default: // utilitarianSmall
+                template = CLKComplicationTemplateUtilitarianSmallFlat() // CLKComplicationTemplateUtilitarianSmallRingText()
+            }
             
-            handler(template)
-        default:
-            handler(nil)
+            if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
+                let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
+                let imageProvider = CLKImageProvider(onePieceImage: #imageLiteral(resourceName: "has stood"))
+                smallFlattemplate.imageProvider = imageProvider
+                smallFlattemplate.textProvider = textProvider
+            }
+            else {
+                let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
+                smallRingTextTemplate.ringStyle = .closed
+                smallRingTextTemplate.fillFraction = 1.0
+                smallRingTextTemplate.textProvider = textProvider
+            }
+            
+            return template
         }
+        
+        handler(templateOf())
     }
 }
 
