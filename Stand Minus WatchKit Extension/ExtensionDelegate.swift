@@ -143,8 +143,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         let id = UUID().uuidString
                         let content = { () -> UNMutableNotificationContent in
                             let mc = UNMutableNotificationContent()
-                            mc.title = NSLocalizedString("Stand Up!", comment: "Stand Up Notification Title")
-                            mc.body = NSLocalizedString("Class begins!(Err, no...) Please do some activity for at least one minute.", comment: "Stand Up Notification Body")
+                            mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
+                            mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
                             mc.categoryIdentifier = "notify_user_category"
                             
                             if notificationSettings.soundSetting == .enabled {

@@ -2,13 +2,13 @@
 "Already stood" = "已站立";
 
 /* Stand Up Notification Body */
-"Class begins!(Err, no...) Please do some activity for at least one minute." = "是时间起来活动一下身体啦！";
+"Is the time to move up about your body!" = "是时间起来活动一下身体啦！";
 
 /* Not stood yet */
 "Not stood yet" = "未站立";
 
 /* Stand Up Notification Title */
-"Stand Up!" = "请起立！";
+"Please Stand Up!" = "请起立！";
 
 /* Update */
 "Update" = "更新";
