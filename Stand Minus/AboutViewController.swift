@@ -31,5 +31,8 @@ class AboutViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    @IBAction func privacyNoticeButtonClicked(_ sender: Any) {
+        let url = URL(string: "http://parussoft.com/en/Stand_Minus/privacy_notice.html")!
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
 }

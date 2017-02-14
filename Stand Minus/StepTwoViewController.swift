@@ -14,6 +14,8 @@ class StepTwoViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        let image = UIImage(named: NSLocalizedString("step_two.png", comment: "step_two"))
+        imageView.image = image
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,6 +23,7 @@ class StepTwoViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBOutlet weak var imageView: UIImageView!
 
     /*
     // MARK: - Navigation
