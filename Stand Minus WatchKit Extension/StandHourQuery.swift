@@ -166,6 +166,7 @@ class StandHourQuery {
                     }
                 }
                 else { // device is locked. **query failed, reason: Protected health data is inaccessible**
+                    (WKExtension.shared().rootInterfaceController as! InterfaceController).hasStood = nil
                     arrangeNextBackgroundTaskWhenDeviceIsLocked()
                 }
             }
