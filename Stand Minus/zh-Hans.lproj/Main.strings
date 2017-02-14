@@ -1,1 +1,27 @@
-/* No Localized Strings */
+/* Class = "UILabel"; text = "Step 3:"; ObjectID = "IFY-Sn-O77"; */
+"IFY-Sn-O77.text" = "步骤3:";
+
+/* Class = "UILabel"; text = "Open Stand- on your watch."; ObjectID = "OFp-oo-8fw"; */
+"OFp-oo-8fw.text" = "打开手表上的Stand-";
+
+/* Class = "UILabel"; text = "Find Stand-, then press \"Keep in Dock\"."; ObjectID = "QNK-BR-Bks"; */
+"QNK-BR-Bks.text" = "找到Stand-,然后按“在Dock中保留”";
+
+/* Class = "UILabel"; text = "Step 2:"; ObjectID = "WIV-kD-qs1"; */
+"WIV-kD-qs1.text" = "步骤2:";
+
+/* Class = "UILabel"; text = "Enabling Stand- on your watch"; ObjectID = "fgs-Dq-gTc"; */
+"fgs-Dq-gTc.text" = "在手表上启用Stand-";
+
+/* Class = "UILabel"; text = "Enabling Stand- on your watch"; ObjectID = "gti-XT-kXa"; */
+"gti-XT-kXa.text" = "在手表上启用Stand-";
+
+/* Class = "UILabel"; text = "Enabling Stand- on your watch"; ObjectID = "iAf-vX-M2h"; */
+"iAf-vX-M2h.text" = "在手表上启用Stand-";
+
+/* Class = "UILabel"; text = "Step 1:"; ObjectID = "mBy-lm-hb0"; */
+"mBy-lm-hb0.text" = "步骤1:";
+
+/* Class = "UILabel"; text = "Press side button of your watch."; ObjectID = "pBk-VJ-ZzQ"; */
+"pBk-VJ-ZzQ.text" = "按手表的侧键";
+
