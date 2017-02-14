@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hBo-BL-9PV">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Page View Controller-->
+        <scene sceneID="DEU-lh-8e5">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="hBo-BL-9PV" customClass="PageViewController" customModule="Stand_Minus" customModuleProvider="target" sceneMemberID="viewController">
+                    <connections>
+                        <segue destination="ghH-Z5-KVe" kind="show" identifier="quitPageViewControllerSegue" id="Etp-GG-PRJ"/>
+                    </connections>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nZ2-FF-nNC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-523" y="-225"/>
+        </scene>
+        <!--Step One View Controller-->
+        <scene sceneID="omZ-Ta-ClT">
+            <objects>
+                <viewController storyboardIdentifier="StepOneViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="eHJ-sw-G1E" customClass="StepOneViewController" customModule="Stand_Minus" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y0V-4E-zn9"/>
+                        <viewControllerLayoutGuide type="bottom" id="JWh-Gt-ivc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lSQ-Yh-fG2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 1:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mBy-lm-hb0">
+                                <rect key="frame" x="119" y="80" width="82" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="tGM-37-n3Y"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open Stand- on your watch." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OFp-oo-8fw">
+                                <rect key="frame" x="52" y="137" width="216" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="tRx-ms-Elj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lki-bf-x0p">
+                                <rect key="frame" x="16" y="198" width="304" height="292"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling Stand- on your watch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgs-Dq-gTc">
+                                <rect key="frame" x="42.5" y="38" width="235" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="aTN-RW-ghX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="mBy-lm-hb0" firstAttribute="top" secondItem="fgs-Dq-gTc" secondAttribute="bottom" constant="22" id="5tW-10-OWJ"/>
+                            <constraint firstItem="fgs-Dq-gTc" firstAttribute="top" secondItem="y0V-4E-zn9" secondAttribute="bottom" constant="18" id="7Xa-wc-LfC"/>
+                            <constraint firstItem="OFp-oo-8fw" firstAttribute="centerX" secondItem="Lki-bf-x0p" secondAttribute="centerX" constant="-8" id="CfN-B3-CuW"/>
+                            <constraint firstItem="JWh-Gt-ivc" firstAttribute="top" secondItem="Lki-bf-x0p" secondAttribute="bottom" constant="78" id="IG3-Fe-Jh6"/>
+                            <constraint firstItem="fgs-Dq-gTc" firstAttribute="centerX" secondItem="lSQ-Yh-fG2" secondAttribute="centerX" id="IUR-1e-4SD"/>
+                            <constraint firstItem="Lki-bf-x0p" firstAttribute="leading" secondItem="lSQ-Yh-fG2" secondAttribute="leadingMargin" id="QcO-qY-TSd"/>
+                            <constraint firstItem="OFp-oo-8fw" firstAttribute="top" secondItem="mBy-lm-hb0" secondAttribute="bottom" constant="23" id="c3A-R6-U5c"/>
+                            <constraint firstItem="Lki-bf-x0p" firstAttribute="top" secondItem="OFp-oo-8fw" secondAttribute="bottom" constant="40" id="ilG-aY-FMh"/>
+                            <constraint firstItem="Lki-bf-x0p" firstAttribute="trailing" secondItem="lSQ-Yh-fG2" secondAttribute="trailingMargin" constant="16" id="jZO-YD-1Dd"/>
+                            <constraint firstItem="mBy-lm-hb0" firstAttribute="centerX" secondItem="OFp-oo-8fw" secondAttribute="centerX" id="zCn-Iz-6aD"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="Lki-bf-x0p" id="Sjh-Fz-6ox"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j8W-Ah-59T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-523" y="477"/>
+        </scene>
+        <!--Step Two View Controller-->
+        <scene sceneID="Rh5-Il-0n9">
+            <objects>
+                <viewController storyboardIdentifier="StepTwoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="31h-EX-0kq" customClass="StepTwoViewController" customModule="Stand_Minus" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JwF-dK-pSv"/>
+                        <viewControllerLayoutGuide type="bottom" id="Oj2-sA-7vo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="C7a-WD-25L">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 2:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WIV-kD-qs1">
+                                <rect key="frame" x="117" y="80" width="86" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="lPz-NQ-vzQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Press side button of your watch." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBk-VJ-ZzQ">
+                                <rect key="frame" x="36.5" y="137" width="247" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Y2g-g3-P5M"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SuS-Yd-npY">
+                                <rect key="frame" x="16" y="198" width="304" height="292"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling Stand- on your watch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gti-XT-kXa">
+                                <rect key="frame" x="42.5" y="38" width="235" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="fa3-AV-ZdD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="SuS-Yd-npY" firstAttribute="trailing" secondItem="C7a-WD-25L" secondAttribute="trailingMargin" constant="16" id="N0L-6S-bXF"/>
+                            <constraint firstItem="pBk-VJ-ZzQ" firstAttribute="centerX" secondItem="SuS-Yd-npY" secondAttribute="centerX" constant="-8" id="Ns3-pK-j6O"/>
+                            <constraint firstItem="Oj2-sA-7vo" firstAttribute="top" secondItem="SuS-Yd-npY" secondAttribute="bottom" constant="78" id="P17-Ty-zPF"/>
+                            <constraint firstItem="WIV-kD-qs1" firstAttribute="top" secondItem="gti-XT-kXa" secondAttribute="bottom" constant="22" id="Qso-kA-C5r"/>
+                            <constraint firstItem="WIV-kD-qs1" firstAttribute="centerX" secondItem="pBk-VJ-ZzQ" secondAttribute="centerX" id="bWy-sE-ETR"/>
+                            <constraint firstItem="gti-XT-kXa" firstAttribute="centerX" secondItem="C7a-WD-25L" secondAttribute="centerX" id="cUd-ny-YUF"/>
+                            <constraint firstItem="pBk-VJ-ZzQ" firstAttribute="top" secondItem="WIV-kD-qs1" secondAttribute="bottom" constant="23" id="eih-Og-a5z"/>
+                            <constraint firstItem="SuS-Yd-npY" firstAttribute="top" secondItem="pBk-VJ-ZzQ" secondAttribute="bottom" constant="40" id="ejk-AN-Lf5"/>
+                            <constraint firstItem="gti-XT-kXa" firstAttribute="top" secondItem="JwF-dK-pSv" secondAttribute="bottom" constant="18" id="iDf-n4-ODR"/>
+                            <constraint firstItem="SuS-Yd-npY" firstAttribute="leading" secondItem="C7a-WD-25L" secondAttribute="leadingMargin" id="kjq-Be-sT0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="SuS-Yd-npY" id="zbT-2z-SgX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aaL-0o-hIl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="238" y="476"/>
+        </scene>
+        <!--About View Controller-->
+        <scene sceneID="9X9-4H-FsQ">
+            <objects>
+                <viewController storyboardIdentifier="aboutViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ghH-Z5-KVe" customClass="AboutViewController" customModule="Stand_Minus" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tCy-42-b6h"/>
+                        <viewControllerLayoutGuide type="bottom" id="oS5-7C-Gkl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cic-ws-u8n">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PPS-9l-5a0">
+                                <rect key="frame" x="105" y="269" width="110" height="30"/>
+                                <state key="normal" title="Enabling Stand-"/>
+                                <connections>
+                                    <segue destination="hBo-BL-9PV" kind="show" id="dza-7G-ab7"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="42mm Home Screen" translatesAutoresizingMaskIntoConstraints="NO" id="g3u-tx-8xJ">
+                                <rect key="frame" x="120" y="79" width="80" height="80"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stand- 1.0 (1702)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IRw-tJ-3Mq">
+                                <rect key="frame" x="95" y="198" width="131" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UeF-Zy-5zj">
+                                <rect key="frame" x="111" y="339" width="99" height="30"/>
+                                <state key="normal" title="Privacy Notice"/>
+                                <connections>
+                                    <action selector="privacyNoticeButtonClicked:" destination="ghH-Z5-KVe" eventType="touchUpInside" id="8Tm-is-OXg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstItem="PPS-9l-5a0" firstAttribute="top" secondItem="IRw-tJ-3Mq" secondAttribute="bottom" constant="50" id="XS5-He-Nlg"/>
+                            <constraint firstItem="g3u-tx-8xJ" firstAttribute="centerX" secondItem="IRw-tJ-3Mq" secondAttribute="centerX" id="Xkp-Ww-MM0"/>
+                            <constraint firstItem="PPS-9l-5a0" firstAttribute="centerY" secondItem="cic-ws-u8n" secondAttribute="centerY" id="eBW-8z-62M"/>
+                            <constraint firstItem="PPS-9l-5a0" firstAttribute="centerX" secondItem="UeF-Zy-5zj" secondAttribute="centerX" id="hph-eN-7OW"/>
+                            <constraint firstItem="IRw-tJ-3Mq" firstAttribute="centerX" secondItem="PPS-9l-5a0" secondAttribute="centerX" id="ixC-BD-pFW"/>
+                            <constraint firstItem="g3u-tx-8xJ" firstAttribute="centerX" secondItem="cic-ws-u8n" secondAttribute="centerX" id="mtq-Om-GgN"/>
+                            <constraint firstItem="IRw-tJ-3Mq" firstAttribute="top" secondItem="g3u-tx-8xJ" secondAttribute="bottom" constant="39" id="nLI-gk-OJQ"/>
+                            <constraint firstItem="UeF-Zy-5zj" firstAttribute="top" secondItem="PPS-9l-5a0" secondAttribute="bottom" constant="40" id="qQp-Gz-vFl"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q9V-fC-Vgw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="915" y="-240"/>
+        </scene>
+        <!--Step Three View Controller-->
+        <scene sceneID="wYP-LD-pbt">
+            <objects>
+                <viewController storyboardIdentifier="StepThreeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="EVd-x0-1Gc" customClass="StepThreeViewController" customModule="Stand_Minus" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="yYo-wb-XFO"/>
+                        <viewControllerLayoutGuide type="bottom" id="THP-zK-Q49"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="n6q-CV-0sl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 3:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFY-Sn-O77">
+                                <rect key="frame" x="117" y="80" width="87" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="psR-xD-dKM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find Stand-, then press &quot;Keep in Dock&quot;." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNK-BR-Bks">
+                                <rect key="frame" x="9" y="137" width="302" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="pbe-kB-AxF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="la7-cT-ysd">
+                                <rect key="frame" x="16" y="198" width="304" height="292"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling Stand- on your watch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAf-vX-M2h">
+                                <rect key="frame" x="42.5" y="38" width="235" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="gHT-V5-nb1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="iAf-vX-M2h" firstAttribute="top" secondItem="yYo-wb-XFO" secondAttribute="bottom" constant="18" id="3Zq-Aw-QLH"/>
+                            <constraint firstItem="la7-cT-ysd" firstAttribute="leading" secondItem="n6q-CV-0sl" secondAttribute="leadingMargin" id="6u7-zB-HVN"/>
+                            <constraint firstItem="IFY-Sn-O77" firstAttribute="top" secondItem="iAf-vX-M2h" secondAttribute="bottom" constant="22" id="B3x-Lb-Oeo"/>
+                            <constraint firstItem="IFY-Sn-O77" firstAttribute="centerX" secondItem="QNK-BR-Bks" secondAttribute="centerX" id="IYR-Kh-4mE"/>
+                            <constraint firstItem="QNK-BR-Bks" firstAttribute="centerX" secondItem="la7-cT-ysd" secondAttribute="centerX" constant="-8" id="NQq-ff-PIm"/>
+                            <constraint firstItem="la7-cT-ysd" firstAttribute="top" secondItem="QNK-BR-Bks" secondAttribute="bottom" constant="40" id="QzR-j7-Jnx"/>
+                            <constraint firstItem="THP-zK-Q49" firstAttribute="top" secondItem="la7-cT-ysd" secondAttribute="bottom" constant="78" id="VJF-oP-atq"/>
+                            <constraint firstItem="iAf-vX-M2h" firstAttribute="centerX" secondItem="n6q-CV-0sl" secondAttribute="centerX" id="cCD-SV-LYK"/>
+                            <constraint firstItem="la7-cT-ysd" firstAttribute="trailing" secondItem="n6q-CV-0sl" secondAttribute="trailingMargin" constant="16" id="cyB-BO-0hN"/>
+                            <constraint firstItem="QNK-BR-Bks" firstAttribute="top" secondItem="IFY-Sn-O77" secondAttribute="bottom" constant="23" id="mmK-2J-yfL"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="la7-cT-ysd" id="raM-gH-ylm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Yd-ge-Ju0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1018" y="475"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="42mm Home Screen" width="80" height="80"/>
+    </resources>
+</document>
