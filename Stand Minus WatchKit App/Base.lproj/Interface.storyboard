@@ -20,7 +20,7 @@
                             <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <label width="1" alignment="left" text="Not stood yet" textAlignment="center" id="C5a-uD-hh4">
+                        <label width="1" alignment="left" text="Stood" textAlignment="center" id="C5a-uD-hh4">
                             <fontDescription key="font" style="UICTFontTextStyleBody"/>
                         </label>
                         <label width="1" alignment="left" text="Updated at" textAlignment="center" id="Lo6-sC-cko">
@@ -52,7 +52,7 @@
                     </connections>
                 </notificationController>
             </objects>
-            <point key="canvasLocation" x="220" y="643"/>
+            <point key="canvasLocation" x="226" y="793"/>
         </scene>
         <!--Notification Controller-->
         <scene sceneID="ZPc-GJ-vnh">
@@ -71,7 +71,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="468" y="643"/>
+            <point key="canvasLocation" x="474" y="793"/>
         </scene>
     </scenes>
 </document>

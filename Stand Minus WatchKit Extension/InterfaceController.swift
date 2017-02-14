@@ -62,7 +62,12 @@ class InterfaceController: WKInterfaceController {
     private func updateUI() {
         func labelOfHasStood() -> String {
             if hasStood == nil { return NSLocalizedString("Watch Locked", comment: "Watch Locked") }
-            return hasStood! ? NSLocalizedString("Already stood", comment: "Already stood") : NSLocalizedString("Not stood yet", comment: "Not stood yet")
+            if hasStood! {
+                return NSLocalizedString("Already stood", comment: "Already stood")
+            }
+            else {
+                return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
+            }
         }
         fireDateLabel.setText(DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium))
         hasStoodLabel.setText(labelOfHasStood())

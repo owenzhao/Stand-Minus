@@ -1,15 +1,15 @@
 {
     "aps": {
         "alert": {
-            "body": "Test message",
-            "title": "Optional title"
+            "body": "是時間起來活動一下身體啦！",
+            "title": "請起立！"
         },
-        "category": "myCategory"
+        "category": "notify_user_category"
     },
     
     "WatchKit Simulator Actions": [
         {
-            "title": "First Button",
+            "title": "關閉",
             "identifier": "firstButtonAction"
         }
     ],
