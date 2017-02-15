@@ -10,15 +10,15 @@ import Foundation
 import HealthKit
 import WatchKit
 
-enum QueryBy:Int {
-    case complicationDirectly = 0
-    case viewController
-    case backgroundTask
-    case remoteNotification
-    case dockAfterSystemRebooting // not useful as this can't know now
-    case firstStart // occupy for init
-    case deviceLocked
-}
+//enum QueryBy:Int {
+//    case complicationDirectly = 0
+//    case viewController
+//    case backgroundTask
+//    case remoteNotification
+//    case dockAfterSystemRebooting // not useful as this can't know now
+//    case firstStart // occupy for init
+//    case deviceLocked
+//}
 
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
@@ -45,18 +45,19 @@ class StandHourQuery {
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
     
-    private var _by:QueryBy = .firstStart
+//    private var _by:QueryBy = .firstStart
+    var complicationShouldReQuery = true
     private var delegate:StandHourQueryHelper!
     
-    var by:QueryBy {
-        return _by
-    }
+//    var by:QueryBy {
+//        return _by
+//    }
     
 //    internal func dayOf(_ date:Date) -> Int {
 //        return cal.component(.day, from: date)
 //    }
     
-    func start(by: QueryBy, at now:Date, completeHandler: @escaping () -> ()) {
+    func start(at now:Date, completeHandler: @escaping () -> ()) {
         func arrangeNextBackgroundTaskWhenDeviceIsLocked() {
             func _hasComplication() -> Bool {
                 let server = CLKComplicationServer.sharedInstance()
@@ -166,13 +167,14 @@ class StandHourQuery {
                     }
                 }
                 else { // device is locked. **query failed, reason: Protected health data is inaccessible**
+                    self.complicationShouldReQuery = true
                     (WKExtension.shared().rootInterfaceController as! InterfaceController).hasStood = nil
                     arrangeNextBackgroundTaskWhenDeviceIsLocked()
                 }
             }
         }
         
-        _by = by
+//        _by = by
         
         defer { delegate.lastQueryDate = now }
         

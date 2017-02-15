@@ -72,9 +72,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 let now = Date()
 //                fireDates.append(now)
 //                fireDate = now
+                let query = StandHourQuery.shared()
+                if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
                 (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
 
-                procedureStart(by: .backgroundTask, at: now)
+                procedureStart(at: now)
                 
                 backgroundTask.setTaskCompleted()
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
@@ -102,7 +104,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         return false
     }
     
-    func procedureStart(by:QueryBy, at now:Date, updateOwenComplication:Bool = false, completeHandler: @escaping ()->() = { }) {
+    func procedureStart(at now:Date, updateOwenComplication:Bool = false, completeHandler: @escaping ()->() = { }) {
         func arrangeNextBackgroundTask(at now:Date) {
             func calculateNextFireDate() -> Date {
                 func shouldNotifyUser() -> Bool {
@@ -234,16 +236,23 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         
         func updateComplications() {
             let server = CLKComplicationServer.sharedInstance()
-            if updateComplicationHelper.hasComplication && updateComplicationHelper.shouldUpdateComplications() {
-                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
+            if updateComplicationHelper.hasComplication {
+                if updateComplicationHelper.shouldUpdateComplications() {
+                    server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
+                }
             }
+            else {
+                StandHourQuery.shared().complicationShouldReQuery = true
+            }
+//            if updateComplicationHelper.hasComplication && updateComplicationHelper.shouldUpdateComplications() {
+//                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
+//            }
         }
         
 //        dataHelper = CurrentHourDataHelper()
 //        data.delegate = dataHelper
         let query = StandHourQuery.shared()
-        
-        query.start(by: by, at: now) { // query
+        query.start(at: now) { // query
             self.data.update(at: now) // // calculate data
             if !updateOwenComplication { // update complications
                 updateComplications()

@@ -53,8 +53,8 @@ class InterfaceController: WKInterfaceController {
         let now = Date()
         //        delegate.fireDates.append(now)
         fireDate = now
-        
-        delegate.procedureStart(by: .viewController, at: now) {[unowned self] in // run first time after reboot
+        StandHourQuery.shared().complicationShouldReQuery = false
+        delegate.procedureStart(at: now) {[unowned self] in // run first time after reboot
             self.updateUI()
         }
     }

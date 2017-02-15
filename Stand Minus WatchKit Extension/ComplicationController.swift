@@ -16,8 +16,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 
     unowned private let data = CurrentHourData.shared()
-    
-    private let query = StandHourQuery.shared()
+    unowned private let query = StandHourQuery.shared()
     
     // MARK: - Timeline Configuration
     
@@ -74,18 +73,32 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             return CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
         }
         
-        if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
-            handler(entryOf(complication))
-        }
-        else {
+        if query.complicationShouldReQuery {
+            query.complicationShouldReQuery = false
             let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-//            delegate.fireDates.append(now)
+            //            delegate.fireDates.append(now)
             (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
             
-            delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
+            delegate.procedureStart(at: now, updateOwenComplication: true) {
                 handler(entryOf(complication))
             }
         }
+        else {
+            handler(entryOf(complication))
+        }
+//        
+//        if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
+//            handler(entryOf(complication))
+//        }
+//        else {
+//            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
+////            delegate.fireDates.append(now)
+//            (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
+//            
+//            delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
+//                handler(entryOf(complication))
+//            }
+//        }
     }
     
     func getTimelineEntries(for complication: CLKComplication, before date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
