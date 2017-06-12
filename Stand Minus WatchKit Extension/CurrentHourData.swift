@@ -83,7 +83,7 @@ class CurrentHourData {
         }
         
         func hasStood() {
-            if let latestSample = (_samples.max { $0.0.startDate < $0.1.startDate }) {
+            if let latestSample = (_samples.max { $0.startDate < $1.startDate }) {
                 let hourInLast = hourOf(latestSample.startDate)
                 let hourNow = hourOf(now)
                 
