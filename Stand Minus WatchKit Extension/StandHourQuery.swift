@@ -10,16 +10,6 @@ import Foundation
 import HealthKit
 import WatchKit
 
-//enum QueryBy:Int {
-//    case complicationDirectly = 0
-//    case viewController
-//    case backgroundTask
-//    case remoteNotification
-//    case dockAfterSystemRebooting // not useful as this can't know now
-//    case firstStart // occupy for init
-//    case deviceLocked
-//}
-
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = CurrentHourData.shared()
@@ -45,17 +35,8 @@ class StandHourQuery {
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
     
-//    private var _by:QueryBy = .firstStart
     var complicationShouldReQuery = true
     private var delegate:StandHourQueryHelper!
-    
-//    var by:QueryBy {
-//        return _by
-//    }
-    
-//    internal func dayOf(_ date:Date) -> Int {
-//        return cal.component(.day, from: date)
-//    }
     
     func start(at now:Date, completeHandler: @escaping () -> ()) {
         func arrangeNextBackgroundTaskWhenDeviceIsLocked() {
@@ -72,7 +53,6 @@ class StandHourQuery {
                 cps.hour! += 1
                 cps.minute = 0
             }
-//            let wkDelegate = WKExtension.shared().delegate as! ExtensionDelegate
             
             let hasComplication = _hasComplication()
             var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
@@ -128,12 +108,8 @@ class StandHourQuery {
             }
             
             let fireDate = cal.date(from: cps)!
-//            let arrangeDate = ArrangeDate(date: fireDate, by:.deviceLocked)
-//            wkDelegate.arrangeDates.append(arrangeDate)
             WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
                 if error == nil {
-//                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
-                    // NSLog("arrange background task at %@", ds)
                 }
             }
         }
@@ -173,8 +149,6 @@ class StandHourQuery {
                 }
             }
         }
-        
-//        _by = by
         
         defer { delegate.lastQueryDate = now }
         

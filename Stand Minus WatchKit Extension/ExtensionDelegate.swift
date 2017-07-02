@@ -114,7 +114,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     return data.hasStood
                 }
                 func total() -> Int {
-                    return data.stoodCount
+                    return data.standCount
                 }
                 func nextWholeHour(cps:inout DateComponents) {
                     cps.hour! += 1
@@ -283,7 +283,7 @@ class UpdateComplicationHelper:UpdateComplicationDelegate {
     private let server = CLKComplicationServer.sharedInstance()
     private let data = CurrentHourData.shared()
     
-    private var stoodCount:Int! = nil
+    private var standCount:Int! = nil
     private var hasStood:Bool! = nil
     
     var hasComplication:Bool {
@@ -292,8 +292,8 @@ class UpdateComplicationHelper:UpdateComplicationDelegate {
     }
     
     func shouldUpdateComplications() -> Bool {
-        if stoodCount == nil || stoodCount != data.stoodCount || hasStood != data.hasStood {
-            stoodCount = data.stoodCount
+        if standCount == nil || standCount != data.standCount || hasStood != data.hasStood {
+            standCount = data.standCount
             hasStood = data.hasStood
             
             return true

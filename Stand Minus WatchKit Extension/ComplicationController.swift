@@ -45,7 +45,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         func entryOf(_ complication:CLKComplication) -> CLKComplicationTimelineEntry {
             let template:CLKComplicationTemplate
-            let textProvider = CLKSimpleTextProvider(text: String(self.data.stoodCount))
+            let textProvider = CLKSimpleTextProvider(text: String(self.data.standCount))
             switch complication.family {
             case .circularSmall:
                 template = CLKComplicationTemplateCircularSmallRingText()
@@ -117,7 +117,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // This method will be called once per supported complication, and the results will be cached
         func templateOf() -> CLKComplicationTemplate {
             let template:CLKComplicationTemplate
-            let textProvider = CLKSimpleTextProvider(text: String(self.data.stoodCount))
+            let textProvider = CLKSimpleTextProvider(text: String(self.data.standCount))
             switch complication.family {
             case .circularSmall:
                 template = CLKComplicationTemplateCircularSmallRingText()
