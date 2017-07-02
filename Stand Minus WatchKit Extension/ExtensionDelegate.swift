@@ -70,8 +70,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
                 let now = Date()
-//                fireDates.append(now)
-//                fireDate = now
                 let query = StandHourQuery.shared()
                 if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
                 (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
@@ -224,12 +222,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
             
             let fireDate = calculateNextFireDate()
-//            let arrangeDate = ArrangeDate(date: fireDate, by: by)
-//            arrangeDates.append(arrangeDate)
+            
             WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
                 if error == nil {
-//                    let ds = DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
-                    // NSLog("arrange background task at %@", ds)
                 }
             }
         }
@@ -244,13 +239,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             else {
                 StandHourQuery.shared().complicationShouldReQuery = true
             }
-//            if updateComplicationHelper.hasComplication && updateComplicationHelper.shouldUpdateComplications() {
-//                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
-//            }
         }
         
-//        dataHelper = CurrentHourDataHelper()
-//        data.delegate = dataHelper
         let query = StandHourQuery.shared()
         query.start(at: now) { // query
             self.data.update(at: now) // // calculate data
