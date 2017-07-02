@@ -10,17 +10,10 @@ import WatchKit
 import ClockKit
 import UserNotifications
 
-//struct ArrangeDate {
-//    let date:Date
-//    let by:QueryBy
-//}
-
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private let cal = Calendar(identifier: .gregorian)
     unowned private let data = CurrentHourData.shared()
-    lazy private var updateComplicationHelper:UpdateComplicationHelper = UpdateComplicationHelper()
-    
-//    private var dataHelper:CurrentHourDataHelper!
+    lazy private var updateComplicationDelegate:UpdateComplicationDelegate = UpdateComplicationDelegate()
     
     var state:ExtensionCurrentHourState = .notSet
     
@@ -29,32 +22,14 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         
         return false
     }
-    
-//    var arrangeDates:[ArrangeDate] = [] // by, date
-//    var fireDates:[Date] = []
-//    var fireDate:Date! = nil
 
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
-        // NSLog("app did finish launching")
-        
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
             if error == nil && success {
                 
             }
         }
-    }
-
-    func applicationDidBecomeActive() {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        // NSLog("app did become active")
-//        standardPrecedure()
-    }
-
-    func applicationWillResignActive() {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, etc.
-        // NSLog("app will resign active")
     }
     
     deinit {
@@ -74,7 +49,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
                 (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
 
-                procedureStart(at: now)
+                startProcedure(at: now)
                 
                 backgroundTask.setTaskCompleted()
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
@@ -93,161 +68,192 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
     }
     
-    private func _hasComplication() -> Bool {
-        let server = CLKComplicationServer.sharedInstance()
-        if let complications = server.activeComplications, !complications.isEmpty {
-            return true
-        }
-        
-        return false
-    }
+//    private func _hasComplication() -> Bool {
+//        let server = CLKComplicationServer.sharedInstance()
+//        if let complications = server.activeComplications, !complications.isEmpty {
+//            return true
+//        }
+//
+//        return false
+//    }
     
-    func procedureStart(at now:Date, updateOwenComplication:Bool = false, completeHandler: @escaping ()->() = { }) {
-        func arrangeNextBackgroundTask(at now:Date) {
-            func calculateNextFireDate() -> Date {
-                func shouldNotifyUser() -> Bool {
-                    return data.shouldNotifyUser
+    
+    
+    
+    
+    
+    private func arrangeNextBackgroundTask(at now:Date) {
+        func calculateNextFireDate() -> Date {
+            func shouldNotifyUser() -> Bool {
+                return data.shouldNotifyUser
+            }
+            func hasStood() -> Bool {
+                return data.hasStood
+            }
+            func total() -> Int {
+                return data.standCount
+            }
+            func nextWholeHour(cps:inout DateComponents) {
+                cps.hour! += 1
+                cps.minute = 0
+            }
+            func fiftyMinutesInThisHour(cps:inout DateComponents) {
+                cps.minute = 50
+                state = .notNotifyUser(at: now)
+            }
+            func fiftyMinutesInNextHour(cps:inout DateComponents) {
+                cps.hour! += 1
+                cps.minute = 50
+                state = .notNotifyUser(at: now)
+            }
+            func twelveFiftyInNextDay(cps:inout DateComponents) {
+                cps.day! += 1
+                cps.hour = 12
+                cps.minute = 50
+                state = .notNotifyUser(at: now)
+            }
+            func currentMinute() -> Int {
+                return cal.component(.minute, from: now)
+            }
+            func notifyUser() {
+                let center = UNUserNotificationCenter.current()
+                if center.delegate == nil { center.delegate = self }
+                center.getNotificationSettings { (notificationSettings) in
+                    let id = UUID().uuidString
+                    let content = { () -> UNMutableNotificationContent in
+                        let mc = UNMutableNotificationContent()
+                        mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
+                        mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
+                        mc.categoryIdentifier = "notify_user_category"
+                        
+                        if notificationSettings.soundSetting == .enabled {
+                            mc.sound = UNNotificationSound.default()
+                        }
+                        
+                        return mc
+                    }()
+                    let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
+                    center.add(request, withCompletionHandler: nil)
                 }
-                func hasStood() -> Bool {
-                    return data.hasStood
-                }
-                func total() -> Int {
-                    return data.standCount
-                }
-                func nextWholeHour(cps:inout DateComponents) {
-                    cps.hour! += 1
-                    cps.minute = 0
-                }
-                func fiftyMinutesInThisHour(cps:inout DateComponents) {
-                    cps.minute = 50
-                    state = .notNotifyUser(at: now)
-                }
-                func fiftyMinutesInNextHour(cps:inout DateComponents) {
-                    cps.hour! += 1
-                    cps.minute = 50
-                    state = .notNotifyUser(at: now)
-                }
-                func twelveFiftyInNextDay(cps:inout DateComponents) {
-                    cps.day! += 1
-                    cps.hour = 12
-                    cps.minute = 50
-                    state = .notNotifyUser(at: now)
-                }
-                func currentMinute() -> Int {
-                    return cal.component(.minute, from: now)
-                }
-                func notifyUser() {
-                    let center = UNUserNotificationCenter.current()
-                    if center.delegate == nil { center.delegate = self }
-                    center.getNotificationSettings { (notificationSettings) in
-                        let id = UUID().uuidString
-                        let content = { () -> UNMutableNotificationContent in
-                            let mc = UNMutableNotificationContent()
-                            mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
-                            mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
-                            mc.categoryIdentifier = "notify_user_category"
-                            
-                            if notificationSettings.soundSetting == .enabled {
-                                mc.sound = UNNotificationSound.default()
-                            }
-                            
-                            return mc
-                        }()
-                        let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
-                        center.add(request, withCompletionHandler: nil)
-                    }
+            }
+            
+            let hasComplication:Bool = {
+                let server = CLKComplicationServer.sharedInstance()
+                if let complications = server.activeComplications, !complications.isEmpty {
+                    return true
                 }
                 
-                let hasComplication = _hasComplication()
-                var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
-                if hasComplication {
-                    if shouldNotifyUser() {
-                        if hasStood() {
-                            nextWholeHour(cps: &cps)
-                        }
-                        else {
-                            switch cps.minute! {
-                            case 0..<50:
-                                fiftyMinutesInThisHour(cps: &cps)
-                            default: //(50..<60)
-                                if state == .notNotifyUser(at: now) {
-                                    notifyUser()
-                                    state = .alreadyNotifyUser(at: now)
-                                }
-                                nextWholeHour(cps: &cps)
-                            }
-                        }
+                return false
+            }()
+            var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+            if hasComplication {
+                if shouldNotifyUser() {
+                    if hasStood() {
+                        nextWholeHour(cps: &cps)
                     }
                     else {
-                        nextWholeHour(cps: &cps)
+                        switch cps.minute! {
+                        case 0..<50:
+                            fiftyMinutesInThisHour(cps: &cps)
+                        default: //(50..<60)
+                            if state == .notNotifyUser(at: now) {
+                                notifyUser()
+                                state = .alreadyNotifyUser(at: now)
+                            }
+                            nextWholeHour(cps: &cps)
+                        }
                     }
                 }
                 else {
-                    if shouldNotifyUser() {
-                        if hasStood() {
-                            if cps.hour! != 23 {
-                                fiftyMinutesInNextHour(cps:&cps)
-                            }
-                            else {
-                                twelveFiftyInNextDay(cps: &cps)
-                            }
-                        }
-                        else {
-                            switch cps.minute! {
-                            case 0..<50:
-                                cps.minute = 50
-                                state = .notNotifyUser(at: now)
-                            default: // 50..<60
-                                if state != .alreadyNotifyUser(at: now) {
-                                    notifyUser()
-                                    state = .alreadyNotifyUser(at: now)
-                                }
-                                fiftyMinutesInNextHour(cps: &cps)
-                            }
-                        }
-                    }
-                    else {
-                        cps.hour! += 12 - total() + (hasStood() ? 1 : 0)
-                        if cps.hour! > 23 {
-                            twelveFiftyInNextDay(cps: &cps)
-                        }
-                        else {
-                            cps.minute = 50
-                        }
-                        state = .notNotifyUser(at: now)
-                    }
-                }
-                
-                return cal.date(from: cps)!
-            }
-            
-            let fireDate = calculateNextFireDate()
-            
-            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
-                if error == nil {
-                }
-            }
-        }
-        
-        func updateComplications() {
-            let server = CLKComplicationServer.sharedInstance()
-            if updateComplicationHelper.hasComplication {
-                if updateComplicationHelper.shouldUpdateComplications() {
-                    server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
+                    nextWholeHour(cps: &cps)
                 }
             }
             else {
-                StandHourQuery.shared().complicationShouldReQuery = true
+                if shouldNotifyUser() {
+                    if hasStood() {
+                        if cps.hour! != 23 {
+                            fiftyMinutesInNextHour(cps:&cps)
+                        }
+                        else {
+                            twelveFiftyInNextDay(cps: &cps)
+                        }
+                    }
+                    else {
+                        switch cps.minute! {
+                        case 0..<50:
+                            cps.minute = 50
+                            state = .notNotifyUser(at: now)
+                        default: // 50..<60
+                            if state != .alreadyNotifyUser(at: now) {
+                                notifyUser()
+                                state = .alreadyNotifyUser(at: now)
+                            }
+                            fiftyMinutesInNextHour(cps: &cps)
+                        }
+                    }
+                }
+                else {
+                    cps.hour! += 12 - total() + (hasStood() ? 1 : 0)
+                    if cps.hour! > 23 {
+                        twelveFiftyInNextDay(cps: &cps)
+                    }
+                    else {
+                        cps.minute = 50
+                    }
+                    state = .notNotifyUser(at: now)
+                }
             }
+            
+            return cal.date(from: cps)!
         }
         
-        let query = StandHourQuery.shared()
-        query.start(at: now) { // query
-            self.data.update(at: now) // // calculate data
-            if !updateOwenComplication { // update complications
-                updateComplications()
+        let fireDate = calculateNextFireDate()
+        
+        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
+            if error == nil {
             }
-            arrangeNextBackgroundTask(at: now)
+        }
+    }
+    
+    private func updateComplications() {
+        let server = CLKComplicationServer.sharedInstance()
+        if updateComplicationDelegate.hasComplication {
+            if updateComplicationDelegate.shouldUpdateComplications() {
+                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
+            }
+        }
+        else {
+            StandHourQuery.shared().complicationShouldReQuery = true
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func startProcedure(at now:Date, shouldUpdateComplication:Bool = true, completeHandler: @escaping ()->() = { }) {
+        let query = StandHourQuery.shared()
+        query.start(at: now) { [unowned self] in // query
+            self.data.update(at: now) // // calculate data
+            if shouldUpdateComplication { // update complications
+                self.updateComplications()
+            }
+            self.arrangeNextBackgroundTask(at: now)
             
             completeHandler()
         }
@@ -264,12 +270,12 @@ extension ExtensionDelegate:UNUserNotificationCenterDelegate {
 
 // MARK: - UpdateComplicationDelegate
 
-protocol UpdateComplicationDelegate {
+protocol UpdateComplicationDelegateProtocol {
     var hasComplication:Bool { get }
     func shouldUpdateComplications() -> Bool
 }
 
-class UpdateComplicationHelper:UpdateComplicationDelegate {
+class UpdateComplicationDelegate:UpdateComplicationDelegateProtocol {
     private let server = CLKComplicationServer.sharedInstance()
     private let data = CurrentHourData.shared()
     

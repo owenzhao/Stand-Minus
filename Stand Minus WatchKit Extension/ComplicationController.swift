@@ -40,7 +40,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         // Call the handler with the current timeline entry
-        // NSLog("complication updates")
         let now = Date()
         
         func entryOf(_ complication:CLKComplication) -> CLKComplicationTimelineEntry {
@@ -79,26 +78,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             //            delegate.fireDates.append(now)
             (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
             
-            delegate.procedureStart(at: now, updateOwenComplication: true) {
+            delegate.startProcedure(at: now, shouldUpdateComplication: false) {
                 handler(entryOf(complication))
             }
         }
         else {
             handler(entryOf(complication))
         }
-//        
-//        if query.by == .backgroundTask || WKExtension.shared().applicationState == .active { // app calls complication updates
-//            handler(entryOf(complication))
-//        }
-//        else {
-//            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-////            delegate.fireDates.append(now)
-//            (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
-//            
-//            delegate.procedureStart(by: .complicationDirectly, at: now, updateOwenComplication: true) {
-//                handler(entryOf(complication))
-//            }
-//        }
     }
     
     func getTimelineEntries(for complication: CLKComplication, before date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {

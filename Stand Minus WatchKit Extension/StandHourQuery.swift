@@ -36,7 +36,7 @@ class StandHourQuery {
     private let store = HKHealthStore()
     
     var complicationShouldReQuery = true
-    private var delegate:StandHourQueryHelper!
+    private var delegate:StandHourQueryDelegate!
     
     func start(at now:Date, completeHandler: @escaping () -> ()) {
         func arrangeNextBackgroundTaskWhenDeviceIsLocked() {
@@ -153,7 +153,7 @@ class StandHourQuery {
         defer { delegate.lastQueryDate = now }
         
         if delegate == nil {
-            delegate = StandHourQueryHelper(now)
+            delegate = StandHourQueryDelegate(now)
         }
         else {
             guard delegate.shouldQuery(at: now) else {
@@ -181,13 +181,13 @@ class StandHourQuery {
     }
 }
 
-protocol StandHourQueryDelegate:class {
+protocol StandHourQueryDelegateProtocol:class {
     var lastQueryDate: Date { get set }
     func shouldQuery(at now:Date) -> Bool
     func shouldRecreatePredicate(_ isFirstQuery:Bool, _ now:Date) -> Bool
 }
 
-class StandHourQueryHelper:StandHourQueryDelegate {
+class StandHourQueryDelegate:StandHourQueryDelegateProtocol {
     var lastQueryDate: Date
     unowned private let data = CurrentHourData.shared()
 
