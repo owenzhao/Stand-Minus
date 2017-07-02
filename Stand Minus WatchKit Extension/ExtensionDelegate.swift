@@ -68,20 +68,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
     }
     
-//    private func _hasComplication() -> Bool {
-//        let server = CLKComplicationServer.sharedInstance()
-//        if let complications = server.activeComplications, !complications.isEmpty {
-//            return true
-//        }
-//
-//        return false
-//    }
-    
-    
-    
-    
-    
-    
     private func arrangeNextBackgroundTask(at now:Date) {
         func calculateNextFireDate() -> Date {
             func shouldNotifyUser() -> Bool {
@@ -137,16 +123,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 }
             }
             
-            let hasComplication:Bool = {
-                let server = CLKComplicationServer.sharedInstance()
-                if let complications = server.activeComplications, !complications.isEmpty {
-                    return true
-                }
-                
-                return false
-            }()
             var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
-            if hasComplication {
+            if updateComplicationDelegate.hasComplication {
                 if shouldNotifyUser() {
                     if hasStood() {
                         nextWholeHour(cps: &cps)
@@ -227,30 +205,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    func startProcedure(at now:Date, shouldUpdateComplication:Bool = true, completeHandler: @escaping ()->() = { }) {
+    func startProcedure(at now:Date, needToUpdateComplication:Bool = true, completeHandler: @escaping ()->() = { }) {
         let query = StandHourQuery.shared()
-        query.start(at: now) { [unowned self] in // query
+        query.start(at: now, hasComplication:updateComplicationDelegate.hasComplication) { [unowned self] in // query
             self.data.update(at: now) // // calculate data
-            if shouldUpdateComplication { // update complications
+            if needToUpdateComplication { // update complications
                 self.updateComplications()
             }
             self.arrangeNextBackgroundTask(at: now)

@@ -53,7 +53,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             case .utilitarianSmallFlat:
                 template = CLKComplicationTemplateUtilitarianSmallFlat()
             default: // utilitarianSmall
-                template = CLKComplicationTemplateUtilitarianSmallFlat() // CLKComplicationTemplateUtilitarianSmallRingText()
+                template = CLKComplicationTemplateUtilitarianSmallFlat()
             }
             
             if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
@@ -78,7 +78,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             //            delegate.fireDates.append(now)
             (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
             
-            delegate.startProcedure(at: now, shouldUpdateComplication: false) {
+            delegate.startProcedure(at: now, needToUpdateComplication: false) {
                 handler(entryOf(complication))
             }
         }

@@ -38,23 +38,13 @@ class StandHourQuery {
     var complicationShouldReQuery = true
     private var delegate:StandHourQueryDelegate!
     
-    func start(at now:Date, completeHandler: @escaping () -> ()) {
+    func start(at now:Date, hasComplication:Bool, completeHandler: @escaping () -> ()) {
         func arrangeNextBackgroundTaskWhenDeviceIsLocked() {
-            func _hasComplication() -> Bool {
-                let server = CLKComplicationServer.sharedInstance()
-                if let complications = server.activeComplications, !complications.isEmpty {
-                    return true
-                }
-                
-                return false
-            }
-            
             func nextWholeHour( cps:inout DateComponents) {
                 cps.hour! += 1
                 cps.minute = 0
             }
-            
-            let hasComplication = _hasComplication()
+
             var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
             
             if hasComplication {
