@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC0200091F0EF95C00ECA5EA /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
 		DC08314F1E407B7F00A62520 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08314E1E407B7F00A62520 /* AppDelegate.swift */; };
 		DC0831541E407B8000A62520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC0831521E407B8000A62520 /* Main.storyboard */; };
 		DC0831561E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831551E407B8000A62520 /* Assets.xcassets */; };
@@ -108,6 +109,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsKey.swift; sourceTree = "<group>"; };
 		DC08314B1E407B7F00A62520 /* Stand Minus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stand Minus.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC08314E1E407B7F00A62520 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC0831551E407B8000A62520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				DC0831871E407B8000A62520 /* Supporting Files */,
 				DC9AC4801E480D8000F52028 /* CurrentHourData.swift */,
 				DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */,
+				DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */,
 			);
 			path = "Stand Minus WatchKit Extension";
 			sourceTree = "<group>";
@@ -639,6 +642,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC9AC4811E480D8000F52028 /* CurrentHourData.swift in Sources */,
+				DC0200091F0EF95C00ECA5EA /* DefaultsKey.swift in Sources */,
 				DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */,
 				DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */,
 				DC08318C1E407B8000A62520 /* ExtensionDelegate.swift in Sources */,

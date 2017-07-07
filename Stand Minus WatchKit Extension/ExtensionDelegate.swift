@@ -47,7 +47,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 let now = Date()
                 let query = StandHourQuery.shared()
                 if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
-                (WKExtension.shared().rootInterfaceController as! InterfaceController).fireDate = now
+                let defaults = UserDefaults.standard
+                defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
 
                 startProcedure(at: now)
                 
@@ -69,7 +70,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     }
     
     private func arrangeNextBackgroundTask(at now:Date) {
-        func calculateNextFireDate() -> Date {
+        func calculateNextQueryDate() -> Date {
             func shouldNotifyUser() -> Bool {
                 return data.shouldNotifyUser
             }
@@ -185,9 +186,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             return cal.date(from: cps)!
         }
         
-        let fireDate = calculateNextFireDate()
+        let nextQueryDate = calculateNextQueryDate()
         
-        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
+        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: nextQueryDate, userInfo: nil) { (error) in
             if error == nil {
             }
         }

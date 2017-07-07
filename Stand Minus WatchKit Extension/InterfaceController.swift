@@ -12,9 +12,14 @@ import ClockKit
 
 class InterfaceController: WKInterfaceController {
     private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
+    private let defaults = UserDefaults.standard
     
-    var hasStood:Bool? = nil
-    var fireDate:Date! = nil
+    var hasStood:Bool? {
+        let isDefaultsContainHasStood = !(defaults.object(forKey: DefaultsKey.hasStoodKey) == nil)
+        
+        return isDefaultsContainHasStood ? defaults.bool(forKey: DefaultsKey.hasStoodKey) : nil
+    }
+    
     
     private func addMeneItemOfUpdate() {
         return addMenuItem(with: .resume, title: NSLocalizedString("Update", comment: "Update"), action: #selector(updateButtonClicked))
@@ -36,7 +41,7 @@ class InterfaceController: WKInterfaceController {
     // MARK: - UI
     
     @IBOutlet var hasStoodLabel: WKInterfaceLabel!
-    @IBOutlet var fireDateLabel: WKInterfaceLabel!
+    @IBOutlet var lastQueryDateLabel: WKInterfaceLabel!
     
     @IBAction func updateButtonClicked() {
         queryCurrentStandUpInfo()
@@ -45,7 +50,7 @@ class InterfaceController: WKInterfaceController {
     // MARK: - private functions
     private func queryCurrentStandUpInfo() {
         let now = Date()
-        fireDate = now
+        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
         StandHourQuery.shared().complicationShouldReQuery = false
         delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
             self.updateUI()
@@ -65,11 +70,13 @@ class InterfaceController: WKInterfaceController {
             return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
         }
         
-        func localizedFireDate() -> String {
-            return DateFormatter.localizedString(from: fireDate, dateStyle: .none, timeStyle: .medium)
+        func localizedLastQueryDate() -> String {
+            let lastQueryTimeIntervalSinceReferenceDate = defaults.double(forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+            let lastQueryDate = Date(timeIntervalSinceReferenceDate: lastQueryTimeIntervalSinceReferenceDate)
+            return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)
         }
         
-        fireDateLabel.setText(localizedFireDate())
+        lastQueryDateLabel.setText(localizedLastQueryDate())
         hasStoodLabel.setText(localizedLabelOfHasStood())
     }
 }

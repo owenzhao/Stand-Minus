@@ -32,7 +32,8 @@ class CurrentHourData {
     private(set) var standCount = 0
     private(set) var hasStood = false {
         didSet {
-            (WKExtension.shared().rootInterfaceController as! InterfaceController).hasStood = hasStood
+            let defaults = UserDefaults.standard
+            defaults.set(hasStood, forKey: DefaultsKey.hasStoodKey)
         }
     }
     private let cal = Calendar(identifier: .gregorian)

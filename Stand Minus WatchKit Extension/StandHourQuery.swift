@@ -97,8 +97,8 @@ class StandHourQuery {
                 }
             }
             
-            let fireDate = cal.date(from: cps)!
-            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
+            let nextQueryDate = cal.date(from: cps)!
+            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: nextQueryDate, userInfo: nil) { (error) in
                 if error == nil {
                 }
             }
@@ -134,7 +134,8 @@ class StandHourQuery {
                 }
                 else { // device is locked. **query failed, reason: Protected health data is inaccessible**
                     self.complicationShouldReQuery = true
-                    (WKExtension.shared().rootInterfaceController as! InterfaceController).hasStood = nil
+                    let defaults = UserDefaults.standard
+                    defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
                     arrangeNextBackgroundTaskWhenDeviceIsLocked()
                 }
             }
