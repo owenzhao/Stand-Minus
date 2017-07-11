@@ -58,11 +58,7 @@ class InterfaceController: WKInterfaceController {
     }
     
     private func updateUI() {
-        func localizedLabelOfHasStood() -> String {
-            guard let hasStood = hasStood else {
-                return NSLocalizedString("Watch Locked", comment: "Watch Locked")
-            }
-            
+        func localizedLabelOfHasStood(_ hasStood:Bool) -> String {
             if hasStood {
                 return NSLocalizedString("Already stood", comment: "Already stood")
             }
@@ -76,7 +72,12 @@ class InterfaceController: WKInterfaceController {
             return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)
         }
         
+        guard let hasStood = hasStood else {
+            queryCurrentStandUpInfo()
+            return
+        }
+        
         lastQueryDateLabel.setText(localizedLastQueryDate())
-        hasStoodLabel.setText(localizedLabelOfHasStood())
+        hasStoodLabel.setText(localizedLabelOfHasStood(hasStood))
     }
 }
