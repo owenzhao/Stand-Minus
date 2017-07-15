@@ -29,7 +29,7 @@ class StandHourQuery {
     private var anchor:HKQueryAnchor? = nil
     
     private var predicate:NSPredicate! = nil
-    private var anchorQuery:HKAnchoredObjectQuery! = nil
+//    private var anchorQuery:HKAnchoredObjectQuery! = nil
     
     private let cal = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
@@ -111,8 +111,8 @@ class StandHourQuery {
             predicate = HKQuery.predicateForSamples(withStart: midnight, end: midnight.addingTimeInterval(24 * 60 * 60), options: .strictStartDate)
         }
         
-        func creatAnchorQuery() {
-            anchorQuery = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
+        func creatAnchorQuery() -> HKAnchoredObjectQuery {
+            let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
                 if error == nil {
                     defer {
                         self.anchor = nextAnchor
@@ -139,6 +139,8 @@ class StandHourQuery {
                     arrangeNextBackgroundTaskWhenDeviceIsLocked()
                 }
             }
+            
+            return query
         }
         
         defer { delegate.lastQueryDate = now }
@@ -162,11 +164,11 @@ class StandHourQuery {
             createPredicate()
         }
         
-        creatAnchorQuery()
+        let anchorQuery = creatAnchorQuery()
         
         store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
             if error == nil && success {
-                self.store.execute(self.anchorQuery!)
+                self.store.execute(anchorQuery)
             }
         }
     }
