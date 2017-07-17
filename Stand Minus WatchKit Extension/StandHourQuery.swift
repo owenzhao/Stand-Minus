@@ -13,6 +13,7 @@ import WatchKit
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = CurrentHourData.shared()
+    lazy private var semaphore = DispatchSemaphore(value: 1)
     
     private init() { }
     
@@ -39,6 +40,8 @@ class StandHourQuery {
     private var delegate:StandHourQueryDelegate!
     
     func start(at now:Date, hasComplication:Bool, completionHandler: @escaping () -> ()) {
+        semaphore.wait()
+        
         defer { delegate.lastQueryDate = now }
         
         if delegate == nil {
@@ -145,6 +148,7 @@ class StandHourQuery {
         let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
             defer {
                 completionHandler()
+                self.semaphore.signal()
             }
             
             if error == nil {

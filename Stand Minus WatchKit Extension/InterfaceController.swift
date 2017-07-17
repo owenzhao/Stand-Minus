@@ -48,18 +48,20 @@ class InterfaceController: WKInterfaceController {
     }
     
     // MARK: - private functions
+    
+    /// When Apple Watch reboots, complication and interface will rerun at the same time.
+    /// In order to solve the problem, I used semaphore to keep one query runs at one time.
+    /// Since main thread shouldn't be blocked, the `DispatchQueue.global()` queue is necessary.
+    /// There was also very rare possibility and when you manually update UI in Watch app, the background task runs.
     private func queryCurrentStandUpInfo() {
-        let query = StandHourQuery.shared()
-        if query.complicationShouldReQuery {
-            query.complicationShouldReQuery = false
+        DispatchQueue.global().async { [unowned self] in
             let now = Date()
-            defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-            delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
-                self.updateUI()
+            self.defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+            self.delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
+                DispatchQueue.main.async { [unowned self] in
+                    self.updateUI()
+                }
             }
-        }
-        else {
-            updateUI()
         }
     }
     
