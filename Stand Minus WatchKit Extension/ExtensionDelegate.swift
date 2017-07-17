@@ -50,9 +50,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 let defaults = UserDefaults.standard
                 defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
 
-                startProcedure(at: now)
-                
-                backgroundTask.setTaskCompleted()
+                let completionHandler = backgroundTask.setTaskCompleted
+                startProcedure(at: now, completionHandler: completionHandler)
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
                 snapshotTask.setTaskCompleted(restoredDefaultState: false, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
@@ -206,7 +205,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
     }
     
-    func startProcedure(at now:Date, needToUpdateComplication:Bool = true, completeHandler: @escaping ()->() = { }) {
+    func startProcedure(at now:Date, needToUpdateComplication:Bool = true, completionHandler: @escaping ()->()) {
         let query = StandHourQuery.shared()
         query.start(at: now, hasComplication:updateComplicationDelegate.hasComplication) { [unowned self] in // query
             self.data.update(at: now) // // calculate data
@@ -215,7 +214,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             }
             self.arrangeNextBackgroundTask(at: now)
             
-            completeHandler()
+            completionHandler()
         }
     }
 }
