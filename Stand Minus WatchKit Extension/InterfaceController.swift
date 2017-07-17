@@ -29,7 +29,9 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         addMeneItemOfUpdate()
-        queryCurrentStandUpInfo()
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { [unowned self] (_) in
+            self.queryCurrentStandUpInfo()
+        }
     }
     
     override func willActivate() {
