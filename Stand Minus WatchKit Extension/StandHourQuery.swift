@@ -42,10 +42,10 @@ class StandHourQuery {
         defer { delegate.lastQueryDate = now }
         
         if delegate == nil {
-            delegate = StandHourQueryDelegate(now)
+            delegate = StandHourQueryDelegate(lastQueryDate: now)
         }
         else {
-            guard delegate.shouldQuery(at: now) else {
+            guard delegate.shouldQuery(atNow: now) else {
                 completionHandler()
                 return
             }
@@ -68,7 +68,6 @@ class StandHourQuery {
             }
         }
     }
-    
     
     private func arrangeNextBackgroundTaskWhenDeviceIsLocked(at now:Date, hasComplication:Bool) {
         func nextWholeHour( cps:inout DateComponents) {
@@ -144,10 +143,13 @@ class StandHourQuery {
     
     private func creatAnchorQuery(at now:Date, hasComplication:Bool, completionHandler:@escaping () -> ()) -> HKAnchoredObjectQuery {
         let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
+            defer {
+                completionHandler()
+            }
+            
             if error == nil {
                 defer {
                     self.anchor = nextAnchor
-                    completionHandler()
                 }
                 
                 if self.isFirstQuery {
@@ -177,7 +179,7 @@ class StandHourQuery {
 
 protocol StandHourQueryDelegateProtocol:class {
     var lastQueryDate: Date { get set }
-    func shouldQuery(at now:Date) -> Bool
+    func shouldQuery(atNow now:Date) -> Bool
     func shouldRecreatePredicate(_ isFirstQuery:Bool, _ now:Date) -> Bool
 }
 
@@ -187,11 +189,11 @@ class StandHourQueryDelegate:StandHourQueryDelegateProtocol {
 
     private let cal = Calendar(identifier: .gregorian)
     
-    init(_ lastQueryDate:Date) {
+    init(lastQueryDate:Date) {
         self.lastQueryDate = lastQueryDate
     }
     
-    func shouldQuery(at now:Date) -> Bool {
+    func shouldQuery(atNow now:Date) -> Bool {
         func hourOf(_ date:Date) -> Int {
             return cal.component(.hour, from: date)
         }

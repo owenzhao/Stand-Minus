@@ -49,11 +49,17 @@ class InterfaceController: WKInterfaceController {
     
     // MARK: - private functions
     private func queryCurrentStandUpInfo() {
-        let now = Date()
-        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-        StandHourQuery.shared().complicationShouldReQuery = false
-        delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
-            self.updateUI()
+        let query = StandHourQuery.shared()
+        if query.complicationShouldReQuery {
+            query.complicationShouldReQuery = false
+            let now = Date()
+            defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+            delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
+                self.updateUI()
+            }
+        }
+        else {
+            updateUI()
         }
     }
     
