@@ -147,8 +147,8 @@ class StandHourQuery {
     private func creatAnchorQuery(at now:Date, hasComplication:Bool, completionHandler:@escaping () -> ()) -> HKAnchoredObjectQuery {
         let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
             defer {
-                completionHandler()
                 self.semaphore.signal()
+                completionHandler()
             }
             
             if error == nil {
