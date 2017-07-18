@@ -29,15 +29,12 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         addMeneItemOfUpdate()
-        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { [unowned self] (_) in
-            self.queryCurrentStandUpInfo()
-        }
     }
     
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        updateUI()
+//        updateUI()
     }
 
     // MARK: - UI
@@ -67,27 +64,33 @@ class InterfaceController: WKInterfaceController {
         }
     }
     
-    private func updateUI() {
-        func localizedLabelOfHasStood(_ hasStood:Bool) -> String {
-            if hasStood {
-                return NSLocalizedString("Already stood", comment: "Already stood")
-            }
-            
-            return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
-        }
-        
-        func localizedLastQueryDate() -> String {
-            let lastQueryTimeIntervalSinceReferenceDate = defaults.double(forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-            let lastQueryDate = Date(timeIntervalSinceReferenceDate: lastQueryTimeIntervalSinceReferenceDate)
-            return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)
-        }
-        
+    typealias CompletiongHandler = () -> ()
+    
+    func updateUI(completionHandler: @escaping () -> () = { }) {
         guard let hasStood = hasStood else {
-            queryCurrentStandUpInfo()
             return
         }
         
-        lastQueryDateLabel.setText(localizedLastQueryDate())
-        hasStoodLabel.setText(localizedLabelOfHasStood(hasStood))
+        DispatchQueue.main.async { [unowned self] in
+            self.lastQueryDateLabel.setText(self.localizedLastQueryDate())
+            self.hasStoodLabel.setText(self.localizedLabelOfHasStood(hasStood))
+            
+            completionHandler()
+        }
+    }
+    
+    private func localizedLabelOfHasStood(_ hasStood:Bool) -> String {
+        if hasStood {
+            return NSLocalizedString("Already stood", comment: "Already stood")
+        }
+        
+        return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
+    }
+    
+    private func localizedLastQueryDate() -> String {
+        let lastQueryTimeIntervalSinceReferenceDate = defaults.double(forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+        let lastQueryDate = Date(timeIntervalSinceReferenceDate: lastQueryTimeIntervalSinceReferenceDate)
+        
+        return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)
     }
 }

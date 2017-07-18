@@ -50,11 +50,29 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 let defaults = UserDefaults.standard
                 defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
 
-                let completionHandler = backgroundTask.setTaskCompleted
+                let completionHandler:() -> () = {
+                    let now = Date()
+                    WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: now.addingTimeInterval(10), userInfo: nil) { error in
+                        if error != nil {
+                            fatalError(error!.localizedDescription)
+                        }
+                    }
+                    
+                    backgroundTask.setTaskCompleted()
+                }
+                
                 startProcedure(at: now, completionHandler: completionHandler)
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
-                snapshotTask.setTaskCompleted(restoredDefaultState: false, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
+                let completionHandler = {
+                    snapshotTask.setTaskCompleted(restoredDefaultState: false, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
+                }
+                
+                if let viewController = WKExtension.shared().rootInterfaceController as? InterfaceController {
+                    viewController.updateUI(completionHandler:completionHandler)
+                }
+                
+                completionHandler()
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.
                 connectivityTask.setTaskCompleted()
