@@ -15,9 +15,7 @@ class InterfaceController: WKInterfaceController {
     private let defaults = UserDefaults.standard
     
     var hasStood:Bool? {
-        let isDefaultsContainHasStood = !(defaults.object(forKey: DefaultsKey.hasStoodKey) == nil)
-        
-        return isDefaultsContainHasStood ? defaults.bool(forKey: DefaultsKey.hasStoodKey) : nil
+        return defaults.object(forKey: DefaultsKey.hasStoodKey) as? Bool
     }
     
     
