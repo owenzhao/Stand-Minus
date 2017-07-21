@@ -67,24 +67,24 @@ class InterfaceController: WKInterfaceController {
     typealias CompletiongHandler = () -> ()
     
     func updateUI(completionHandler: @escaping () -> () = { }) {
-        guard let hasStood = hasStood else {
-            return
-        }
-        
         DispatchQueue.main.async { [unowned self] in
             self.lastQueryDateLabel.setText(self.localizedLastQueryDate())
-            self.hasStoodLabel.setText(self.localizedLabelOfHasStood(hasStood))
+            self.hasStoodLabel.setText(self.localizedLabelOfHasStood())
             
             completionHandler()
         }
     }
     
-    private func localizedLabelOfHasStood(_ hasStood:Bool) -> String {
-        if hasStood {
-            return NSLocalizedString("Already stood", comment: "Already stood")
+    private func localizedLabelOfHasStood() -> String {
+        if let hasStood = self.hasStood {
+            if hasStood {
+                return NSLocalizedString("Already stood", comment: "Already stood")
+            }
+            
+            return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
         }
         
-        return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
+        return NSLocalizedString("Watch Locked", comment: "Watch Locked")
     }
     
     private func localizedLastQueryDate() -> String {

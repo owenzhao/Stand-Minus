@@ -131,6 +131,14 @@ class StandHourQuery {
         }
         
         let nextQueryDate = cal.date(from: cps)!
+        
+        let now = Date()
+        WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: now, userInfo: nil) { error in
+            if error != nil {
+                fatalError(error!.localizedDescription)
+            }
+        }
+
         WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: nextQueryDate, userInfo: nil) { (error) in
             if error == nil {
             }
@@ -148,12 +156,12 @@ class StandHourQuery {
         let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit) { [unowned self] (query, samples, deletedObjects, nextAnchor, error) -> Void in
             defer {
                 self.semaphore.signal()
-                completionHandler()
             }
             
             if error == nil {
                 defer {
                     self.anchor = nextAnchor
+                    completionHandler()
                 }
                 
                 if self.isFirstQuery {
@@ -171,8 +179,6 @@ class StandHourQuery {
             }
             else { // device is locked. **query failed, reason: Protected health data is inaccessible**
                 self.complicationShouldReQuery = true
-                let defaults = UserDefaults.standard
-                defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
                 self.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
             }
         }

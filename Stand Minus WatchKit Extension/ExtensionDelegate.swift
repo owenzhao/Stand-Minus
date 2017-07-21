@@ -48,11 +48,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 let query = StandHourQuery.shared()
                 if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
                 let defaults = UserDefaults.standard
+                defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
                 defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
 
                 let completionHandler:() -> () = {
                     let now = Date()
-                    WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: now.addingTimeInterval(10), userInfo: nil) { error in
+                    WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: now, userInfo: nil) { error in
                         if error != nil {
                             fatalError(error!.localizedDescription)
                         }

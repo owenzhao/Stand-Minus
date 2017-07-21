@@ -74,10 +74,10 @@ class CurrentHourData {
         
         func theHasStood() {
             if let latestSample = (samples.max { $0.startDate < $1.startDate }) {
-                let hourInLast = hourOf(latestSample.startDate)
+                let hourInLatest = hourOf(latestSample.startDate)
                 let hourNow = hourOf(now)
                 
-                self.hasStood = hourInLast == hourNow
+                self.hasStood = hourInLatest == hourNow
             }
             else {
                 self.hasStood = false
