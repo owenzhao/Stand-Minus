@@ -123,10 +123,7 @@ class StandHourQuery {
             func total() -> Int {
                 return data.standCount
             }
-            func nextWholeHour(cps:inout DateComponents) {
-                cps.hour! += 1
-                cps.minute = 0
-            }
+
             func fiftyMinutesInThisHour(cps:inout DateComponents) {
                 cps.minute = 50
                 state = .notNotifyUser(at: now)
@@ -145,29 +142,9 @@ class StandHourQuery {
             func currentMinute() -> Int {
                 return cal.component(.minute, from: now)
             }
-            func notifyUser() {
-                let center = UNUserNotificationCenter.current()
-                if center.delegate == nil { center.delegate = userNotificationCenterDelegate }
-                center.getNotificationSettings { (notificationSettings) in
-                    let id = UUID().uuidString
-                    let content = { () -> UNMutableNotificationContent in
-                        let mc = UNMutableNotificationContent()
-                        mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
-                        mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
-                        mc.categoryIdentifier = "notify_user_category"
-                        
-                        if notificationSettings.soundSetting == .enabled {
-                            mc.sound = UNNotificationSound.default()
-                        }
-                        
-                        return mc
-                    }()
-                    let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
-                    center.add(request, withCompletionHandler: nil)
-                }
-            }
             
             var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+            
             if hasComplication {
                 if shouldNotifyUser() {
                     if hasStood() {
@@ -231,18 +208,39 @@ class StandHourQuery {
         
         let nextQueryDate = calculateNextQueryDate()
         
-        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: nextQueryDate, userInfo: nil) { (error) in
+        arrangeNextBackgroundTask(at: nextQueryDate)
+    }
+    
+    private func notifyUser() {
+        let center = UNUserNotificationCenter.current()
+        if center.delegate == nil { center.delegate = userNotificationCenterDelegate }
+        center.getNotificationSettings { (notificationSettings) in
+            let id = UUID().uuidString
+            let content = { () -> UNMutableNotificationContent in
+                let mc = UNMutableNotificationContent()
+                mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
+                mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
+                mc.categoryIdentifier = "notify_user_category"
+                
+                if notificationSettings.soundSetting == .enabled {
+                    mc.sound = UNNotificationSound.default()
+                }
+                
+                return mc
+            }()
+            let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
+            center.add(request, withCompletionHandler: nil)
+        }
+    }
+    
+    private func arrangeNextBackgroundTask(at fireDate:Date) {
+        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
             if error == nil {
             }
         }
     }
     
     private func arrangeNextBackgroundTaskWhenDeviceIsLocked(at now:Date, hasComplication:Bool) {
-        func nextWholeHour( cps:inout DateComponents) {
-            cps.hour! += 1
-            cps.minute = 0
-        }
-        
         var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
         
         if hasComplication {
@@ -296,18 +294,13 @@ class StandHourQuery {
         }
         
         let nextQueryDate = cal.date(from: cps)!
-        
-        let now = Date()
-        WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: now, userInfo: nil) { error in
-            if error != nil {
-                fatalError(error!.localizedDescription)
-            }
-        }
 
-        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: nextQueryDate, userInfo: nil) { (error) in
-            if error == nil {
-            }
-        }
+        arrangeNextBackgroundTask(at: nextQueryDate)
+    }
+    
+    private func nextWholeHour( cps:inout DateComponents) {
+        cps.hour! += 1
+        cps.minute = 0
     }
     
     private func createPredicate(at now:Date) {
