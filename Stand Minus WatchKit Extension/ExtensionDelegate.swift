@@ -15,8 +15,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     unowned private let data = CurrentHourData.shared()
     lazy private var updateComplicationDelegate:UpdateComplicationDelegate = UpdateComplicationDelegate()
     
-    var state:ExtensionCurrentHourState = .notSet
-    
     func isTheSameState(s1:ExtensionCurrentHourState, s2:ExtensionCurrentHourState) -> Bool {
         guard s1 == s2 else { return false }
         
@@ -87,131 +85,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         }
     }
     
-    private func arrangeNextBackgroundTask(at now:Date) {
-        func calculateNextQueryDate() -> Date {
-            func shouldNotifyUser() -> Bool {
-                return data.shouldNotifyUser
-            }
-            func hasStood() -> Bool {
-                return data.hasStood
-            }
-            func total() -> Int {
-                return data.standCount
-            }
-            func nextWholeHour(cps:inout DateComponents) {
-                cps.hour! += 1
-                cps.minute = 0
-            }
-            func fiftyMinutesInThisHour(cps:inout DateComponents) {
-                cps.minute = 50
-                state = .notNotifyUser(at: now)
-            }
-            func fiftyMinutesInNextHour(cps:inout DateComponents) {
-                cps.hour! += 1
-                cps.minute = 50
-                state = .notNotifyUser(at: now)
-            }
-            func twelveFiftyInNextDay(cps:inout DateComponents) {
-                cps.day! += 1
-                cps.hour = 12
-                cps.minute = 50
-                state = .notNotifyUser(at: now)
-            }
-            func currentMinute() -> Int {
-                return cal.component(.minute, from: now)
-            }
-            func notifyUser() {
-                let center = UNUserNotificationCenter.current()
-                if center.delegate == nil { center.delegate = self }
-                center.getNotificationSettings { (notificationSettings) in
-                    let id = UUID().uuidString
-                    let content = { () -> UNMutableNotificationContent in
-                        let mc = UNMutableNotificationContent()
-                        mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
-                        mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
-                        mc.categoryIdentifier = "notify_user_category"
-                        
-                        if notificationSettings.soundSetting == .enabled {
-                            mc.sound = UNNotificationSound.default()
-                        }
-                        
-                        return mc
-                    }()
-                    let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
-                    center.add(request, withCompletionHandler: nil)
-                }
-            }
-            
-            var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
-            if updateComplicationDelegate.hasComplication {
-                if shouldNotifyUser() {
-                    if hasStood() {
-                        nextWholeHour(cps: &cps)
-                    }
-                    else {
-                        switch cps.minute! {
-                        case 0..<50:
-                            fiftyMinutesInThisHour(cps: &cps)
-                        default: //(50..<60)
-                            if state == .notNotifyUser(at: now) {
-                                notifyUser()
-                                state = .alreadyNotifyUser(at: now)
-                            }
-                            nextWholeHour(cps: &cps)
-                        }
-                    }
-                }
-                else {
-                    nextWholeHour(cps: &cps)
-                }
-            }
-            else {
-                if shouldNotifyUser() {
-                    if hasStood() {
-                        if cps.hour! != 23 {
-                            fiftyMinutesInNextHour(cps:&cps)
-                        }
-                        else {
-                            twelveFiftyInNextDay(cps: &cps)
-                        }
-                    }
-                    else {
-                        switch cps.minute! {
-                        case 0..<50:
-                            cps.minute = 50
-                            state = .notNotifyUser(at: now)
-                        default: // 50..<60
-                            if state != .alreadyNotifyUser(at: now) {
-                                notifyUser()
-                                state = .alreadyNotifyUser(at: now)
-                            }
-                            fiftyMinutesInNextHour(cps: &cps)
-                        }
-                    }
-                }
-                else {
-                    cps.hour! += 12 - total() + (hasStood() ? 1 : 0)
-                    if cps.hour! > 23 {
-                        twelveFiftyInNextDay(cps: &cps)
-                    }
-                    else {
-                        cps.minute = 50
-                    }
-                    state = .notNotifyUser(at: now)
-                }
-            }
-            
-            return cal.date(from: cps)!
-        }
-        
-        let nextQueryDate = calculateNextQueryDate()
-        
-        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: nextQueryDate, userInfo: nil) { (error) in
-            if error == nil {
-            }
-        }
-    }
-    
     private func updateComplications() {
         let server = CLKComplicationServer.sharedInstance()
         if updateComplicationDelegate.hasComplication {
@@ -231,7 +104,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             if needToUpdateComplication { // update complications
                 self.updateComplications()
             }
-            self.arrangeNextBackgroundTask(at: now)
             
             completionHandler()
         }
