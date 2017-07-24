@@ -46,6 +46,7 @@ class StandHourQuery {
                     }
                 }
                 
+                self.data.update(at: now) // // calculate data
                 self.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
             }
             else { // device is locked. **query failed, reason: Protected health data is inaccessible**

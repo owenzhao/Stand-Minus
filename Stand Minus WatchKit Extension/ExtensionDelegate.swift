@@ -100,7 +100,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     func startProcedure(at now:Date, needToUpdateComplication:Bool = true, completionHandler: @escaping ()->()) {
         let query = StandHourQuery.shared()
         query.start(at: now, hasComplication:updateComplicationDelegate.hasComplication) { [unowned self] in // query
-            self.data.update(at: now) // // calculate data
             if needToUpdateComplication { // update complications
                 self.updateComplications()
             }
