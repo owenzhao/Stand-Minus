@@ -50,14 +50,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
 
                 let completionHandler:() -> () = {
-                    let now = Date()
-                    WKExtension.shared().scheduleSnapshotRefresh(withPreferredDate: now, userInfo: nil) { error in
-                        if error != nil {
-                            fatalError(error!.localizedDescription)
-                        }
-                    }
-                    
-                    backgroundTask.setTaskCompleted()
+                    backgroundTask.setTaskCompletedWithSnapshot(true)
                 }
                 
                 startProcedure(at: now, completionHandler: completionHandler)
@@ -74,13 +67,13 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 completionHandler()
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.
-                connectivityTask.setTaskCompleted()
+                connectivityTask.setTaskCompletedWithSnapshot(false)
             case let urlSessionTask as WKURLSessionRefreshBackgroundTask:
                 // Be sure to complete the URL session task once you’re done.
-                urlSessionTask.setTaskCompleted()
+                urlSessionTask.setTaskCompletedWithSnapshot(false)
             default:
                 // make sure to complete unhandled task types
-                task.setTaskCompleted()
+                task.setTaskCompletedWithSnapshot(false)
             }
         }
     }
