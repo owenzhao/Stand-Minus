@@ -62,6 +62,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 
                 if let viewController = WKExtension.shared().rootInterfaceController as? InterfaceController {
                     viewController.updateUI(completionHandler:completionHandler)
+                } else {
+                    completionHandler()
                 }
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.
