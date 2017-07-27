@@ -52,6 +52,7 @@ class InterfaceController: WKInterfaceController {
     private func queryCurrentStandUpInfo() {
         DispatchQueue.global().async { [unowned self] in
             let now = Date()
+            self.defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
             self.defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
             self.delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
                 DispatchQueue.main.async { [unowned self] in

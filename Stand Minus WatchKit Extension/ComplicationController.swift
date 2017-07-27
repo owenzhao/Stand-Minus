@@ -76,6 +76,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             query.complicationShouldReQuery = false
             let delegate = WKExtension.shared().delegate as! ExtensionDelegate
             let defaults = UserDefaults.standard
+            defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
             defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
             
             delegate.startProcedure(at: now, needToUpdateComplication: false) {
