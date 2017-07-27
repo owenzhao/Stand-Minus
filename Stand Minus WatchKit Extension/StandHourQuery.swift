@@ -110,6 +110,10 @@ class StandHourQuery {
             if error == nil && success {
                 self.store.execute(anchorQuery)
             }
+            else {
+                self.semaphore.signal()
+                fatalError(error!.localizedDescription + "\\user success: \(success)")
+            }
         }
     }
     

@@ -17,6 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        // FIXME: workaround for watchOS 4.0 beta 4 issue
+        // "Transaction block failed without an error."
+        let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
+        
+        HKHealthStore().requestAuthorization(toShare: nil, read: [sampleType]) { (success, error) in
+            if error == nil && success {
+            }
+            else {
+                print(error!.localizedDescription, "\n")
+            }
+        }
+        
         return true
     }
 
