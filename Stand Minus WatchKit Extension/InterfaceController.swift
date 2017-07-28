@@ -54,9 +54,9 @@ class InterfaceController: WKInterfaceController {
         
         let now = Date()
         let c = Calendar(identifier: .gregorian)
-        var cps = c.dateComponents([.year, .month, .day,], from: now)
+        var cps = c.dateComponents([.year, .month, .day], from: now)
         let zeroHour = c.date(from: cps)
-        cps.hour! += 24
+        cps.hour = 24
         let midnight = c.date(from: cps)
 
         let predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: midnight, options: [.strictStartDate])
