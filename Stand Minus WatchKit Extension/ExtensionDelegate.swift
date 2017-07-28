@@ -9,18 +9,17 @@
 import WatchKit
 import ClockKit
 import UserNotifications
+import HealthKit
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private let cal = Calendar(identifier: .gregorian)
     unowned private let data = TodayStandData.shared()
     lazy private var updateComplicationDelegate:UpdateComplicationDelegate = UpdateComplicationDelegate()
     
-    func isTheSameState(s1:ExtensionCurrentHourState, s2:ExtensionCurrentHourState) -> Bool {
-        guard s1 == s2 else { return false }
-        
-        return false
-    }
-
+    
+    private var anchor:HKQueryAnchor? = nil
+    private var isFirstQuery = true
+    
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
@@ -42,29 +41,54 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             switch task {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
-                let now = Date()
                 let query = StandHourQuery.shared()
                 if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
-                let defaults = UserDefaults.standard
-                defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
-                defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-
-                let completionHandler:() -> () = {
-                    backgroundTask.setTaskCompletedWithSnapshot(true)
+                
+                let preResultsHandler:HKAnchoredObjectQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKAnchoredObjectQuery.ResultsHandler in
+                    
+                    return { [unowned self] (_, samples, deletedObjects, nextAnchor, error) in
+                        defer {
+                            backgroundTask.setTaskCompletedWithSnapshot(false)
+                        }
+                        
+                        if error == nil {
+                            defer {
+                                self.anchor = nextAnchor
+                            }
+                            
+                            if self.isFirstQuery {
+                                defer { self.isFirstQuery = false }
+                                self.data.assign(samples as! [HKCategorySample])
+                            }
+                            else {
+                                if let deletedObjects = deletedObjects {
+                                    self.data.delete(deletedObjects)
+                                }
+                                if let samples = samples as? [HKCategorySample] {
+                                    self.data.append(samples)
+                                }
+                            }
+                            
+                            self.data.update(at: now) // // calculate data
+                            
+                            if hasComplication {
+                                self.updateComplications()
+                            }
+                            
+                            query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
+                        }
+                        else { // device is locked. **query failed, reason: Protected health data is inaccessible**
+                            query.complicationShouldReQuery = true
+                            query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
+                        }
+                    }
                 }
                 
-                startProcedure(at: now, completionHandler: completionHandler)
+                query.executeAnchorObjectQuery(preResultsHanlder: preResultsHandler)
+                
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
-                let completionHandler = {
-                    snapshotTask.setTaskCompleted(restoredDefaultState: false, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
-                }
-                
-                if let viewController = WKExtension.shared().rootInterfaceController as? InterfaceController {
-                    viewController.updateUI(completionHandler:completionHandler)
-                } else {
-                    completionHandler()
-                }
+                snapshotTask.setTaskCompleted(restoredDefaultState: false, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
                 // Be sure to complete the connectivity task once you’re done.
                 connectivityTask.setTaskCompletedWithSnapshot(false)
@@ -80,25 +104,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
     private func updateComplications() {
         let server = CLKComplicationServer.sharedInstance()
-        if updateComplicationDelegate.hasComplication {
-            if updateComplicationDelegate.shouldUpdateComplications() {
-                server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
-            }
-        }
-        else {
-            StandHourQuery.shared().complicationShouldReQuery = true
-        }
-    }
-    
-    func startProcedure(at now:Date, needToUpdateComplication:Bool = true, completionHandler: @escaping ()->()) {
-        let query = StandHourQuery.shared()
-        query.start(at: now, hasComplication:updateComplicationDelegate.hasComplication) { [unowned self] in // query
-            if needToUpdateComplication { // update complications
-                self.updateComplications()
-            }
-            
-            completionHandler()
-        }
+        server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
     }
 }
 

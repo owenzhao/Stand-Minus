@@ -8,6 +8,7 @@
 
 import ClockKit
 import WatchKit
+import HealthKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     deinit {
@@ -15,7 +16,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         TodayStandData.terminate()
     }
 
-    unowned private let data = TodayStandData.shared()
+    unowned private let todayStandData = TodayStandData.shared()
     unowned private let query = StandHourQuery.shared()
     
     // MARK: - Timeline Configuration
@@ -44,7 +45,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         func entryOf(_ complication:CLKComplication) -> CLKComplicationTimelineEntry {
             let template:CLKComplicationTemplate
-            let textProvider = CLKSimpleTextProvider(text: String(self.data.total))
+            let textProvider = CLKSimpleTextProvider(text: String(self.todayStandData.total))
             switch complication.family {
             case .circularSmall:
                 template = CLKComplicationTemplateCircularSmallRingText()
@@ -58,14 +59,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             
             if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
                 let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
-                let imageProvider = CLKImageProvider(onePieceImage: self.data.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+                let imageProvider = CLKImageProvider(onePieceImage: self.todayStandData.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
                 smallFlattemplate.imageProvider = imageProvider
                 smallFlattemplate.textProvider = textProvider
             }
             else {
                 let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
                 smallRingTextTemplate.ringStyle = .closed
-                smallRingTextTemplate.fillFraction = self.data.hasStoodInCurrentHour ? 1.0 : 0.5
+                smallRingTextTemplate.fillFraction = self.todayStandData.hasStoodInCurrentHour ? 1.0 : 0.5
                 smallRingTextTemplate.textProvider = textProvider
             }
             
@@ -73,15 +74,44 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
         
         if query.complicationShouldReQuery {
-            query.complicationShouldReQuery = false
-            let delegate = WKExtension.shared().delegate as! ExtensionDelegate
-            let defaults = UserDefaults.standard
-            defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
-            defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-            
-            delegate.startProcedure(at: now, needToUpdateComplication: false) {
-                handler(entryOf(complication))
+            let preResultsHander:HKSampleQuery.PreResultsHandler = { [unowned self] (now, _) -> HKSampleQuery.ResultsHandler in
+                return { [unowned self] (_, samples, error) in
+                    guard error == nil else {
+                        fatalError(error!.localizedDescription)
+                    }
+                    
+                    defer {
+                        self.query.complicationShouldReQuery = false
+                    }
+                    
+                    if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
+                        let total = samples.reduce(0) { (result, sample) -> Int in
+                            result + (1 - sample.value)
+                        }
+                        
+                        var hassStoodInCurrentHour = false
+                        
+                        if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
+                            let calendar = Calendar(identifier: .gregorian)
+                            let currentHour = calendar.component(.hour, from: now)
+                            let lastSampleHour = calendar.component(.hour, from: lastSample.startDate)
+                            hassStoodInCurrentHour = (currentHour == lastSampleHour)
+                        }
+                        
+                        self.todayStandData.explicitlySetTotal(total)
+                        self.todayStandData.explicitlySetHasStoodInCurrentHour(hassStoodInCurrentHour)
+                    } else {
+                        self.todayStandData.explicitlySetTotal(0)
+                        self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
+                    }
+                    
+                    handler(entryOf(complication))
+                    
+                    self.query.arrangeNextBackgroundTask(at: now, hasComplication: true)
+                }
             }
+            
+            self.query.excuteSampleQuery(preResultsHandler: preResultsHander)
         }
         else {
             handler(entryOf(complication))
@@ -104,7 +134,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // This method will be called once per supported complication, and the results will be cached
         func templateOf() -> CLKComplicationTemplate {
             let template:CLKComplicationTemplate
-            let textProvider = CLKSimpleTextProvider(text: String(self.data.total))
+            let textProvider = CLKSimpleTextProvider(text: String(self.todayStandData.total))
             switch complication.family {
             case .circularSmall:
                 template = CLKComplicationTemplateCircularSmallRingText()

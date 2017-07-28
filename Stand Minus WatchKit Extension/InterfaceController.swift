@@ -50,65 +50,45 @@ class InterfaceController: WKInterfaceController {
     }
     
     private func queryCurrentStandUpInfo() {
-        let type = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
-        
-        let now = Date()
-        let c = Calendar(identifier: .gregorian)
-        var cps = c.dateComponents([.year, .month, .day], from: now)
-        let zeroHour = c.date(from: cps)
-        cps.hour = 24
-        let midnight = c.date(from: cps)
-
-        let predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: midnight, options: [.strictStartDate])
-        
-        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor]) { [unowned self] (_, samples, error) in
-            
-            guard error == nil else {
-                fatalError(error!.localizedDescription)
-            }
-            
-            if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
-                let total = samples.reduce(0) { (result, sample) -> Int in
-                    result + (1 - sample.value)
+        let preResultsHander:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+            return { [unowned self] (_, samples, error) in
+                
+                guard error == nil else {
+                    fatalError(error!.localizedDescription)
                 }
                 
-                var hassStoodInCurrentHour = false
-                
-                if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
-                    let currentHour = c.component(.hour, from: now)
-                    let lastSampleHour = c.component(.hour, from: lastSample.startDate)
-                    hassStoodInCurrentHour = (currentHour == lastSampleHour)
+                if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
+                    let total = samples.reduce(0) { (result, sample) -> Int in
+                        result + (1 - sample.value)
+                    }
+                    
+                    var hassStoodInCurrentHour = false
+                    
+                    if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
+                        let calendar = Calendar(identifier: .gregorian)
+                        let currentHour = calendar.component(.hour, from: now)
+                        let lastSampleHour = calendar.component(.hour, from: lastSample.startDate)
+                        hassStoodInCurrentHour = (currentHour == lastSampleHour)
+                    }
+                    
+                    self.todayStandData.explicitlySetTotal(total)
+                    self.todayStandData.explicitlySetHasStoodInCurrentHour(hassStoodInCurrentHour)
+                } else {
+                    self.todayStandData.explicitlySetTotal(0)
+                    self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
                 }
                 
-                self.todayStandData.explicitlySetTotal(total)
-                self.todayStandData.explicitlySetHasStoodInCurrentHour(hassStoodInCurrentHour)
-            } else {
-                self.todayStandData.explicitlySetTotal(0)
-                self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
-            }
-            
-            self.updateUI()
-            
-            let hasComplication:Bool = {
-                if let _ = CLKComplicationServer.sharedInstance().activeComplications {
-                    return true
+                self.updateUI()
+                
+                if hasComplication {
+                    self.updateComplications()
                 }
                 
-                return false
-            }()
-            
-            if hasComplication {
-                self.updateComplications()
+                self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
             }
-            
-            self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
         }
         
-        defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
-        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-        
-        store.execute(query)
+        self.query.excuteSampleQuery(preResultsHandler: preResultsHander)
     }
     
     private func updateComplications() {

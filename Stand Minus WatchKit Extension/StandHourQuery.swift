@@ -17,43 +17,6 @@ class StandHourQuery {
     private var state:ExtensionCurrentHourState = .notSet
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     
-    typealias ResultHandler = (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void
-    typealias PreResultHandler = (Date, Bool, @escaping () -> ()) -> ResultHandler
-    
-    private lazy var preResultHandler:PreResultHandler = { [unowned self] (now, hasComplication, completionHandler) -> ResultHandler in
-        return { [unowned self] (_, samples, deletedObjects, nextAnchor, error) in
-            defer {
-                completionHandler()
-            }
-            
-            if error == nil {
-                defer {
-                    self.anchor = nextAnchor
-                }
-                
-                if self.isFirstQuery {
-                    defer { self.isFirstQuery = false }
-                    self.data.assign(samples as! [HKCategorySample])
-                }
-                else {
-                    if let deletedObjects = deletedObjects {
-                        self.data.delete(deletedObjects)
-                    }
-                    if let samples = samples as? [HKCategorySample] {
-                        self.data.append(samples)
-                    }
-                }
-                
-                self.data.update(at: now) // // calculate data
-                self.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
-            }
-            else { // device is locked. **query failed, reason: Protected health data is inaccessible**
-                self.complicationShouldReQuery = true
-                self.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
-            }
-        }
-    }
-    
     private init() { }
     
     class func shared() -> StandHourQuery {
@@ -65,45 +28,60 @@ class StandHourQuery {
         instance = nil
     }
     
-    private var isFirstQuery = true
     private var anchor:HKQueryAnchor? = nil
-    
     private var predicate:NSPredicate! = nil
-    
-    private let cal = Calendar(identifier: .gregorian)
+    private let calendar = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
-    
-    var complicationShouldReQuery = true
-    private var delegate:StandHourQueryDelegate!
-    
-    func start(at now:Date, hasComplication:Bool, completionHandler: @escaping () -> ()) {
-        defer { delegate.lastQueryDate = now }
-        
-        if delegate == nil {
-            delegate = StandHourQueryDelegate(lastQueryDate: now)
-        }
-        else {
-            guard delegate.shouldQuery(atNow: now) else {
-                completionHandler()
-                return
-            }
+    private var hasComplication:Bool {
+        if let _ = CLKComplicationServer.sharedInstance().activeComplications {
+            return true
         }
         
-        if delegate.shouldRecreatePredicate(isFirstQuery, now)
-        {
-            defer { isFirstQuery = true }
-            
-            anchor = nil
-            
-            createPredicate(at: now)
-        }
-        
-        let anchorQuery = creatAnchorQuery(at: now, hasComplication: hasComplication, completionHandler: completionHandler)
-        
-        self.store.execute(anchorQuery)
+        return false
     }
     
+    var complicationShouldReQuery = true
+//    private var delegate:StandHourQueryDelegate!
+    
+    func executeAnchorObjectQuery(preResultsHanlder:@escaping HKAnchoredObjectQuery.PreResultsHandler) {
+        let now = Date()
+        createPredicate(at: now)
+        
+        let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit, resultsHandler: preResultsHanlder(now, hasComplication))
+
+        excuteHKQuery(query, at: now)
+    }
+    
+    func excuteSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
+        let now = Date()
+        createPredicate(at: now)
+        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, hasComplication))
+        
+        excuteHKQuery(query, at: now)
+    }
+    
+    private func excuteHKQuery(_ query:HKQuery, at now:Date) {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
+        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+        
+        store.execute(query)
+    }
+    
+    private func createPredicate(at now:Date) {
+        let cps = calendar.dateComponents([.year, .month, .day], from: now)
+        let zeroHour = calendar.date(from: cps)
+        let midnight = zeroHour?.addingTimeInterval(24 * 60 * 60)
+        
+        predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: midnight, options: .strictStartDate)
+    }
+}
+
+// MARK: - arrange next background task
+extension StandHourQuery {
     func arrangeNextBackgroundTask(at now:Date, hasComplication: Bool) {
         func calculateNextQueryDate() -> Date {
             func shouldNotifyUser() -> Bool {
@@ -115,7 +93,7 @@ class StandHourQuery {
             func total() -> Int {
                 return data.total
             }
-
+            
             func fiftyMinutesInThisHour(cps:inout DateComponents) {
                 cps.minute = 50
                 state = .notNotifyUser(at: now)
@@ -132,10 +110,10 @@ class StandHourQuery {
                 state = .notNotifyUser(at: now)
             }
             func currentMinute() -> Int {
-                return cal.component(.minute, from: now)
+                return calendar.component(.minute, from: now)
             }
             
-            var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+            var cps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: now)
             
             if hasComplication {
                 if shouldNotifyUser() {
@@ -195,7 +173,7 @@ class StandHourQuery {
                 }
             }
             
-            return cal.date(from: cps)!
+            return calendar.date(from: cps)!
         }
         
         let nextQueryDate = calculateNextQueryDate()
@@ -232,8 +210,8 @@ class StandHourQuery {
         }
     }
     
-    private func arrangeNextBackgroundTaskWhenDeviceIsLocked(at now:Date, hasComplication:Bool) {
-        var cps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+    func arrangeNextBackgroundTaskWhenDeviceIsLocked(at now:Date, hasComplication:Bool) {
+        var cps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: now)
         
         if hasComplication {
             switch cps.hour! {
@@ -285,8 +263,8 @@ class StandHourQuery {
             }
         }
         
-        let nextQueryDate = cal.date(from: cps)!
-
+        let nextQueryDate = calendar.date(from: cps)!
+        
         arrangeNextBackgroundTask(at: nextQueryDate)
     }
     
@@ -294,60 +272,22 @@ class StandHourQuery {
         cps.hour! += 1
         cps.minute = 0
     }
-    
-    private func createPredicate(at now:Date) {
-        let cps = cal.dateComponents([.year, .month, .day], from: now)
-        let midnight = cal.date(from: cps)!
-        
-        predicate = HKQuery.predicateForSamples(withStart: midnight, end: midnight.addingTimeInterval(24 * 60 * 60), options: .strictStartDate)
-    }
-    
-    private func creatAnchorQuery(at now:Date, hasComplication:Bool, completionHandler:@escaping () -> ()) -> HKAnchoredObjectQuery {
-        let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit, resultsHandler: preResultHandler(now, hasComplication, completionHandler))
-        
-        return query
-    }
+}
+
+// MARK: - type alias
+extension HKSampleQuery {
+    typealias ResultsHandler = (HKSampleQuery, [HKSample]?, Error?) -> Void
+    typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
+}
+
+extension HKAnchoredObjectQuery {
+    typealias ResultsHandler = (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void
+    typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
 }
 
 // MARK: - UNUserNotificationCenterDelegate
-
 class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert,.sound])
-    }
-}
-
-protocol StandHourQueryDelegateProtocol:class {
-    var lastQueryDate: Date { get set }
-    func shouldQuery(atNow now:Date) -> Bool
-    func shouldRecreatePredicate(_ isFirstQuery:Bool, _ now:Date) -> Bool
-}
-
-class StandHourQueryDelegate:StandHourQueryDelegateProtocol {
-    var lastQueryDate: Date
-    unowned private let data = TodayStandData.shared()
-
-    private let cal = Calendar(identifier: .gregorian)
-    
-    init(lastQueryDate:Date) {
-        self.lastQueryDate = lastQueryDate
-    }
-    
-    func shouldQuery(atNow now:Date) -> Bool {
-        func hourOf(_ date:Date) -> Int {
-            return cal.component(.hour, from: date)
-        }
-        
-        let value = !data.hasStoodInCurrentHour || !(now.timeIntervalSince(lastQueryDate) < 60 * 60 && hourOf(lastQueryDate) == hourOf(now))
-        
-        return value
-    }
-    
-    func shouldRecreatePredicate(_ isFirstQuery:Bool, _ now:Date) -> Bool {
-        func dayOf(_ date:Date) -> Int {
-            return cal.component(.day, from: date)
-        }
-        
-        return isFirstQuery || (dayOf(lastQueryDate) != dayOf(now))
     }
 }
