@@ -80,10 +80,6 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                         fatalError(error!.localizedDescription)
                     }
                     
-                    defer {
-                        self.query.complicationShouldReQuery = false
-                    }
-                    
                     if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
                         let total = samples.reduce(0) { (result, sample) -> Int in
                             result + (1 - sample.value)
@@ -105,6 +101,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                         self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
                     }
                     
+                    self.query.complicationShouldReQuery = false
                     handler(entryOf(complication))
                     
                     self.query.arrangeNextBackgroundTask(at: now, hasComplication: true)

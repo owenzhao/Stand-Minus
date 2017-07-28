@@ -37,7 +37,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
                 let query = StandHourQuery.shared()
-                if query.complicationShouldReQuery { query.complicationShouldReQuery = false }
                 
                 let preResultsHandler:HKAnchoredObjectQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKAnchoredObjectQuery.ResultsHandler in
                     
@@ -68,6 +67,10 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                             
                             todayStandData.update(at: now) // calculate data
                             
+                            if query.complicationShouldReQuery {
+                                query.complicationShouldReQuery = false
+                            }
+                            
                             if hasComplication {
                                 self.updateComplications()
                             }
@@ -75,7 +78,10 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                             query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
                         }
                         else { // device is locked. **query failed, reason: Protected health data is inaccessible**
-                            query.complicationShouldReQuery = true
+                            if !query.complicationShouldReQuery {
+                                query.complicationShouldReQuery = true
+                            }
+                            
                             query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
                         }
                     }

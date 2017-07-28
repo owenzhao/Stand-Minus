@@ -33,7 +33,7 @@ class StandHourQuery {
     private let calendar = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
-    private var hasComplication:Bool {
+    var hasComplication:Bool {
         if let _ = CLKComplicationServer.sharedInstance().activeComplications {
             return true
         }
@@ -78,7 +78,11 @@ class StandHourQuery {
         defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
         defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
         
-        store.execute(query)
+        store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
+            if error == nil && success {
+                self.store.execute(query)
+            }
+        }
     }
     
     private func createPredicate(at now:Date) {

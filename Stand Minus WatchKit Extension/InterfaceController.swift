@@ -22,7 +22,6 @@ class InterfaceController: WKInterfaceController {
         return defaults.object(forKey: DefaultsKey.hasStoodKey) as? Bool
     }
     
-    
     private func addMeneItemOfUpdate() {
         return addMenuItem(with: .resume, title: NSLocalizedString("Update", comment: "Update"), action: #selector(updateButtonClicked))
     }
@@ -31,7 +30,12 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         addMeneItemOfUpdate()
-        
+            
+        DispatchQueue.main.asyncAfter(wallDeadline: .now() + .seconds(5)) { [unowned self] in
+            if self.query.hasComplication {
+                self.queryCurrentStandUpInfo()
+            }
+        }
     }
     
     override func willActivate() {
@@ -39,20 +43,6 @@ class InterfaceController: WKInterfaceController {
         super.willActivate()
         
         updateUI()
-        
-        defaults.addObserver(self, forKeyPath: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey, options: .new, context: nil)
-        defaults.addObserver(self, forKeyPath: DefaultsKey.hasStoodKey, options: .new, context: nil)
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        DispatchQueue.main.async { [unowned self] in
-            self.updateUI()
-        }
-    }
-    
-    override func willDisappear() {
-        defaults.removeObserver(self, forKeyPath: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-        defaults.removeObserver(self, forKeyPath: DefaultsKey.hasStoodKey)
     }
 
     // MARK: - UI
@@ -96,6 +86,10 @@ class InterfaceController: WKInterfaceController {
                 
                 DispatchQueue.main.async { [unowned self] in
                     self.updateUI()
+                }
+                
+                if self.query.complicationShouldReQuery {
+                    self.query.complicationShouldReQuery = false
                 }
                 
                 if hasComplication {
