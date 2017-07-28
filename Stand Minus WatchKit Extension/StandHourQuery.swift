@@ -14,7 +14,6 @@ import UserNotifications
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = TodayStandData.shared()
-//    lazy private var semaphore = DispatchSemaphore(value: 1)
     private var state:ExtensionCurrentHourState = .notSet
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     
@@ -24,7 +23,6 @@ class StandHourQuery {
     private lazy var preResultHandler:PreResultHandler = { [unowned self] (now, hasComplication, completionHandler) -> ResultHandler in
         return { [unowned self] (_, samples, deletedObjects, nextAnchor, error) in
             defer {
-//                self.semaphore.signal()
                 completionHandler()
             }
             
@@ -71,7 +69,6 @@ class StandHourQuery {
     private var anchor:HKQueryAnchor? = nil
     
     private var predicate:NSPredicate! = nil
-//    private var anchorQuery:HKAnchoredObjectQuery! = nil
     
     private let cal = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
@@ -81,8 +78,6 @@ class StandHourQuery {
     private var delegate:StandHourQueryDelegate!
     
     func start(at now:Date, hasComplication:Bool, completionHandler: @escaping () -> ()) {
-//        semaphore.wait()
-        
         defer { delegate.lastQueryDate = now }
         
         if delegate == nil {
@@ -106,15 +101,7 @@ class StandHourQuery {
         
         let anchorQuery = creatAnchorQuery(at: now, hasComplication: hasComplication, completionHandler: completionHandler)
         
-        store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
-            if error == nil && success {
-                self.store.execute(anchorQuery)
-            }
-            else {
-//                self.semaphore.signal()
-                fatalError(error!.localizedDescription + "\\user success: \(success)")
-            }
-        }
+        self.store.execute(anchorQuery)
     }
     
     func arrangeNextBackgroundTask(at now:Date, hasComplication: Bool) {
