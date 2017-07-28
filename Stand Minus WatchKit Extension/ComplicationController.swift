@@ -111,7 +111,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 }
             }
             
-            self.query.excuteSampleQuery(preResultsHandler: preResultsHander)
+            self.query.executeSampleQueryWithComplication(preResultsHandler: preResultsHander)
         }
         else {
             handler(entryOf(complication))

@@ -78,7 +78,10 @@ class InterfaceController: WKInterfaceController {
                     self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
                 }
                 
-                self.updateUI()
+                
+                DispatchQueue.main.async { [unowned self] in
+                    self.updateUI()
+                }
                 
                 if hasComplication {
                     self.updateComplications()
@@ -88,7 +91,7 @@ class InterfaceController: WKInterfaceController {
             }
         }
         
-        self.query.excuteSampleQuery(preResultsHandler: preResultsHander)
+        self.query.executeSampleQuery(preResultsHandler: preResultsHander)
     }
     
     private func updateComplications() {
@@ -96,15 +99,9 @@ class InterfaceController: WKInterfaceController {
         server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
     }
     
-    typealias CompletiongHandler = () -> ()
-    
-    func updateUI(completionHandler: @escaping () -> () = { }) {
-        DispatchQueue.main.async { [unowned self] in
-            self.lastQueryDateLabel.setText(self.localizedLastQueryDate())
-            self.hasStoodLabel.setText(self.localizedLabelOfHasStood())
-            
-            completionHandler()
-        }
+    func updateUI() {
+        self.lastQueryDateLabel.setText(self.localizedLastQueryDate())
+        self.hasStoodLabel.setText(self.localizedLabelOfHasStood())
     }
     
     private func localizedLabelOfHasStood() -> String {

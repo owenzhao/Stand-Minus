@@ -12,11 +12,6 @@ import UserNotifications
 import HealthKit
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
-    private let cal = Calendar(identifier: .gregorian)
-    unowned private let data = TodayStandData.shared()
-    lazy private var updateComplicationDelegate:UpdateComplicationDelegate = UpdateComplicationDelegate()
-    
-    
     private var anchor:HKQueryAnchor? = nil
     private var isFirstQuery = true
     
@@ -56,20 +51,22 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                                 self.anchor = nextAnchor
                             }
                             
+                            let todayStandData = TodayStandData.shared()
+                            
                             if self.isFirstQuery {
                                 defer { self.isFirstQuery = false }
-                                self.data.assign(samples as! [HKCategorySample])
+                                todayStandData.assign(samples as! [HKCategorySample])
                             }
                             else {
                                 if let deletedObjects = deletedObjects {
-                                    self.data.delete(deletedObjects)
+                                    todayStandData.delete(deletedObjects)
                                 }
                                 if let samples = samples as? [HKCategorySample] {
-                                    self.data.append(samples)
+                                    todayStandData.append(samples)
                                 }
                             }
                             
-                            self.data.update(at: now) // // calculate data
+                            todayStandData.update(at: now) // calculate data
                             
                             if hasComplication {
                                 self.updateComplications()
@@ -109,46 +106,13 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 }
 
 // MARK: - UNUserNotificationCenterDelegate
-
 extension ExtensionDelegate:UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert,.sound])
     }
 }
 
-// MARK: - UpdateComplicationDelegate
-
-protocol UpdateComplicationDelegateProtocol {
-    var hasComplication:Bool { get }
-    func shouldUpdateComplications() -> Bool
-}
-
-class UpdateComplicationDelegate:UpdateComplicationDelegateProtocol {
-    private let server = CLKComplicationServer.sharedInstance()
-    private let data = TodayStandData.shared()
-    
-    private var standCount:Int! = nil
-    private var hasStood:Bool! = nil
-    
-    var hasComplication:Bool {
-        if let complications = server.activeComplications, !complications.isEmpty { return true }
-        return false
-    }
-    
-    func shouldUpdateComplications() -> Bool {
-        if standCount == nil || standCount != data.total || hasStood != data.hasStoodInCurrentHour {
-            standCount = data.total
-            hasStood = data.hasStoodInCurrentHour
-            
-            return true
-        }
-        
-        return false
-    }
-}
-
 // MARK: - ExtensionCurrentHourState
-
 enum ExtensionCurrentHourState {
     case notSet
     case notNotifyUser(at:Date)
@@ -156,9 +120,9 @@ enum ExtensionCurrentHourState {
     
     static func == (left:ExtensionCurrentHourState, right:ExtensionCurrentHourState) -> Bool {
         func inTheSampeHour(_ last:Date, _ now:Date) -> Bool {
-            let cal = Calendar(identifier: .gregorian)
-            let hourInLast = cal.component(.hour, from: last)
-            let hourNow = cal.component(.hour, from: now)
+            let calendar = Calendar(identifier: .gregorian)
+            let hourInLast = calendar.component(.hour, from: last)
+            let hourNow = calendar.component(.hour, from: now)
             
             return hourInLast == hourNow && now.timeIntervalSince(last) < 60 * 60
         }

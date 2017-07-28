@@ -50,20 +50,30 @@ class StandHourQuery {
         
         let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit, resultsHandler: preResultsHanlder(now, hasComplication))
 
-        excuteHKQuery(query, at: now)
+        executeHKQuery(query, at: now)
     }
     
-    func excuteSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
+    func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
         createPredicate(at: now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, hasComplication))
         
-        excuteHKQuery(query, at: now)
+        executeHKQuery(query, at: now)
     }
     
-    private func excuteHKQuery(_ query:HKQuery, at now:Date) {
+    func executeSampleQueryWithComplication(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
+        let now = Date()
+        createPredicate(at: now)
+        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, true))
+        
+        executeHKQuery(query, at: now)
+    }
+    
+    private func executeHKQuery(_ query:HKQuery, at now:Date) {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
         defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
