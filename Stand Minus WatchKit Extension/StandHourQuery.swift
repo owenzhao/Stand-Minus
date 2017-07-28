@@ -14,7 +14,7 @@ import UserNotifications
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = CurrentHourData.shared()
-    lazy private var semaphore = DispatchSemaphore(value: 1)
+//    lazy private var semaphore = DispatchSemaphore(value: 1)
     private var state:ExtensionCurrentHourState = .notSet
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     
@@ -24,7 +24,7 @@ class StandHourQuery {
     private lazy var preResultHandler:PreResultHandler = { [unowned self] (now, hasComplication, completionHandler) -> ResultHandler in
         return { [unowned self] (_, samples, deletedObjects, nextAnchor, error) in
             defer {
-                self.semaphore.signal()
+//                self.semaphore.signal()
                 completionHandler()
             }
             
@@ -81,7 +81,7 @@ class StandHourQuery {
     private var delegate:StandHourQueryDelegate!
     
     func start(at now:Date, hasComplication:Bool, completionHandler: @escaping () -> ()) {
-        semaphore.wait()
+//        semaphore.wait()
         
         defer { delegate.lastQueryDate = now }
         
@@ -111,7 +111,7 @@ class StandHourQuery {
                 self.store.execute(anchorQuery)
             }
             else {
-                self.semaphore.signal()
+//                self.semaphore.signal()
                 fatalError(error!.localizedDescription + "\\user success: \(success)")
             }
         }

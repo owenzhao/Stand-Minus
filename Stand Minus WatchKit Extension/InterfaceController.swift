@@ -9,10 +9,12 @@
 import WatchKit
 import Foundation
 import ClockKit
+import HealthKit
 
 class InterfaceController: WKInterfaceController {
     private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
     private let defaults = UserDefaults.standard
+    private lazy var store = HKHealthStore()
     
     var hasStood:Bool? {
         return defaults.object(forKey: DefaultsKey.hasStoodKey) as? Bool
@@ -45,22 +47,44 @@ class InterfaceController: WKInterfaceController {
         queryCurrentStandUpInfo()
     }
     
-    // MARK: - private functions
-    
-    /// When Apple Watch reboots, complication and interface will rerun at the same time.
-    /// In order to solve the problem, I used semaphore to keep one query runs at one time.
-    /// Since main thread shouldn't be blocked, the `DispatchQueue.global()` queue is necessary.
-    /// There was also very rare possibility and when you manually update UI in Watch app, the background task runs.
     private func queryCurrentStandUpInfo() {
-        DispatchQueue.global().async { [unowned self] in
-            let now = Date()
-            self.defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
-            self.defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-            self.delegate.startProcedure(at: now) {[unowned self] in // run first time after reboot
-                DispatchQueue.main.async { [unowned self] in
-                    self.updateUI()
-                }
+        let type = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
+        
+        let now = Date()
+        let c = Calendar(identifier: .gregorian)
+        let cps = c.dateComponents([.year, .month, .day, .hour], from: now)
+        let currentHour = c.date(from: cps)
+
+        let predicate = HKQuery.predicateForSamples(withStart: currentHour, end: nil, options: [.strictStartDate])
+        
+        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor]) { [unowned self] (_, samples, error) in
+            
+            guard error == nil else {
+                fatalError(error!.localizedDescription)
             }
+            
+            var hasStood = false
+            
+            if  let samples = samples {
+                hasStood = !samples.isEmpty
+            }
+            
+            self.defaults.set(hasStood, forKey: DefaultsKey.hasStoodKey)
+            self.updateUI()
+            self.updateComplications()
+        }
+        
+        defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
+        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+        
+        store.execute(query)
+    }
+    
+    private func updateComplications() {
+        let server = CLKComplicationServer.sharedInstance()
+        if let _ = server.activeComplications {
+            server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
         }
     }
     
