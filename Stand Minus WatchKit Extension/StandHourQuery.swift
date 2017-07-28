@@ -13,7 +13,7 @@ import UserNotifications
 
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
-    unowned private let data = CurrentHourData.shared()
+    unowned private let data = TodayStandData.shared()
 //    lazy private var semaphore = DispatchSemaphore(value: 1)
     private var state:ExtensionCurrentHourState = .notSet
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
@@ -117,16 +117,16 @@ class StandHourQuery {
         }
     }
     
-    private func arrangeNextBackgroundTask(at now:Date, hasComplication: Bool) {
+    func arrangeNextBackgroundTask(at now:Date, hasComplication: Bool) {
         func calculateNextQueryDate() -> Date {
             func shouldNotifyUser() -> Bool {
                 return data.shouldNotifyUser
             }
             func hasStood() -> Bool {
-                return data.hasStood
+                return data.hasStoodInCurrentHour
             }
             func total() -> Int {
-                return data.standCount
+                return data.total
             }
 
             func fiftyMinutesInThisHour(cps:inout DateComponents) {
@@ -338,7 +338,7 @@ protocol StandHourQueryDelegateProtocol:class {
 
 class StandHourQueryDelegate:StandHourQueryDelegateProtocol {
     var lastQueryDate: Date
-    unowned private let data = CurrentHourData.shared()
+    unowned private let data = TodayStandData.shared()
 
     private let cal = Calendar(identifier: .gregorian)
     
@@ -351,7 +351,7 @@ class StandHourQueryDelegate:StandHourQueryDelegateProtocol {
             return cal.component(.hour, from: date)
         }
         
-        let value = !data.hasStood || !(now.timeIntervalSince(lastQueryDate) < 60 * 60 && hourOf(lastQueryDate) == hourOf(now))
+        let value = !data.hasStoodInCurrentHour || !(now.timeIntervalSince(lastQueryDate) < 60 * 60 && hourOf(lastQueryDate) == hourOf(now))
         
         return value
     }

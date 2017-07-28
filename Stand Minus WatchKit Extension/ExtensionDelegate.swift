@@ -12,7 +12,7 @@ import UserNotifications
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private let cal = Calendar(identifier: .gregorian)
-    unowned private let data = CurrentHourData.shared()
+    unowned private let data = TodayStandData.shared()
     lazy private var updateComplicationDelegate:UpdateComplicationDelegate = UpdateComplicationDelegate()
     
     func isTheSameState(s1:ExtensionCurrentHourState, s2:ExtensionCurrentHourState) -> Bool {
@@ -32,7 +32,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
     deinit {
         StandHourQuery.terminate()
-        CurrentHourData.terminate()
+        TodayStandData.terminate()
     }
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
@@ -119,7 +119,7 @@ protocol UpdateComplicationDelegateProtocol {
 
 class UpdateComplicationDelegate:UpdateComplicationDelegateProtocol {
     private let server = CLKComplicationServer.sharedInstance()
-    private let data = CurrentHourData.shared()
+    private let data = TodayStandData.shared()
     
     private var standCount:Int! = nil
     private var hasStood:Bool! = nil
@@ -130,9 +130,9 @@ class UpdateComplicationDelegate:UpdateComplicationDelegateProtocol {
     }
     
     func shouldUpdateComplications() -> Bool {
-        if standCount == nil || standCount != data.standCount || hasStood != data.hasStood {
-            standCount = data.standCount
-            hasStood = data.hasStood
+        if standCount == nil || standCount != data.total || hasStood != data.hasStoodInCurrentHour {
+            standCount = data.total
+            hasStood = data.hasStoodInCurrentHour
             
             return true
         }

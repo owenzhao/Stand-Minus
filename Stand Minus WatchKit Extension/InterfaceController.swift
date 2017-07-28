@@ -15,6 +15,8 @@ class InterfaceController: WKInterfaceController {
     private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
     private let defaults = UserDefaults.standard
     private lazy var store = HKHealthStore()
+    private unowned let todayStandData = TodayStandData.shared()
+    private unowned let query = StandHourQuery.shared()
     
     var hasStood:Bool? {
         return defaults.object(forKey: DefaultsKey.hasStoodKey) as? Bool
@@ -52,10 +54,12 @@ class InterfaceController: WKInterfaceController {
         
         let now = Date()
         let c = Calendar(identifier: .gregorian)
-        let cps = c.dateComponents([.year, .month, .day, .hour], from: now)
-        let currentHour = c.date(from: cps)
+        var cps = c.dateComponents([.year, .month, .day,], from: now)
+        let zeroHour = c.date(from: cps)
+        cps.hour! += 24
+        let midnight = c.date(from: cps)
 
-        let predicate = HKQuery.predicateForSamples(withStart: currentHour, end: nil, options: [.strictStartDate])
+        let predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: midnight, options: [.strictStartDate])
         
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor]) { [unowned self] (_, samples, error) in
@@ -64,15 +68,41 @@ class InterfaceController: WKInterfaceController {
                 fatalError(error!.localizedDescription)
             }
             
-            var hasStood = false
-            
-            if  let samples = samples {
-                hasStood = !samples.isEmpty
+            if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
+                let total = samples.reduce(0) { (result, sample) -> Int in
+                    result + (1 - sample.value)
+                }
+                
+                var hassStoodInCurrentHour = false
+                
+                if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
+                    let currentHour = c.component(.hour, from: now)
+                    let lastSampleHour = c.component(.hour, from: lastSample.startDate)
+                    hassStoodInCurrentHour = (currentHour == lastSampleHour)
+                }
+                
+                self.todayStandData.explicitlySetTotal(total)
+                self.todayStandData.explicitlySetHasStoodInCurrentHour(hassStoodInCurrentHour)
+            } else {
+                self.todayStandData.explicitlySetTotal(0)
+                self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
             }
             
-            self.defaults.set(hasStood, forKey: DefaultsKey.hasStoodKey)
             self.updateUI()
-            self.updateComplications()
+            
+            let hasComplication:Bool = {
+                if let _ = CLKComplicationServer.sharedInstance().activeComplications {
+                    return true
+                }
+                
+                return false
+            }()
+            
+            if hasComplication {
+                self.updateComplications()
+            }
+            
+            self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
         }
         
         defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
@@ -83,9 +113,7 @@ class InterfaceController: WKInterfaceController {
     
     private func updateComplications() {
         let server = CLKComplicationServer.sharedInstance()
-        if let _ = server.activeComplications {
-            server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
-        }
+        server.activeComplications!.forEach { server.reloadTimeline(for: $0) }
     }
     
     typealias CompletiongHandler = () -> ()

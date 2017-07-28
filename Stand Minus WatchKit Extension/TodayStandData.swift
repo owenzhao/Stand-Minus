@@ -11,14 +11,14 @@ import HealthKit
 import ClockKit
 import WatchKit
 
-class CurrentHourData {
-    private static var instance:CurrentHourData? = nil
+class TodayStandData {
+    private static var instance:TodayStandData? = nil
     
     private init() { }
     
-    class func shared() -> CurrentHourData {
+    class func shared() -> TodayStandData {
         if instance == nil {
-            instance = CurrentHourData()
+            instance = TodayStandData()
         }
         
         return instance!
@@ -29,17 +29,17 @@ class CurrentHourData {
     }
     
     private(set) var samples:[HKCategorySample] = []
-    private(set) var standCount = 0
-    private(set) var hasStood = false {
+    private(set) var total = 0
+    private(set) var hasStoodInCurrentHour = false {
         didSet {
             let defaults = UserDefaults.standard
-            defaults.set(hasStood, forKey: DefaultsKey.hasStoodKey)
+            defaults.set(hasStoodInCurrentHour, forKey: DefaultsKey.hasStoodKey)
         }
     }
-    private let cal = Calendar(identifier: .gregorian)
+    private let calendar = Calendar(identifier: .gregorian)
     
     var shouldNotifyUser:Bool {
-        return standCount >= 12
+        return total >= 12
     }
     
     func delete(_ deletedObjects:[HKDeletedObject]) {
@@ -62,29 +62,43 @@ class CurrentHourData {
     
     func update(at now:Date) {
         func hourOf(_ date:Date) -> Int {
-            return cal.component(.hour, from: date)
+            return calendar.component(.hour, from: date)
         }
         
-        func theStandCount() {
-            self.standCount = samples.reduce(0, { (result, nextSample) -> Int in
-                let value = (nextSample.value == HKCategoryValueAppleStandHour.stood.rawValue ? 1 : 0)
+        func countTotal() {
+            self.total = samples.reduce(0) { (result, nextSample) -> Int in
+                // FIXME: next line depends on the HKCategoryValueAppleStandHour.rawValue to be stand(0) and idle(1)
+                // should use `let value = (nextSample.value == HKCategoryValueAppleStandHour.stood.rawValue ? 1 : 0)`
+                // but above line is less effecient as it use a question tuple.
+                let value = 1 - nextSample.value
                 return result + value
-            })
+            }
         }
         
-        func theHasStood() {
+        func judgeHasStoodInCurrentHour() {
             if let latestSample = (samples.max { $0.startDate < $1.startDate }) {
                 let hourInLatest = hourOf(latestSample.startDate)
                 let hourNow = hourOf(now)
                 
-                self.hasStood = hourInLatest == hourNow
+                self.hasStoodInCurrentHour = hourInLatest == hourNow
             }
             else {
-                self.hasStood = false
+                self.hasStoodInCurrentHour = false
             }
         }
         
-        theStandCount()
-        theHasStood()
+        countTotal()
+        judgeHasStoodInCurrentHour()
+    }
+}
+
+// MARK: - for interface controller
+extension TodayStandData {
+    func explicitlySetTotal(_ total:Int) {
+        self.total = total
+    }
+    
+    func explicitlySetHasStoodInCurrentHour(_ hasStoodInCurrentHour:Bool) {
+        self.hasStoodInCurrentHour = hasStoodInCurrentHour
     }
 }

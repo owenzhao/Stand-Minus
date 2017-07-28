@@ -12,10 +12,10 @@ import WatchKit
 class ComplicationController: NSObject, CLKComplicationDataSource {
     deinit {
         StandHourQuery.terminate()
-        CurrentHourData.terminate()
+        TodayStandData.terminate()
     }
 
-    unowned private let data = CurrentHourData.shared()
+    unowned private let data = TodayStandData.shared()
     unowned private let query = StandHourQuery.shared()
     
     // MARK: - Timeline Configuration
@@ -44,7 +44,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         func entryOf(_ complication:CLKComplication) -> CLKComplicationTimelineEntry {
             let template:CLKComplicationTemplate
-            let textProvider = CLKSimpleTextProvider(text: String(self.data.standCount))
+            let textProvider = CLKSimpleTextProvider(text: String(self.data.total))
             switch complication.family {
             case .circularSmall:
                 template = CLKComplicationTemplateCircularSmallRingText()
@@ -58,14 +58,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             
             if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
                 let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
-                let imageProvider = CLKImageProvider(onePieceImage: self.data.hasStood ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+                let imageProvider = CLKImageProvider(onePieceImage: self.data.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
                 smallFlattemplate.imageProvider = imageProvider
                 smallFlattemplate.textProvider = textProvider
             }
             else {
                 let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
                 smallRingTextTemplate.ringStyle = .closed
-                smallRingTextTemplate.fillFraction = self.data.hasStood ? 1.0 : 0.5
+                smallRingTextTemplate.fillFraction = self.data.hasStoodInCurrentHour ? 1.0 : 0.5
                 smallRingTextTemplate.textProvider = textProvider
             }
             
@@ -104,7 +104,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         // This method will be called once per supported complication, and the results will be cached
         func templateOf() -> CLKComplicationTemplate {
             let template:CLKComplicationTemplate
-            let textProvider = CLKSimpleTextProvider(text: String(self.data.standCount))
+            let textProvider = CLKSimpleTextProvider(text: String(self.data.total))
             switch complication.family {
             case .circularSmall:
                 template = CLKComplicationTemplateCircularSmallRingText()
