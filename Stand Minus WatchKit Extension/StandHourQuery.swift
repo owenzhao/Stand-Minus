@@ -42,16 +42,6 @@ class StandHourQuery {
     }
     
     var complicationShouldReQuery = true
-//    private var delegate:StandHourQueryDelegate!
-    
-    func executeAnchorObjectQuery(preResultsHanlder:@escaping HKAnchoredObjectQuery.PreResultsHandler) {
-        let now = Date()
-        createPredicate(at: now)
-        
-        let query = HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: HKObjectQueryNoLimit, resultsHandler: preResultsHanlder(now, hasComplication))
-
-        executeHKQuery(query, at: now)
-    }
     
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
@@ -77,6 +67,7 @@ class StandHourQuery {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
         defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+        data.now = now
         
         store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
             if error == nil && success {
@@ -291,11 +282,6 @@ extension StandHourQuery {
 // MARK: - type alias
 extension HKSampleQuery {
     typealias ResultsHandler = (HKSampleQuery, [HKSample]?, Error?) -> Void
-    typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
-}
-
-extension HKAnchoredObjectQuery {
-    typealias ResultsHandler = (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void
     typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
 }
 

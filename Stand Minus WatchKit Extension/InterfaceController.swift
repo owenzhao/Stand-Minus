@@ -55,34 +55,17 @@ class InterfaceController: WKInterfaceController {
     }
     
     private func queryCurrentStandUpInfo() {
-        let preResultsHander:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+        let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
             return { [unowned self] (_, samples, error) in
-                
                 guard error == nil else {
                     fatalError(error!.localizedDescription)
                 }
                 
-                if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
-                    let total = samples.reduce(0) { (result, sample) -> Int in
-                        result + (1 - sample.value)
-                    }
-                    
-                    var hassStoodInCurrentHour = false
-                    
-                    if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
-                        let calendar = Calendar(identifier: .gregorian)
-                        let currentHour = calendar.component(.hour, from: now)
-                        let lastSampleHour = calendar.component(.hour, from: lastSample.startDate)
-                        hassStoodInCurrentHour = (currentHour == lastSampleHour)
-                    }
-                    
-                    self.todayStandData.explicitlySetTotal(total)
-                    self.todayStandData.explicitlySetHasStoodInCurrentHour(hassStoodInCurrentHour)
+                if let samples = samples as? [HKCategorySample] {
+                    self.todayStandData.samples = samples
                 } else {
-                    self.todayStandData.explicitlySetTotal(0)
-                    self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
+                    self.todayStandData.samples = []
                 }
-                
                 
                 DispatchQueue.main.async { [unowned self] in
                     self.updateUI()
@@ -100,7 +83,7 @@ class InterfaceController: WKInterfaceController {
             }
         }
         
-        self.query.executeSampleQuery(preResultsHandler: preResultsHander)
+        self.query.executeSampleQuery(preResultsHandler: preResultsHandler)
     }
     
     private func updateComplications() {

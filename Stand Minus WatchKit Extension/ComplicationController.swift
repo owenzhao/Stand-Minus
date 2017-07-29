@@ -74,31 +74,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         }
         
         if query.complicationShouldReQuery {
-            let preResultsHander:HKSampleQuery.PreResultsHandler = { [unowned self] (now, _) -> HKSampleQuery.ResultsHandler in
+            let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, _) -> HKSampleQuery.ResultsHandler in
                 return { [unowned self] (_, samples, error) in
                     guard error == nil else {
                         fatalError(error!.localizedDescription)
                     }
                     
-                    if let samples = samples as? [HKCategorySample], let lastSample = samples.last {
-                        let total = samples.reduce(0) { (result, sample) -> Int in
-                            result + (1 - sample.value)
-                        }
-                        
-                        var hassStoodInCurrentHour = false
-                        
-                        if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
-                            let calendar = Calendar(identifier: .gregorian)
-                            let currentHour = calendar.component(.hour, from: now)
-                            let lastSampleHour = calendar.component(.hour, from: lastSample.startDate)
-                            hassStoodInCurrentHour = (currentHour == lastSampleHour)
-                        }
-                        
-                        self.todayStandData.explicitlySetTotal(total)
-                        self.todayStandData.explicitlySetHasStoodInCurrentHour(hassStoodInCurrentHour)
+                    if let samples = samples as? [HKCategorySample] {
+                        self.todayStandData.samples = samples
                     } else {
-                        self.todayStandData.explicitlySetTotal(0)
-                        self.todayStandData.explicitlySetHasStoodInCurrentHour(false)
+                        self.todayStandData.samples = []
                     }
                     
                     self.query.complicationShouldReQuery = false
@@ -108,7 +93,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 }
             }
             
-            self.query.executeSampleQueryWithComplication(preResultsHandler: preResultsHander)
+            self.query.executeSampleQueryWithComplication(preResultsHandler: preResultsHandler)
         }
         else {
             handler(entryOf(complication))

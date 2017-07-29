@@ -12,9 +12,6 @@ import UserNotifications
 import HealthKit
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
-    private var anchor:HKQueryAnchor? = nil
-    private var isFirstQuery = true
-    
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
@@ -38,34 +35,20 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the background task once you’re done.
                 let query = StandHourQuery.shared()
                 
-                let preResultsHandler:HKAnchoredObjectQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKAnchoredObjectQuery.ResultsHandler in
-                    
-                    return { [unowned self] (_, samples, deletedObjects, nextAnchor, error) in
+                let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+                    return { [unowned self] (_, samples, error) in
                         defer {
                             backgroundTask.setTaskCompletedWithSnapshot(false)
                         }
                         
                         if error == nil {
-                            defer {
-                                self.anchor = nextAnchor
-                            }
-                            
                             let todayStandData = TodayStandData.shared()
                             
-                            if self.isFirstQuery {
-                                defer { self.isFirstQuery = false }
-                                todayStandData.assign(samples as! [HKCategorySample])
+                            if let samples = samples as? [HKCategorySample] {
+                                todayStandData.samples = samples
+                            } else {
+                                todayStandData.samples = []
                             }
-                            else {
-                                if let deletedObjects = deletedObjects {
-                                    todayStandData.delete(deletedObjects)
-                                }
-                                if let samples = samples as? [HKCategorySample] {
-                                    todayStandData.append(samples)
-                                }
-                            }
-                            
-                            todayStandData.update(at: now) // calculate data
                             
                             if query.complicationShouldReQuery {
                                 query.complicationShouldReQuery = false
@@ -84,10 +67,11 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                             
                             query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
                         }
+                        
                     }
                 }
                 
-                query.executeAnchorObjectQuery(preResultsHanlder: preResultsHandler)
+                query.executeSampleQuery(preResultsHandler: preResultsHandler)
                 
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
