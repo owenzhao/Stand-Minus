@@ -41,8 +41,6 @@ class StandHourQuery {
         return false
     }
     
-//    var complicationShouldReQuery = true
-    
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
         createPredicate(at: now)
