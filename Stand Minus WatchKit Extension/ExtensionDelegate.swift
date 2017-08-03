@@ -23,6 +23,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         TodayStandData.terminate()
     }
     
+    private var anchor:HKQueryAnchor? = nil
+    
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
         for task in backgroundTasks {
@@ -61,6 +63,35 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 }
                 
                 query.executeSampleQuery(preResultsHandler: preResultsHandler)
+                
+                let handler:HKAnchoredObjectQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKAnchoredObjectQuery.ResultsHandler in
+                    return { [unowned self] (_, samples, deletedObjects, anchor, error) in
+                        defer {
+                            backgroundTask.setTaskCompletedWithSnapshot(false)
+                        }
+                        
+                        if error == nil {
+                            self.anchor = anchor
+                            
+                            let todayStandData = TodayStandData.shared()
+                            
+                            if let samples = samples as? [HKCategorySample] {
+                                todayStandData.samples = samples
+                            } else {
+                                todayStandData.samples = []
+                            }
+                            
+                            if hasComplication {
+                                self.updateComplications()
+                            }
+                            
+                            query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
+                        }
+                        else { // device is locked. **query failed, reason: Protected health data is inaccessible**
+                            query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
+                        }
+                    }
+                }
                 
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date

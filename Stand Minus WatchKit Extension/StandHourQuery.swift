@@ -275,6 +275,11 @@ extension HKSampleQuery {
     typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
 }
 
+extension HKAnchoredObjectQuery {
+    typealias ResultsHandler = (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void
+    typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
+}
+
 // MARK: - UNUserNotificationCenterDelegate
 class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
