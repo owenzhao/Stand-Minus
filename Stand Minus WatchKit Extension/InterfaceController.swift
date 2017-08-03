@@ -31,7 +31,7 @@ class InterfaceController: WKInterfaceController {
         
         addMeneItemOfUpdate()
             
-        DispatchQueue.main.asyncAfter(wallDeadline: .now() + .seconds(5)) { [unowned self] in
+        DispatchQueue.main.asyncAfter(wallDeadline: .now()) { [unowned self] in
             if self.query.hasComplication {
                 self.queryCurrentStandUpInfo()
             }
@@ -71,10 +71,6 @@ class InterfaceController: WKInterfaceController {
                     self.updateUI()
                 }
                 
-                if self.query.complicationShouldReQuery {
-                    self.query.complicationShouldReQuery = false
-                }
-                
                 if hasComplication {
                     self.updateComplications()
                 }
@@ -83,7 +79,7 @@ class InterfaceController: WKInterfaceController {
             }
         }
         
-        self.query.executeSampleQuery(preResultsHandler: preResultsHandler)
+        query.executeSampleQuery(preResultsHandler: preResultsHandler)
     }
     
     private func updateComplications() {
@@ -92,8 +88,8 @@ class InterfaceController: WKInterfaceController {
     }
     
     func updateUI() {
-        self.lastQueryDateLabel.setText(self.localizedLastQueryDate())
-        self.hasStoodLabel.setText(self.localizedLabelOfHasStood())
+        lastQueryDateLabel.setText(self.localizedLastQueryDate())
+        hasStoodLabel.setText(self.localizedLabelOfHasStood())
     }
     
     private func localizedLabelOfHasStood() -> String {

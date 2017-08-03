@@ -41,7 +41,7 @@ class StandHourQuery {
         return false
     }
     
-    var complicationShouldReQuery = true
+//    var complicationShouldReQuery = true
     
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
@@ -49,16 +49,6 @@ class StandHourQuery {
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, hasComplication))
-        
-        executeHKQuery(query, at: now)
-    }
-    
-    func executeSampleQueryWithComplication(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
-        let now = Date()
-        createPredicate(at: now)
-        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, true))
         
         executeHKQuery(query, at: now)
     }
@@ -182,6 +172,8 @@ extension StandHourQuery {
         }
         
         let nextQueryDate = calculateNextQueryDate()
+        
+//        print("下一次的运行时间为：", DateFormatter.localizedString(from: nextQueryDate, dateStyle: .medium, timeStyle: .medium))
         
         arrangeNextBackgroundTask(at: nextQueryDate)
     }

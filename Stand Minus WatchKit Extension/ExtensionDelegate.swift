@@ -15,9 +15,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
-            if error == nil && success {
-                
-            }
         }
     }
     
@@ -50,10 +47,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                                 todayStandData.samples = []
                             }
                             
-                            if query.complicationShouldReQuery {
-                                query.complicationShouldReQuery = false
-                            }
-                            
                             if hasComplication {
                                 self.updateComplications()
                             }
@@ -61,10 +54,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                             query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
                         }
                         else { // device is locked. **query failed, reason: Protected health data is inaccessible**
-                            if !query.complicationShouldReQuery {
-                                query.complicationShouldReQuery = true
-                            }
-                            
                             query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
                         }
                         
