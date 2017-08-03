@@ -57,25 +57,42 @@ class InterfaceController: WKInterfaceController {
     private func queryCurrentStandUpInfo() {
         let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
             return { [unowned self] (_, samples, error) in
-                guard error == nil else {
-                    fatalError(error!.localizedDescription)
+//                guard error == nil else {
+//                    fatalError(error!.localizedDescription)
+//                }
+//
+//                if let samples = samples as? [HKCategorySample] {
+//                    self.todayStandData.samples = samples
+//                } else {
+//                    self.todayStandData.samples = []
+//                }
+//
+//                DispatchQueue.main.async { [unowned self] in
+//                    self.updateUI()
+//                }
+//
+//                if hasComplication {
+//                    self.updateComplications()
+//                }
+//
+//                self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
+//
+                if error == nil {
+                    if let samples = samples as? [HKCategorySample] {
+                        self.todayStandData.samples = samples
+                    } else {
+                        self.todayStandData.samples = []
+                    }
+                    
+                    if hasComplication {
+                        self.updateComplications()
+                    }
+                    
+                    self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
                 }
-                
-                if let samples = samples as? [HKCategorySample] {
-                    self.todayStandData.samples = samples
-                } else {
-                    self.todayStandData.samples = []
+                else { // device is locked. **query failed, reason: Protected health data is inaccessible**
+                    self.query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
                 }
-                
-                DispatchQueue.main.async { [unowned self] in
-                    self.updateUI()
-                }
-                
-                if hasComplication {
-                    self.updateComplications()
-                }
-                
-                self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
             }
         }
         
