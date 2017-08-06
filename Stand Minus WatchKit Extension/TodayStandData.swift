@@ -8,8 +8,6 @@
 
 import Foundation
 import HealthKit
-import ClockKit
-import WatchKit
 
 class TodayStandData {
     private static var instance:TodayStandData? = nil
@@ -69,4 +67,42 @@ class TodayStandData {
         }
     }
 
+}
+
+struct StandData {
+    let total:Int
+    let hasStoodInCurrentHour:Bool
+    let now:Date
+    
+    init(total:Int, hasStoodInCurrentHour:Bool, now:Date) {
+        self.total = total
+        self.hasStoodInCurrentHour = hasStoodInCurrentHour
+        self.now = now
+    }
+    
+    init(samples:[HKCategorySample], now:Date) {
+        self.now = now
+        
+        if let lastSample = samples.last {
+            let total = samples.reduce(0) { (result, sample) -> Int in
+                result + (1 - sample.value)
+            }
+            
+            var hasStoodInCurrentHour = false
+            
+            if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
+                let calendar = Calendar(identifier: .gregorian)
+                let currentHour = calendar.component(.hour, from: now)
+                let lastSampleHour = calendar.component(.hour, from: lastSample.startDate)
+                hasStoodInCurrentHour = (currentHour == lastSampleHour)
+            }
+            
+            self.total = total
+            self.hasStoodInCurrentHour = hasStoodInCurrentHour
+        }
+        else {
+            self.total = 0
+            self.hasStoodInCurrentHour = false
+        }
+    }
 }
