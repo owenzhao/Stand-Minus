@@ -174,35 +174,63 @@
                                 <rect key="frame" x="120" y="79" width="80" height="80"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stand- 1.6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IRw-tJ-3Mq">
-                                <rect key="frame" x="121" y="198" width="78.5" height="21"/>
+                                <rect key="frame" x="121" y="198" width="79" height="21"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UeF-Zy-5zj">
                                 <rect key="frame" x="111" y="339" width="99" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="oxa-hV-wij"/>
+                                </constraints>
                                 <state key="normal" title="Privacy Notice"/>
                                 <connections>
                                     <action selector="privacyNoticeButtonClicked:" destination="ghH-Z5-KVe" eventType="touchUpInside" id="8Tm-is-OXg"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="90516b962aaf6a8f339ec380389ffe7bff8b4fbcf508df8ae8876985ee7a9c2e" textAlignment="natural" lineBreakMode="middleTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C8M-WU-qpL">
+                                <rect key="frame" x="16" y="419" width="293" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y8e-B9-5Fb">
+                                <rect key="frame" x="137" y="463" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="aJS-gl-GTa"/>
+                                </constraints>
+                                <state key="normal" title="复制"/>
+                                <connections>
+                                    <action selector="copyButtonClicked:" destination="ghH-Z5-KVe" eventType="touchUpInside" id="Da5-jF-tMc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
-                            <constraint firstItem="PPS-9l-5a0" firstAttribute="top" secondItem="IRw-tJ-3Mq" secondAttribute="bottom" constant="50" id="XS5-He-Nlg"/>
-                            <constraint firstItem="g3u-tx-8xJ" firstAttribute="centerX" secondItem="IRw-tJ-3Mq" secondAttribute="centerX" id="Xkp-Ww-MM0"/>
-                            <constraint firstItem="PPS-9l-5a0" firstAttribute="centerY" secondItem="cic-ws-u8n" secondAttribute="centerY" id="eBW-8z-62M"/>
-                            <constraint firstItem="PPS-9l-5a0" firstAttribute="centerX" secondItem="UeF-Zy-5zj" secondAttribute="centerX" id="hph-eN-7OW"/>
-                            <constraint firstItem="IRw-tJ-3Mq" firstAttribute="centerX" secondItem="PPS-9l-5a0" secondAttribute="centerX" id="ixC-BD-pFW"/>
-                            <constraint firstItem="g3u-tx-8xJ" firstAttribute="centerX" secondItem="cic-ws-u8n" secondAttribute="centerX" id="mtq-Om-GgN"/>
-                            <constraint firstItem="IRw-tJ-3Mq" firstAttribute="top" secondItem="g3u-tx-8xJ" secondAttribute="bottom" constant="39" id="nLI-gk-OJQ"/>
-                            <constraint firstItem="UeF-Zy-5zj" firstAttribute="top" secondItem="PPS-9l-5a0" secondAttribute="bottom" constant="40" id="qQp-Gz-vFl"/>
+                            <constraint firstItem="UeF-Zy-5zj" firstAttribute="top" secondItem="PPS-9l-5a0" secondAttribute="bottom" constant="40" id="0GK-pB-soD"/>
+                            <constraint firstItem="IRw-tJ-3Mq" firstAttribute="centerX" secondItem="PPS-9l-5a0" secondAttribute="centerX" id="2UU-PH-55Z"/>
+                            <constraint firstItem="PPS-9l-5a0" firstAttribute="top" secondItem="IRw-tJ-3Mq" secondAttribute="bottom" constant="50" id="6PS-vZ-hzx"/>
+                            <constraint firstItem="C8M-WU-qpL" firstAttribute="leading" secondItem="cic-ws-u8n" secondAttribute="leadingMargin" id="IRB-zG-wH5"/>
+                            <constraint firstItem="g3u-tx-8xJ" firstAttribute="trailing" secondItem="IRw-tJ-3Mq" secondAttribute="trailing" id="TYB-VG-5oa"/>
+                            <constraint firstItem="oS5-7C-Gkl" firstAttribute="top" secondItem="C8M-WU-qpL" secondAttribute="bottom" constant="200" id="XSd-YC-clc"/>
+                            <constraint firstItem="g3u-tx-8xJ" firstAttribute="centerX" secondItem="cic-ws-u8n" secondAttribute="centerX" id="Y3D-42-2VK"/>
+                            <constraint firstItem="Y8e-B9-5Fb" firstAttribute="centerX" secondItem="UeF-Zy-5zj" secondAttribute="centerX" id="cop-3N-Vft"/>
+                            <constraint firstItem="PPS-9l-5a0" firstAttribute="centerY" secondItem="cic-ws-u8n" secondAttribute="centerY" id="lNp-FW-0v8"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="C8M-WU-qpL" secondAttribute="trailing" constant="-5" id="sRy-zs-sro"/>
+                            <constraint firstItem="Y8e-B9-5Fb" firstAttribute="top" secondItem="C8M-WU-qpL" secondAttribute="bottom" constant="8" symbolic="YES" id="tHm-IG-6JG"/>
+                            <constraint firstItem="IRw-tJ-3Mq" firstAttribute="top" secondItem="g3u-tx-8xJ" secondAttribute="bottom" constant="39" id="u5A-YX-FTP"/>
+                            <constraint firstItem="C8M-WU-qpL" firstAttribute="top" secondItem="UeF-Zy-5zj" secondAttribute="bottom" constant="50" id="yaA-YB-bWg"/>
+                            <constraint firstItem="PPS-9l-5a0" firstAttribute="centerX" secondItem="UeF-Zy-5zj" secondAttribute="centerX" id="yeC-FE-mga"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tokenLabel" destination="C8M-WU-qpL" id="L4U-ys-cNa"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q9V-fC-Vgw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="915" y="-240"/>
+            <point key="canvasLocation" x="914.49275362318849" y="-240.48913043478262"/>
         </scene>
         <!--Step Three View Controller-->
         <scene sceneID="wYP-LD-pbt">

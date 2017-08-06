@@ -135,6 +135,8 @@ extension ExtensionDelegate:WCSessionDelegate {
         query.hasComplication = hasComplication
         let preResultsHandler:HKSampleQuery.PreResultsHandler
         
+        print(messageType)
+        
         switch messageType! {
         case .newHour, .rightNow:
             preResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in

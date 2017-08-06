@@ -15,13 +15,29 @@ class AboutViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let token = UserDefaults.standard.string(forKey: "token") {
+            tokenLabel.text = token
+        }
+        else {
+            tokenLabel.text = NSLocalizedString("not defined", comment: "not defined")
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    @IBOutlet weak var tokenLabel: UILabel!
+    
+    @IBAction func copyButtonClicked(_ sender: Any) {
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = tokenLabel.text
+    }
     /*
     // MARK: - Navigation
 
