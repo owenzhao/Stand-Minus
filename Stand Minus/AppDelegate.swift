@@ -94,9 +94,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // MARK: - Xinge push
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        print(String(data:deviceToken, encoding:.utf8)!)
         print(deviceToken.debugDescription)
-        let token = XGPush.registerDevice(deviceToken, successCallback: {
+        
+        let token = XGPush.registerDevice(deviceToken, account: "Zhao Xin", successCallback: {
             NSLog("register to XG success.")
         }) {
             NSLog("register ot XG failed.")
