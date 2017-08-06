@@ -1,6 +1,9 @@
 /* Already stood */
 "Already stood" = "已站立";
 
+/* Has */
+"Has" = "有";
+
 /* Stand Up Notification Body */
 "Is the time to move up about your body!" = "是时间起来活动一下身体啦！";
 
@@ -9,6 +12,9 @@
 
 /* Stand Up Notification Title */
 "Please Stand Up!" = "请起立！";
+
+/* Unknown */
+"Unknown" = "未知";
 
 /* Update */
 "Update" = "更新";
