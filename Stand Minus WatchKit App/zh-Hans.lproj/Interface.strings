@@ -1,11 +1,14 @@
 /* Class = "WKInterfaceLabel"; text = "Alert Label"; ObjectID = "IdU-wH-bcW"; */
 "IdU-wH-bcW.text" = "Alert Label";
 
-/* Class = "WKInterfaceLabel"; text = "Updated at"; ObjectID = "Lo6-sC-cko"; */
-"Lo6-sC-cko.text" = "更新时间";
+/* Class = "WKInterfaceLabel"; text = "Last Query"; ObjectID = "Lo6-sC-cko"; */
+"Lo6-sC-cko.text" = "上次查询时间";
 
-/* Class = "WKInterfaceLabel"; text = "Status"; ObjectID = "T1X-tj-Hcx"; */
-"T1X-tj-Hcx.text" = "状态";
+/* Class = "WKInterfaceLabel"; text = "Status"; ObjectID = "Sea-cl-H3q"; */
+"Sea-cl-H3q.text" = "状态";
+
+/* Class = "WKInterfaceLabel"; text = "Complications"; ObjectID = "T1X-tj-Hcx"; */
+"T1X-tj-Hcx.text" = "表盘小部件";
 
 /* Class = "WKInterfaceLabel"; text = "date"; ObjectID = "Y2v-iO-2R6"; */
 "Y2v-iO-2R6.text" = "date";
