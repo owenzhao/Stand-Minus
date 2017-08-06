@@ -8,7 +8,7 @@
 
 import Foundation
 import HealthKit
-import WatchKit
+//import WatchKit
 import UserNotifications
 
 class StandHourQuery {
@@ -33,20 +33,14 @@ class StandHourQuery {
     private let calendar = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
-    var hasComplication:Bool {
-        if let _ = CLKComplicationServer.sharedInstance().activeComplications {
-            return true
-        }
-        
-        return false
-    }
+    var hasComplication:Bool!
     
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
         createPredicate(at: now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, hasComplication))
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, true))
         
         executeHKQuery(query, at: now)
     }
@@ -75,107 +69,6 @@ class StandHourQuery {
 
 // MARK: - arrange next background task
 extension StandHourQuery {
-    func arrangeNextBackgroundTask(at now:Date, hasComplication: Bool) {
-        func calculateNextQueryDate() -> Date {
-            func shouldNotifyUser() -> Bool {
-                return data.shouldNotifyUser
-            }
-            func hasStood() -> Bool {
-                return data.hasStoodInCurrentHour
-            }
-            func total() -> Int {
-                return data.total
-            }
-            
-            func fiftyMinutesInThisHour(cps:inout DateComponents) {
-                cps.minute = 50
-                state = .notNotifyUser(at: now)
-            }
-            func fiftyMinutesInNextHour(cps:inout DateComponents) {
-                cps.hour! += 1
-                cps.minute = 50
-                state = .notNotifyUser(at: now)
-            }
-            func twelveFiftyInNextDay(cps:inout DateComponents) {
-                cps.day! += 1
-                cps.hour = 12
-                cps.minute = 50
-                state = .notNotifyUser(at: now)
-            }
-            func currentMinute() -> Int {
-                return calendar.component(.minute, from: now)
-            }
-            
-            var cps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: now)
-            
-            if hasComplication {
-                if shouldNotifyUser() {
-                    if hasStood() {
-                        nextWholeHour(cps: &cps)
-                    }
-                    else {
-                        switch cps.minute! {
-                        case 0..<50:
-                            fiftyMinutesInThisHour(cps: &cps)
-                        default: //(50..<60)
-                            if state == .notNotifyUser(at: now) {
-                                notifyUser()
-                                state = .alreadyNotifyUser(at: now)
-                            }
-                            nextWholeHour(cps: &cps)
-                        }
-                    }
-                }
-                else {
-                    nextWholeHour(cps: &cps)
-                }
-            }
-            else {
-                if shouldNotifyUser() {
-                    if hasStood() {
-                        if cps.hour! != 23 {
-                            fiftyMinutesInNextHour(cps:&cps)
-                        }
-                        else {
-                            twelveFiftyInNextDay(cps: &cps)
-                        }
-                    }
-                    else {
-                        switch cps.minute! {
-                        case 0..<50:
-                            cps.minute = 50
-                            state = .notNotifyUser(at: now)
-                        default: // 50..<60
-                            if state != .alreadyNotifyUser(at: now) {
-                                notifyUser()
-                                state = .alreadyNotifyUser(at: now)
-                            }
-                            fiftyMinutesInNextHour(cps: &cps)
-                        }
-                    }
-                }
-                else {
-                    cps.hour! += 12 - total() + (hasStood() ? 1 : 0)
-                    if cps.hour! > 23 {
-                        twelveFiftyInNextDay(cps: &cps)
-                    }
-                    else {
-                        cps.minute = 50
-                    }
-                    state = .notNotifyUser(at: now)
-                }
-            }
-            
-            return calendar.date(from: cps)!
-        }
-        
-        let nextQueryDate = calculateNextQueryDate()
-        
-//        print("下一次的运行时间为：", DateFormatter.localizedString(from: nextQueryDate, dateStyle: .medium, timeStyle: .medium))
-        
-        arrangeNextBackgroundTask(at: nextQueryDate)
-    }
-    
     private func notifyUser() {
         let center = UNUserNotificationCenter.current()
         if center.delegate == nil { center.delegate = userNotificationCenterDelegate }
@@ -197,76 +90,6 @@ extension StandHourQuery {
             center.add(request, withCompletionHandler: nil)
         }
     }
-    
-    private func arrangeNextBackgroundTask(at fireDate:Date) {
-        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: nil) { (error) in
-            if error == nil {
-            }
-        }
-    }
-    
-    func arrangeNextBackgroundTaskWhenDeviceIsLocked(at now:Date, hasComplication:Bool) {
-        var cps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: now)
-        
-        if hasComplication {
-            switch cps.hour! {
-            case 0..<6:
-                nextWholeHour(cps: &cps)
-            case 6..<12:
-                switch cps.minute! {
-                case 0..<20:
-                    cps.minute = 20
-                case 20..<40:
-                    cps.minute = 40
-                default: // 40 - 60
-                    nextWholeHour(cps: &cps)
-                }
-            default: // 12...23
-                switch cps.minute! {
-                case 0..<20:
-                    cps.minute = 20
-                case 20..<40:
-                    cps.minute = 40
-                case 40..<50:
-                    cps.minute = 50
-                default: // 50 - 60
-                    nextWholeHour(cps: &cps)
-                }
-            }
-        }
-        else {
-            switch cps.hour! {
-            case 0..<12:
-                cps.hour = 12
-                cps.minute = 50
-            case 12..<23:
-                switch cps.minute! {
-                case 0..<50:
-                    cps.minute = 50
-                default: // 50 - 60
-                    nextWholeHour(cps: &cps)
-                }
-            default: // 23
-                switch cps.minute! {
-                case 0..<50:
-                    cps.minute = 50
-                default: // 50 - 60
-                    cps.day! += 1
-                    cps.hour = 12
-                    cps.minute = 50
-                }
-            }
-        }
-        
-        let nextQueryDate = calendar.date(from: cps)!
-        
-        arrangeNextBackgroundTask(at: nextQueryDate)
-    }
-    
-    private func nextWholeHour( cps:inout DateComponents) {
-        cps.hour! += 1
-        cps.minute = 0
-    }
 }
 
 // MARK: - type alias
@@ -284,5 +107,50 @@ extension HKAnchoredObjectQuery {
 class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert,.sound])
+    }
+}
+
+// MARK: - ExtensionCurrentHourState
+enum ExtensionCurrentHourState {
+    case notSet
+    case notNotifyUser(at:Date)
+    case alreadyNotifyUser(at:Date)
+    
+    static func == (left:ExtensionCurrentHourState, right:ExtensionCurrentHourState) -> Bool {
+        func inTheSampeHour(_ last:Date, _ now:Date) -> Bool {
+            let calendar = Calendar(identifier: .gregorian)
+            let hourInLast = calendar.component(.hour, from: last)
+            let hourNow = calendar.component(.hour, from: now)
+            
+            return hourInLast == hourNow && now.timeIntervalSince(last) < 60 * 60
+        }
+        
+        switch left {
+        case .notSet:
+            switch right {
+            case .notSet:
+                return true
+            default:
+                return false
+            }
+        case .notNotifyUser(let last):
+            switch right {
+            case .notNotifyUser(let now):
+                return inTheSampeHour(last, now)
+            default:
+                return false
+            }
+        case .alreadyNotifyUser(let last):
+            switch right {
+            case .alreadyNotifyUser(let now):
+                return inTheSampeHour(last, now)
+            default:
+                return false
+            }
+        }
+    }
+    
+    static func != (left:ExtensionCurrentHourState, right:ExtensionCurrentHourState) -> Bool {
+        return !(left == right)
     }
 }
