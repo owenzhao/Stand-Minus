@@ -30,12 +30,6 @@ class InterfaceController: WKInterfaceController {
         super.awake(withContext: context)
         
         addMeneItemOfUpdate()
-            
-        DispatchQueue.main.asyncAfter(wallDeadline: .now()) { [unowned self] in
-            if self.query.hasComplication {
-                self.queryCurrentStandUpInfo()
-            }
-        }
     }
     
     override func willActivate() {
@@ -49,6 +43,7 @@ class InterfaceController: WKInterfaceController {
     
     @IBOutlet var hasStoodLabel: WKInterfaceLabel!
     @IBOutlet var lastQueryDateLabel: WKInterfaceLabel!
+    @IBOutlet var complicationsLabel: WKInterfaceLabel!
     
     @IBAction func updateButtonClicked() {
         queryCurrentStandUpInfo()
@@ -57,26 +52,6 @@ class InterfaceController: WKInterfaceController {
     private func queryCurrentStandUpInfo() {
         let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
             return { [unowned self] (_, samples, error) in
-//                guard error == nil else {
-//                    fatalError(error!.localizedDescription)
-//                }
-//
-//                if let samples = samples as? [HKCategorySample] {
-//                    self.todayStandData.samples = samples
-//                } else {
-//                    self.todayStandData.samples = []
-//                }
-//
-//                DispatchQueue.main.async { [unowned self] in
-//                    self.updateUI()
-//                }
-//
-//                if hasComplication {
-//                    self.updateComplications()
-//                }
-//
-//                self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
-//
                 if error == nil {
                     if let samples = samples as? [HKCategorySample] {
                         self.todayStandData.samples = samples
@@ -84,14 +59,13 @@ class InterfaceController: WKInterfaceController {
                         self.todayStandData.samples = []
                     }
                     
+                    DispatchQueue.main.async { [unowned self] in
+                        self.updateUI()
+                    }
+                    
                     if hasComplication {
                         self.updateComplications()
                     }
-                    
-                    self.query.arrangeNextBackgroundTask(at: now, hasComplication: hasComplication)
-                }
-                else { // device is locked. **query failed, reason: Protected health data is inaccessible**
-                    self.query.arrangeNextBackgroundTaskWhenDeviceIsLocked(at: now, hasComplication: hasComplication)
                 }
             }
         }
@@ -107,6 +81,14 @@ class InterfaceController: WKInterfaceController {
     func updateUI() {
         lastQueryDateLabel.setText(self.localizedLastQueryDate())
         hasStoodLabel.setText(self.localizedLabelOfHasStood())
+        complicationsLabel.setText({ () -> String in
+            if let _ = CLKComplicationServer.sharedInstance().activeComplications?.isEmpty {
+                return NSLocalizedString("Has", comment: "Has")
+            }
+            else {
+                return NSLocalizedString("None", comment: "None")
+            }
+        }())
     }
     
     private func localizedLabelOfHasStood() -> String {
@@ -118,13 +100,16 @@ class InterfaceController: WKInterfaceController {
             return NSLocalizedString("Not stood yet", comment: "Not stood yet.")
         }
         
-        return NSLocalizedString("Watch Locked", comment: "Watch Locked")
+        return NSLocalizedString("Unknown", comment: "Unknown")
     }
     
     private func localizedLastQueryDate() -> String {
-        let lastQueryTimeIntervalSinceReferenceDate = defaults.double(forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
-        let lastQueryDate = Date(timeIntervalSinceReferenceDate: lastQueryTimeIntervalSinceReferenceDate)
+        if let lastQueryTimeIntervalSinceReferenceDate = defaults.object(forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey) as? Double {
+            let lastQueryDate = Date(timeIntervalSinceReferenceDate: lastQueryTimeIntervalSinceReferenceDate)
+            
+            return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)
+        }
         
-        return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)
+        return NSLocalizedString("Not Query yet.", comment: "Not Query yet.")
     }
 }
