@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="13122.19" systemVersion="16F73" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="13168.3" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
     <device id="watch38" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="watchOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.16"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="13034"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13147.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="13042.2"/>
     </dependencies>
     <scenes>
         <!--Interface Controller-->
@@ -16,21 +16,29 @@
                     <items>
                         <imageView alignment="center" image="ViewController Image" id="Jez-rl-RW9"/>
                         <label width="1" height="10" alignment="left" id="XB6-Ak-6Oe"/>
-                        <label width="1" alignment="left" text="Status" textAlignment="center" id="T1X-tj-Hcx">
+                        <label width="1" alignment="left" text="Complications" textAlignment="center" id="T1X-tj-Hcx">
                             <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <label width="1" alignment="left" text="Stood" textAlignment="center" id="C5a-uD-hh4">
+                        <label width="1" alignment="left" text="None" textAlignment="center" id="C5a-uD-hh4">
                             <fontDescription key="font" style="UICTFontTextStyleBody"/>
                         </label>
-                        <label width="1" alignment="left" text="Updated at" textAlignment="center" id="Lo6-sC-cko">
+                        <label width="1" alignment="left" text="Status" textAlignment="center" id="Sea-cl-H3q">
+                            <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                        </label>
+                        <label width="1" alignment="left" text="Stood" textAlignment="center" id="dPT-Jh-SBU">
+                            <fontDescription key="font" style="UICTFontTextStyleBody"/>
+                        </label>
+                        <label width="1" alignment="left" text="Last Query" textAlignment="center" id="Lo6-sC-cko">
                             <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
                         <label width="1" alignment="left" text="date" textAlignment="center" id="Y2v-iO-2R6"/>
                     </items>
                     <connections>
-                        <outlet property="hasStoodLabel" destination="C5a-uD-hh4" id="iXv-XM-liz"/>
+                        <outlet property="complicationsLabel" destination="C5a-uD-hh4" id="WZR-iO-DkU"/>
+                        <outlet property="hasStoodLabel" destination="dPT-Jh-SBU" id="HzL-Oc-dAz"/>
                         <outlet property="lastQueryDateLabel" destination="Y2v-iO-2R6" id="UwT-qr-YS9"/>
                     </connections>
                 </controller>
