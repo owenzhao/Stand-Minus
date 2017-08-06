@@ -8,11 +8,15 @@
 
 import UIKit
 import HealthKit
+import UserNotifications
+import WatchConnectivity
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    private var session:WCSession!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -27,6 +31,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             else {
                 print(error!.localizedDescription, "\n")
             }
+        }
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
+            if error == nil && success {
+                DispatchQueue.main.async {
+                    application.registerForRemoteNotifications()
+                }
+            }
+        }
+        
+        let setting = XGSetting.getInstance() as! XGSetting
+        setting.enableDebug(true)
+        
+        XGPush.startApp(2200249931, appKey: "I2V4HX465IMJ")
+        
+        if WCSession.isSupported() {
+            session = WCSession.default
+            session.delegate = self
+            session.activate()
         }
         
         return true
@@ -65,4 +89,100 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+}
+
+// MARK: - Xinge push
+extension AppDelegate {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+//        print(String(data:deviceToken, encoding:.utf8)!)
+        print(deviceToken.debugDescription)
+        let token = XGPush.registerDevice(deviceToken, successCallback: {
+            NSLog("register to XG success.")
+        }) {
+            NSLog("register ot XG failed.")
+        }
+        
+        NSLog("XG device token is %@", token!)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        print(userInfo)
+        print()
+        
+        if let rawValue = userInfo["type"] as? String,
+            let type = MessageType(rawValue: rawValue) {
+            switch type {
+            case .newHour, .rightNow:
+                if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
+                    let info:[String:Any] = ["type":type.rawValue, "hasComplication":true]
+                    session.transferCurrentComplicationUserInfo(info)
+                    
+                    completionHandler(.newData)
+                }
+                else {
+                    completionHandler(.noData)
+                }
+            case .fiftyMinutes:
+                let info = session.receivedApplicationContext
+                
+                if let total = info["total"] as? Int,
+                    let hasStoodInCurrentHour = info["hasStoodInCurrentHour"] as? Bool,
+                    let date = info["date"] as? Date {
+                    let now = Date()
+                    
+                    let calendar = Calendar(identifier: .gregorian)
+                    let hour = calendar.component(.hour, from: date)
+                    let nowHour = calendar.component(.hour, from: now)
+                    
+                    if now.timeIntervalSince(date) < 60 * 60,
+                        hour == nowHour,
+                        total < 12,
+                        hasStoodInCurrentHour == false {
+                        
+                        completionHandler(.noData)
+                        return
+                    }
+                }
+                
+                if session.activationState == .activated && session.isPaired {
+                    let info = ["type":type.rawValue]
+                    session.transferCurrentComplicationUserInfo(info)
+                    
+                    completionHandler(.newData)
+                }
+                else {
+                    completionHandler(.noData)
+                }
+            }
+        }
+        else {
+            print("should not happen")
+        }
+    }
+}
+
+// MARK: - WCSessionDelegate
+extension AppDelegate:WCSessionDelegate {
+    /** Called when the session has completed activation. If session state is WCSessionActivationStateNotActivated there will be an error with more details. */
+    @available(iOS 9.3, *)
+    public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        
+    }
+    
+    
+    /** ------------------------- iOS App State For Watch ------------------------ */
+    
+    /** Called when the session can no longer be used to modify or add any new transfers and, all interactive messages will be cancelled, but delegate callbacks for background transfers can still occur. This will happen when the selected watch is being changed. */
+    @available(iOS 9.3, *)
+    public func sessionDidBecomeInactive(_ session: WCSession) {
+        
+    }
+    
+    
+    /** Called when all delegate callbacks for the previously selected watch has occurred. The session can be re-activated for the now selected watch using activateSession. */
+    @available(iOS 9.3, *)
+    public func sessionDidDeactivate(_ session: WCSession) {
+        
+    }
 }
