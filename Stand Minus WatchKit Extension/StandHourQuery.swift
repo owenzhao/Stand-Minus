@@ -15,7 +15,7 @@ class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = TodayStandData.shared()
     private var state:ExtensionCurrentHourState = .notSet
-    private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
+//    private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     
     private init() { }
     
@@ -67,31 +67,6 @@ class StandHourQuery {
     }
 }
 
-// MARK: - arrange next background task
-extension StandHourQuery {
-    private func notifyUser() {
-        let center = UNUserNotificationCenter.current()
-        if center.delegate == nil { center.delegate = userNotificationCenterDelegate }
-        center.getNotificationSettings { (notificationSettings) in
-            let id = UUID().uuidString
-            let content = { () -> UNMutableNotificationContent in
-                let mc = UNMutableNotificationContent()
-                mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
-                mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
-                mc.categoryIdentifier = "notify_user_category"
-                
-                if notificationSettings.soundSetting == .enabled {
-                    mc.sound = UNNotificationSound.default()
-                }
-                
-                return mc
-            }()
-            let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
-            center.add(request, withCompletionHandler: nil)
-        }
-    }
-}
-
 // MARK: - type alias
 extension HKSampleQuery {
     typealias ResultsHandler = (HKSampleQuery, [HKSample]?, Error?) -> Void
@@ -101,13 +76,6 @@ extension HKSampleQuery {
 extension HKAnchoredObjectQuery {
     typealias ResultsHandler = (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void
     typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
-}
-
-// MARK: - UNUserNotificationCenterDelegate
-class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert,.sound])
-    }
 }
 
 // MARK: - ExtensionCurrentHourState

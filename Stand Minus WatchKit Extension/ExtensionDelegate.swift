@@ -32,6 +32,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 //    private var anchor:HKQueryAnchor? = nil
     var hasComplication:Bool!
     private var messageType:MessageType!
+    private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
@@ -160,7 +161,7 @@ extension ExtensionDelegate:WCSessionDelegate {
             }
         case .fiftyMinutes:
             preResultsHandler = { (now, hasComplication) -> HKSampleQuery.ResultsHandler in
-                return { (_, samples, error) in
+                return { [unowned self] (_, samples, error) in
                     if error == nil {
                         let todayStandData = TodayStandData.shared()
                         
@@ -174,12 +175,43 @@ extension ExtensionDelegate:WCSessionDelegate {
                             try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
                         }
                         
-                        // TODO: alert user
+                        if !todayStandData.hasStoodInCurrentHour {
+                            self.notifyUser()
+                        }
                     }
                 }
             }
         }
         
         query.executeSampleQuery(preResultsHandler: preResultsHandler)
+    }
+    
+    private func notifyUser() {
+        let center = UNUserNotificationCenter.current()
+        if center.delegate == nil { center.delegate = userNotificationCenterDelegate }
+        center.getNotificationSettings { (notificationSettings) in
+            let id = UUID().uuidString
+            let content = { () -> UNMutableNotificationContent in
+                let mc = UNMutableNotificationContent()
+                mc.title = NSLocalizedString("Please Stand Up!", comment: "Stand Up Notification Title")
+                mc.body = NSLocalizedString("Is the time to move up about your body!", comment: "Stand Up Notification Body")
+                mc.categoryIdentifier = "notify_user_category"
+                
+                if notificationSettings.soundSetting == .enabled {
+                    mc.sound = UNNotificationSound.default()
+                }
+                
+                return mc
+            }()
+            let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
+            center.add(request, withCompletionHandler: nil)
+        }
+    }
+}
+
+// MARK: - UNUserNotificationCenterDelegate
+class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert,.sound])
     }
 }
