@@ -31,7 +31,7 @@ class TodayStandData {
     private(set) var hasStoodInCurrentHour = false {
         didSet {
             let defaults = UserDefaults.standard
-            defaults.set(hasStoodInCurrentHour, forKey: DefaultsKey.hasStoodKey)
+            defaults.set(hasStoodInCurrentHour, forKey: DefaultsKey.hasStoodInCurrentHour.key)
         }
     }
     

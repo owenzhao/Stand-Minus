@@ -47,8 +47,8 @@ class StandHourQuery {
     
     private func executeHKQuery(_ query:HKQuery, at now:Date) {
         let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: DefaultsKey.hasStoodKey)
-        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey)
+        defaults.removeObject(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+        defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeInterval.key)
         data.now = now
         
         store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in

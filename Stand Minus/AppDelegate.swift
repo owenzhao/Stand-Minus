@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    private var session:WCSession!
+    private(set) var session:WCSession!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -113,15 +113,21 @@ extension AppDelegate {
         
         if let rawValue = userInfo["type"] as? String,
             let type = MessageType(rawValue: rawValue) {
+            let defaults = UserDefaults.standard
+            let now = Date()
+            defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
+            
             switch type {
             case .newHour, .rightNow:
                 if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
                     let info:[String:Any] = ["type":type.rawValue, "hasComplication":true]
                     session.transferCurrentComplicationUserInfo(info)
                     
+                    defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
                     completionHandler(.newData)
                 }
                 else {
+                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
                     completionHandler(.noData)
                 }
             case .fiftyMinutes:
@@ -141,6 +147,7 @@ extension AppDelegate {
                         && total < 12
                         && hasStoodInCurrentHour == false) {
                         
+                        defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
                         completionHandler(.noData)
                         return
                     }
@@ -150,9 +157,11 @@ extension AppDelegate {
                     let info = ["type":type.rawValue]
                     session.transferCurrentComplicationUserInfo(info)
                     
+                    defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
                     completionHandler(.newData)
                 }
                 else {
+                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
                     completionHandler(.noData)
                 }
             }

@@ -19,7 +19,7 @@ class InterfaceController: WKInterfaceController {
     private unowned let query = StandHourQuery.shared()
     
     var hasStood:Bool? {
-        return defaults.object(forKey: DefaultsKey.hasStoodKey) as? Bool
+        return defaults.object(forKey: DefaultsKey.hasStoodInCurrentHour.key) as? Bool
     }
     
     private func addMeneItemOfUpdate() {
@@ -104,7 +104,7 @@ class InterfaceController: WKInterfaceController {
     }
     
     private func localizedLastQueryDate() -> String {
-        if let lastQueryTimeIntervalSinceReferenceDate = defaults.object(forKey: DefaultsKey.lastQueryTimeIntervalSinceReferenceDateKey) as? Double {
+        if let lastQueryTimeIntervalSinceReferenceDate = defaults.object(forKey: DefaultsKey.lastQueryTimeInterval.key) as? Double {
             let lastQueryDate = Date(timeIntervalSinceReferenceDate: lastQueryTimeIntervalSinceReferenceDate)
             
             return DateFormatter.localizedString(from: lastQueryDate, dateStyle: .none, timeStyle: .medium)

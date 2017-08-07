@@ -48,6 +48,8 @@
 		DC38DC921F33EDE6002AE212 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */; };
 		DC38DC9C1F33F0E8002AE212 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC38DC941F33EEB3002AE212 /* libXG-SDK.a */; };
 		DC38DC9D1F33F0FB002AE212 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5C11E432508004D6F10 /* libz.tbd */; };
+		DC468CB51F38248B002BAC42 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC468CB41F38248B002BAC42 /* DebugViewController.swift */; };
+		DC468CB61F382CE6002BAC42 /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
 		DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF61E41824D00C7ED60 /* HealthKit.framework */; };
 		DC7C4F4E1F371B18001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
@@ -180,6 +182,7 @@
 		DC38DC941F33EEB3002AE212 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
 		DC38DC961F33EEB3002AE212 /* XGPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		DC38DC971F33EEB3002AE212 /* XGSetting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
+		DC468CB41F38248B002BAC42 /* DebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		DC788AF11E417BD000C7ED60 /* Stand Minus WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		DC788AF31E417BD000C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.1.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		DC788AF51E41824D00C7ED60 /* Stand Minus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus.entitlements"; sourceTree = "<group>"; };
@@ -269,6 +272,7 @@
 				DC08314E1E407B7F00A62520 /* AppDelegate.swift */,
 				DCA8E9B21E5188BD004A3979 /* PageViewController.swift */,
 				DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */,
+				DC468CB41F38248B002BAC42 /* DebugViewController.swift */,
 				DC7C4F4D1F371B18001BFF83 /* MessageType.swift */,
 				DC0E8AF51E52AFAF00C2ACE3 /* Steps ViewControlloers */,
 				DC0831521E407B8000A62520 /* Main.storyboard */,
@@ -644,8 +648,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC468CB61F382CE6002BAC42 /* DefaultsKey.swift in Sources */,
 				DC7C4F4E1F371B18001BFF83 /* MessageType.swift in Sources */,
 				DC0E8B501E52D07F00C2ACE3 /* AboutViewController.swift in Sources */,
+				DC468CB51F38248B002BAC42 /* DebugViewController.swift in Sources */,
 				DC0E8AF91E52AFF400C2ACE3 /* StepThreeViewController.swift in Sources */,
 				DC0E8AFB1E52B00C00C2ACE3 /* StepOneViewController.swift in Sources */,
 				DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */,

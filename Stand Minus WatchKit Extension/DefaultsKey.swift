@@ -8,7 +8,13 @@
 
 import Foundation
 
-struct DefaultsKey {
-    static let lastQueryTimeIntervalSinceReferenceDateKey = "last query time interval since reference date"
-    static let hasStoodKey = "has stood"
+enum DefaultsKey:String {
+    case lastQueryTimeInterval = "last query time interval"
+    case hasStoodInCurrentHour = "has Stood in current hour"
+    case remoteNofiticationTimeInterval = "remote notification time intervals"
+    case hasNotifedWatchSide = "has notifed watch side"
+    
+    var key:String {
+        return self.rawValue
+    }
 }
