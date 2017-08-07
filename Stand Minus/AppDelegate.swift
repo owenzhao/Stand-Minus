@@ -142,10 +142,9 @@ extension AppDelegate {
                     let hour = calendar.component(.hour, from: date)
                     let nowHour = calendar.component(.hour, from: now)
                     
-                    if !(now.timeIntervalSince(date) < 60 * 60
+                    if now.timeIntervalSince(date) < 60 * 60
                         && hour == nowHour
-                        && total >= 12
-                        && hasStoodInCurrentHour == false) {
+                        && (total < 12 || hasStoodInCurrentHour) {
                         
                         defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
                         completionHandler(.noData)
