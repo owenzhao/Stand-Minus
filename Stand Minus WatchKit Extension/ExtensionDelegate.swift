@@ -33,6 +33,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     var hasComplication:Bool!
     private var messageType:MessageType!
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
+    private var semaphore = DispatchSemaphore(value: 1)
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
@@ -142,6 +143,10 @@ extension ExtensionDelegate:WCSessionDelegate {
         case .newHour, .rightNow:
             preResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
                 return { [unowned self] (_, samples, error) in
+                    defer {
+                        self.semaphore.signal()
+                    }
+                    
                     if error == nil {
                         let todayStandData = TodayStandData.shared()
                         
@@ -162,6 +167,10 @@ extension ExtensionDelegate:WCSessionDelegate {
         case .fiftyMinutes:
             preResultsHandler = { (now, hasComplication) -> HKSampleQuery.ResultsHandler in
                 return { [unowned self] (_, samples, error) in
+                    defer {
+                        self.semaphore.signal()
+                    }
+                    
                     if error == nil {
                         let todayStandData = TodayStandData.shared()
                         
@@ -183,7 +192,14 @@ extension ExtensionDelegate:WCSessionDelegate {
             }
         }
         
-        query.executeSampleQuery(preResultsHandler: preResultsHandler)
+        semaphore.wait()
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            query.executeSampleQuery(preResultsHandler: preResultsHandler)
+        }
+        
+        semaphore.wait()
+        semaphore.signal()
     }
     
     private func notifyUser() {
