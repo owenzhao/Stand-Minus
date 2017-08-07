@@ -144,7 +144,7 @@ extension AppDelegate {
                     
                     if !(now.timeIntervalSince(date) < 60 * 60
                         && hour == nowHour
-                        && total < 12
+                        && total >= 12
                         && hasStoodInCurrentHour == false) {
                         
                         defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
