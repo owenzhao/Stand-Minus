@@ -156,9 +156,7 @@ extension ExtensionDelegate:WCSessionDelegate {
                             todayStandData.samples = []
                         }
                         
-                        if session.isReachable {
-                            try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
-                        }
+                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
                         
                         self.updateComplications()
                     }
@@ -180,9 +178,7 @@ extension ExtensionDelegate:WCSessionDelegate {
                             todayStandData.samples = []
                         }
                         
-                        if session.isReachable {
-                            try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
-                        }
+                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
                         
                         if !todayStandData.hasStoodInCurrentHour {
                             self.notifyUser()
