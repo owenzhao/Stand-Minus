@@ -50,7 +50,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     }
                     
                     if error == nil,
-                        let _ = samples?.isEmpty {
+                        let samples = samples,
+                        samples.isEmpty {
                         
                         self.notifyUser()
                     }
