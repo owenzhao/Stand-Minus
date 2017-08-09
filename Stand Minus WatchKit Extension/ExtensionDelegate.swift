@@ -58,10 +58,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 }
                 
                 let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
-                    let calendar = Calendar(identifier: .gregorian)
-                    let cps = calendar.dateComponents([.year, .month, .day, .hour], from: now)
-                    let startDate = calendar.date(from: cps)
-                    let predicate = HKQuery.predicateForSamples(withStart: startDate, end: nil, options: .strictStartDate)
+                    let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
                     
                     return predicate
                 }

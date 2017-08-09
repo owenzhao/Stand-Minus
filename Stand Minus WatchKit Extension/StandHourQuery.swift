@@ -81,9 +81,8 @@ class StandHourQuery {
     private func createPredicate(at now:Date) {
         let cps = calendar.dateComponents([.year, .month, .day], from: now)
         let zeroHour = calendar.date(from: cps)
-        let midnight = zeroHour?.addingTimeInterval(24 * 60 * 60)
         
-        predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: midnight, options: .strictStartDate)
+        predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: nil, options: .strictStartDate)
     }
 }
 
