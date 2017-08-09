@@ -15,7 +15,6 @@ class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = TodayStandData.shared()
     private var state:ExtensionCurrentHourState = .notSet
-//    private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     
     private init() { }
     
@@ -33,7 +32,6 @@ class StandHourQuery {
     private let calendar = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
-//    var hasComplication:Bool!
     
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()

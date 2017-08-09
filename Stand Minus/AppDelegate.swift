@@ -108,67 +108,21 @@ extension AppDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        print(userInfo)
-        print()
-        
-//        if let rawValue = userInfo["type"] as? String,
-//            let type = MessageType(rawValue: rawValue) {
-            let defaults = UserDefaults.standard
-            let now = Date()
-            defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
+        let defaults = UserDefaults.standard
+        let now = Date()
+        defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
+    
+        if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
+            let info:[String:Any] = [:]
+            session.transferCurrentComplicationUserInfo(info)
             
-//            switch type {
-//            case .newHour, .rightNow:
-            if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-//                let info:[String:Any] = ["type":type.rawValue, "hasComplication":true]
-                let info:[String:Any] = ["hasComplication":true]
-                session.transferCurrentComplicationUserInfo(info)
-                
-                defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                completionHandler(.newData)
-            }
-            else {
-                defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                completionHandler(.noData)
-            }
-//            case .fiftyMinutes:
-//                let info = session.receivedApplicationContext
-//
-//                if let total = info["total"] as? Int,
-//                    let hasStoodInCurrentHour = info["hasStoodInCurrentHour"] as? Bool,
-//                    let date = info["date"] as? Date {
-//                    let now = Date()
-//
-//                    let calendar = Calendar(identifier: .gregorian)
-//                    let hour = calendar.component(.hour, from: date)
-//                    let nowHour = calendar.component(.hour, from: now)
-//
-//                    if now.timeIntervalSince(date) < 60 * 60
-//                        && hour == nowHour
-//                        && (total < 12 || hasStoodInCurrentHour) {
-//
-//                        defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-//                        completionHandler(.noData)
-//                        return
-//                    }
-//                }
-//
-//                if session.activationState == .activated && session.isPaired {
-//                    let info = ["type":type.rawValue]
-//                    session.transferCurrentComplicationUserInfo(info)
-//
-//                    defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
-//                    completionHandler(.newData)
-//                }
-//                else {
-//                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-//                    completionHandler(.noData)
-//                }
-//            }
-//        }
-//        else {
-//            print("should not happen")
-//        }
+            defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
+            completionHandler(.newData)
+        }
+        else {
+            defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+            completionHandler(.noData)
+        }
     }
 }
 
@@ -195,8 +149,4 @@ extension AppDelegate:WCSessionDelegate {
     public func sessionDidDeactivate(_ session: WCSession) {
         
     }
-//
-//    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-//
-//    }
 }
