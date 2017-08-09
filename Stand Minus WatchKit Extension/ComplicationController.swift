@@ -17,7 +17,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         TodayStandData.terminate()
     }
 
-    unowned private let todayStandData = TodayStandData.shared()
+    unowned private var todayStandData = TodayStandData.shared()
     unowned private let query = StandHourQuery.shared()
     
     private var queryOnce:Bool = true
@@ -44,28 +44,21 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
         if queryOnce {
-            let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+            let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now) -> HKSampleQuery.ResultsHandler in
                 return { [unowned self] (_, samples, error) in
                     defer {
                         self.queryOnce = false
                     }
                     
                     if error == nil {
-                        let data:StandData
-    
                         if let samples = samples as? [HKCategorySample] {
-                            data = StandData(samples:samples, now:now)
+                            self.todayStandData.samples = samples
                         }
                         else {
-                            data = StandData(total: 0, hasStoodInCurrentHour: false, now: now)
+                            self.todayStandData.samples = []
                         }
     
-                        let session = (WKExtension.shared().delegate as? ExtensionDelegate)!.session!
-                        if session.isReachable {
-                            try? session.updateApplicationContext(["total":data.total, "hasStoodInCurrentHour":data.hasStoodInCurrentHour, "date":data.now])
-                        }
-    
-                        handler(self.entry(complication: complication, standData: data))
+                        handler(self.entry(complication: complication))
                     }
                 }
             }
@@ -73,14 +66,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             query.executeSampleQuery(preResultsHandler: preResultsHandler)
         }
         else {
-            let standData = StandData(total: todayStandData.total, hasStoodInCurrentHour: todayStandData.hasStoodInCurrentHour, now: todayStandData.now)
-            handler(entry(complication: complication, standData: standData))
+            handler(entry(complication: complication))
         }
     }
     
-    private func entry(complication: CLKComplication, standData:StandData) -> CLKComplicationTimelineEntry {
+    private func entry(complication: CLKComplication) -> CLKComplicationTimelineEntry {
         let template:CLKComplicationTemplate
-        let textProvider = CLKSimpleTextProvider(text: String(standData.total))
+        let textProvider = CLKSimpleTextProvider(text: String(todayStandData.total))
         switch complication.family {
         case .circularSmall:
             template = CLKComplicationTemplateCircularSmallRingText()
@@ -94,18 +86,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
             let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
-            let imageProvider = CLKImageProvider(onePieceImage: standData.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+            let imageProvider = CLKImageProvider(onePieceImage: todayStandData.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
             smallFlattemplate.imageProvider = imageProvider
             smallFlattemplate.textProvider = textProvider
         }
         else {
             let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
             smallRingTextTemplate.ringStyle = .closed
-            smallRingTextTemplate.fillFraction = standData.hasStoodInCurrentHour ? 1.0 : 0.5
+            smallRingTextTemplate.fillFraction = todayStandData.hasStoodInCurrentHour ? 1.0 : 0.5
             smallRingTextTemplate.textProvider = textProvider
         }
         
-        let entry = CLKComplicationTimelineEntry(date: standData.now, complicationTemplate: template)
+        let entry = CLKComplicationTimelineEntry(date: todayStandData.now, complicationTemplate: template)
         
         return entry
     }

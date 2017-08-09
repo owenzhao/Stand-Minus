@@ -33,14 +33,34 @@ class StandHourQuery {
     private let calendar = Calendar(identifier: .gregorian)
     private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private let store = HKHealthStore()
-    var hasComplication:Bool!
+//    var hasComplication:Bool!
     
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
         createPredicate(at: now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now, true))
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now))
+        
+        executeHKQuery(query, at: now)
+    }
+    
+    func executeSampleQuery(resultsHandler:@escaping HKSampleQuery.ResultsHandler) {
+        let now = Date()
+        createPredicate(at: now)
+        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
+        
+        executeHKQuery(query, at: now)
+    }
+    
+    func executeSampleQuery(resultsHandler:@escaping HKSampleQuery.ResultsHandler, with predicate:(Date) -> NSPredicate) {
+        let now = Date()
+        let predicate = predicate(now)
+        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
         
         executeHKQuery(query, at: now)
     }
@@ -70,7 +90,7 @@ class StandHourQuery {
 // MARK: - type alias
 extension HKSampleQuery {
     typealias ResultsHandler = (HKSampleQuery, [HKSample]?, Error?) -> Void
-    typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
+    typealias PreResultsHandler = (Date) -> ResultsHandler
 }
 
 extension HKAnchoredObjectQuery {

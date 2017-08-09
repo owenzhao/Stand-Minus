@@ -17,6 +17,13 @@ class InterfaceController: WKInterfaceController {
     private lazy var store = HKHealthStore()
     private unowned let todayStandData = TodayStandData.shared()
     private unowned let query = StandHourQuery.shared()
+    private var hasComplication:Bool {
+        if let _ = CLKComplicationServer.sharedInstance().activeComplications {
+            return true
+        }
+        
+        return false
+    }
     
     var hasStood:Bool? {
         return defaults.object(forKey: DefaultsKey.hasStoodInCurrentHour.key) as? Bool
@@ -50,7 +57,7 @@ class InterfaceController: WKInterfaceController {
     }
     
     private func queryCurrentStandUpInfo() {
-        let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+        let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now) -> HKSampleQuery.ResultsHandler in
             return { [unowned self] (_, samples, error) in
                 if error == nil {
                     if let samples = samples as? [HKCategorySample] {
@@ -63,7 +70,7 @@ class InterfaceController: WKInterfaceController {
                         self.updateUI()
                     }
                     
-                    if hasComplication {
+                    if self.hasComplication {
                         self.updateComplications()
                     }
                 }
@@ -81,14 +88,17 @@ class InterfaceController: WKInterfaceController {
     func updateUI() {
         lastQueryDateLabel.setText(self.localizedLastQueryDate())
         hasStoodLabel.setText(self.localizedLabelOfHasStood())
-        complicationsLabel.setText({ () -> String in
-            if let _ = CLKComplicationServer.sharedInstance().activeComplications?.isEmpty {
+        
+        // FIXME: Xcode 9 beta 5 can't solve statement ? s1 : s2 correctly.
+        let complicationLabelText:String = {
+            if hasComplication {
                 return NSLocalizedString("Has", comment: "Has")
             }
-            else {
-                return NSLocalizedString("None", comment: "None")
-            }
-        }())
+            
+            return NSLocalizedString("None", comment: "None")
+        }()
+        
+        complicationsLabel.setText(complicationLabelText)
     }
     
     private func localizedLabelOfHasStood() -> String {
