@@ -29,11 +29,39 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         TodayStandData.terminate()
     }
     
-//    private var anchor:HKQueryAnchor? = nil
-    var hasComplication:Bool!
-//    private var messageType:MessageType!
+//    var hasComplication:Bool!
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     private var semaphore = DispatchSemaphore(value: 1)
+    private unowned var query = StandHourQuery.shared()
+    
+    private lazy var sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+        defer {
+            self.semaphore.signal()
+        }
+        
+        if error == nil {
+            let todayStandData = TodayStandData.shared()
+            
+            if let samples = samples as? [HKCategorySample] {
+                todayStandData.samples = samples
+            } else {
+                todayStandData.samples = []
+            }
+            
+            self.updateComplications()
+            
+            if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
+                let calendar = Calendar(identifier: .gregorian)
+                var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
+                cps.minute = 50
+                let firedate = calendar.date(from: cps)!
+                
+                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: nil, scheduledCompletion: { (error) in
+                    
+                })
+            }
+        }
+    }
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
@@ -42,8 +70,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             switch task {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
-                let query = StandHourQuery.shared()
-//                query.hasComplication = hasComplication
                 let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                     defer {
                         backgroundTask.setTaskCompletedWithSnapshot(false)
@@ -102,81 +128,15 @@ extension ExtensionDelegate:WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-//        let typeRawValue = userInfo["type"] as! String
-//        messageType = MessageType(rawValue: typeRawValue)!
-        if let hasComplication = userInfo["hasComplication"] as? Bool {
-            self.hasComplication = hasComplication
-            print("get user info")
+        synchronize { [unowned self] in
+            self.query.executeSampleQuery(resultsHandler: self.sessionResultsHandler)
         }
-        
-        let query = StandHourQuery.shared()
-//        query.hasComplication = hasComplication
-        
-//        print(messageType)
-        
-//        switch messageType! {
-//        case .newHour, .rightNow:
-        let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-            defer {
-                self.semaphore.signal()
-            }
-            
-            if error == nil {
-                let todayStandData = TodayStandData.shared()
-                
-                if let samples = samples as? [HKCategorySample] {
-                    todayStandData.samples = samples
-                } else {
-                    todayStandData.samples = []
-                }
-//
-//                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
-                
-                self.updateComplications()
-                
-                if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
-                    let calendar = Calendar(identifier: .gregorian)
-                    var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
-                    cps.minute = 50
-                    let firedate = calendar.date(from: cps)!
-                    
-                    WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: nil, scheduledCompletion: { (error) in
-                        
-                    })
-                }
-            }
-        }
-//        case .fiftyMinutes:
-//            preResultsHandler = { (now, hasComplication) -> HKSampleQuery.ResultsHandler in
-//                return { [unowned self] (_, samples, error) in
-//                    defer {
-//                        self.semaphore.signal()
-//                    }
-//
-//                    if error == nil {
-//                        let todayStandData = TodayStandData.shared()
-//
-//                        if let samples = samples as? [HKCategorySample] {
-//                            todayStandData.samples = samples
-//                        } else {
-//                            todayStandData.samples = []
-//                        }
-//
-//                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
-//
-//                        if !todayStandData.hasStoodInCurrentHour {
-//                            self.notifyUser()
-//                        }
-//                    }
-//                }
-//            }
-//        }
-        
+    }
+    
+    func synchronize(_ closure:@escaping () -> ()) {
         semaphore.wait()
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            query.executeSampleQuery(resultsHandler: resultsHandler)
-        }
+        DispatchQueue.global(qos: .userInteractive).async(execute: closure)
         
         semaphore.wait()
         semaphore.signal()
