@@ -111,63 +111,64 @@ extension AppDelegate {
         print(userInfo)
         print()
         
-        if let rawValue = userInfo["type"] as? String,
-            let type = MessageType(rawValue: rawValue) {
+//        if let rawValue = userInfo["type"] as? String,
+//            let type = MessageType(rawValue: rawValue) {
             let defaults = UserDefaults.standard
             let now = Date()
             defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
             
-            switch type {
-            case .newHour, .rightNow:
-                if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-                    let info:[String:Any] = ["type":type.rawValue, "hasComplication":true]
-                    session.transferCurrentComplicationUserInfo(info)
-                    
-                    defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                    completionHandler(.newData)
-                }
-                else {
-                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                    completionHandler(.noData)
-                }
-            case .fiftyMinutes:
-                let info = session.receivedApplicationContext
+//            switch type {
+//            case .newHour, .rightNow:
+            if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
+//                let info:[String:Any] = ["type":type.rawValue, "hasComplication":true]
+                let info:[String:Any] = ["hasComplication":true]
+                session.transferCurrentComplicationUserInfo(info)
                 
-                if let total = info["total"] as? Int,
-                    let hasStoodInCurrentHour = info["hasStoodInCurrentHour"] as? Bool,
-                    let date = info["date"] as? Date {
-                    let now = Date()
-                    
-                    let calendar = Calendar(identifier: .gregorian)
-                    let hour = calendar.component(.hour, from: date)
-                    let nowHour = calendar.component(.hour, from: now)
-                    
-                    if now.timeIntervalSince(date) < 60 * 60
-                        && hour == nowHour
-                        && (total < 12 || hasStoodInCurrentHour) {
-                        
-                        defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                        completionHandler(.noData)
-                        return
-                    }
-                }
-                
-                if session.activationState == .activated && session.isPaired {
-                    let info = ["type":type.rawValue]
-                    session.transferCurrentComplicationUserInfo(info)
-                    
-                    defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                    completionHandler(.newData)
-                }
-                else {
-                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                    completionHandler(.noData)
-                }
+                defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
+                completionHandler(.newData)
             }
-        }
-        else {
-            print("should not happen")
-        }
+            else {
+                defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+                completionHandler(.noData)
+            }
+//            case .fiftyMinutes:
+//                let info = session.receivedApplicationContext
+//
+//                if let total = info["total"] as? Int,
+//                    let hasStoodInCurrentHour = info["hasStoodInCurrentHour"] as? Bool,
+//                    let date = info["date"] as? Date {
+//                    let now = Date()
+//
+//                    let calendar = Calendar(identifier: .gregorian)
+//                    let hour = calendar.component(.hour, from: date)
+//                    let nowHour = calendar.component(.hour, from: now)
+//
+//                    if now.timeIntervalSince(date) < 60 * 60
+//                        && hour == nowHour
+//                        && (total < 12 || hasStoodInCurrentHour) {
+//
+//                        defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+//                        completionHandler(.noData)
+//                        return
+//                    }
+//                }
+//
+//                if session.activationState == .activated && session.isPaired {
+//                    let info = ["type":type.rawValue]
+//                    session.transferCurrentComplicationUserInfo(info)
+//
+//                    defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
+//                    completionHandler(.newData)
+//                }
+//                else {
+//                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+//                    completionHandler(.noData)
+//                }
+//            }
+//        }
+//        else {
+//            print("should not happen")
+//        }
     }
 }
 

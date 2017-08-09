@@ -31,7 +31,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
 //    private var anchor:HKQueryAnchor? = nil
     var hasComplication:Bool!
-    private var messageType:MessageType!
+//    private var messageType:MessageType!
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     private var semaphore = DispatchSemaphore(value: 1)
     
@@ -44,44 +44,23 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Be sure to complete the background task once you’re done.
                 let query = StandHourQuery.shared()
                 query.hasComplication = hasComplication
-                let preResultsHandler:HKSampleQuery.PreResultsHandler
-                
-                switch messageType! {
-                case .newHour, .rightNow:
-                    preResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
-                        return { [unowned self] (_, samples, error) in
-                            defer {
-                                backgroundTask.setTaskCompletedWithSnapshot(false)
-                            }
-                            
-                            if error == nil {
-                                let todayStandData = TodayStandData.shared()
-                                
-                                if let samples = samples as? [HKCategorySample] {
-                                    todayStandData.samples = samples
-                                } else {
-                                    todayStandData.samples = []
-                                }
-                                
-                                self.updateComplications()
-                            }
+                let preResultsHandler:HKSampleQuery.PreResultsHandler = { (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+                    return { [unowned self] (_, samples, error) in
+                        defer {
+                            backgroundTask.setTaskCompletedWithSnapshot(false)
                         }
-                    }
-                case .fiftyMinutes:
-                    preResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
-                        return { [unowned self] (_, samples, error) in
-                            defer {
-                                backgroundTask.setTaskCompletedWithSnapshot(false)
+                        
+                        if error == nil {
+                            let todayStandData = TodayStandData.shared()
+                            
+                            if let samples = samples as? [HKCategorySample] {
+                                todayStandData.samples = samples
+                            } else {
+                                todayStandData.samples = []
                             }
                             
-                            if error == nil {
-                                let todayStandData = TodayStandData.shared()
-                                
-                                if let samples = samples as? [HKCategorySample] {
-                                    todayStandData.samples = samples
-                                } else {
-                                    todayStandData.samples = []
-                                }
+                            if !todayStandData.hasStoodInCurrentHour {
+                                self.notifyUser()
                             }
                         }
                     }
@@ -126,8 +105,8 @@ extension ExtensionDelegate:WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        let typeRawValue = userInfo["type"] as! String
-        messageType = MessageType(rawValue: typeRawValue)!
+//        let typeRawValue = userInfo["type"] as! String
+//        messageType = MessageType(rawValue: typeRawValue)!
         if let hasComplication = userInfo["hasComplication"] as? Bool {
             self.hasComplication = hasComplication
             print("get user info")
@@ -135,58 +114,68 @@ extension ExtensionDelegate:WCSessionDelegate {
         
         let query = StandHourQuery.shared()
         query.hasComplication = hasComplication
-        let preResultsHandler:HKSampleQuery.PreResultsHandler
         
-        print(messageType)
+//        print(messageType)
         
-        switch messageType! {
-        case .newHour, .rightNow:
-            preResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
-                return { [unowned self] (_, samples, error) in
-                    defer {
-                        self.semaphore.signal()
-                    }
-                    
-                    if error == nil {
-                        let todayStandData = TodayStandData.shared()
-                        
-                        if let samples = samples as? [HKCategorySample] {
-                            todayStandData.samples = samples
-                        } else {
-                            todayStandData.samples = []
-                        }
-                        
-                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
-                        
-                        self.updateComplications()
-                    }
+//        switch messageType! {
+//        case .newHour, .rightNow:
+        let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+            return { [unowned self] (_, samples, error) in
+                defer {
+                    self.semaphore.signal()
                 }
-            }
-        case .fiftyMinutes:
-            preResultsHandler = { (now, hasComplication) -> HKSampleQuery.ResultsHandler in
-                return { [unowned self] (_, samples, error) in
-                    defer {
-                        self.semaphore.signal()
-                    }
+                
+                if error == nil {
+                    let todayStandData = TodayStandData.shared()
                     
-                    if error == nil {
-                        let todayStandData = TodayStandData.shared()
+                    if let samples = samples as? [HKCategorySample] {
+                        todayStandData.samples = samples
+                    } else {
+                        todayStandData.samples = []
+                    }
+//
+//                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
+                    
+                    self.updateComplications()
+                    
+                    if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
+                        let calendar = Calendar(identifier: .gregorian)
+                        var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
+                        cps.minute = 50
+                        let firedate = calendar.date(from: cps)!
                         
-                        if let samples = samples as? [HKCategorySample] {
-                            todayStandData.samples = samples
-                        } else {
-                            todayStandData.samples = []
-                        }
-                        
-                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
-                        
-                        if !todayStandData.hasStoodInCurrentHour {
-                            self.notifyUser()
-                        }
+                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: nil, scheduledCompletion: { (error) in
+                            
+                        })
                     }
                 }
             }
         }
+//        case .fiftyMinutes:
+//            preResultsHandler = { (now, hasComplication) -> HKSampleQuery.ResultsHandler in
+//                return { [unowned self] (_, samples, error) in
+//                    defer {
+//                        self.semaphore.signal()
+//                    }
+//
+//                    if error == nil {
+//                        let todayStandData = TodayStandData.shared()
+//
+//                        if let samples = samples as? [HKCategorySample] {
+//                            todayStandData.samples = samples
+//                        } else {
+//                            todayStandData.samples = []
+//                        }
+//
+//                        try? session.updateApplicationContext(["total":todayStandData.total, "hasStoodInCurrentHour":todayStandData.hasStoodInCurrentHour, "date":todayStandData.now])
+//
+//                        if !todayStandData.hasStoodInCurrentHour {
+//                            self.notifyUser()
+//                        }
+//                    }
+//                }
+//            }
+//        }
         
         semaphore.wait()
         
