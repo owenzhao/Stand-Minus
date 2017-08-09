@@ -195,8 +195,8 @@ extension AppDelegate:WCSessionDelegate {
     public func sessionDidDeactivate(_ session: WCSession) {
         
     }
-    
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        
-    }
+//
+//    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+//
+//    }
 }
