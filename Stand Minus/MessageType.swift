@@ -8,9 +8,9 @@
 
 import Foundation
 
-//enum MessageType:String {
-//    case newHour = "new hour"
-////    case fiftyMinutes = "50 minutes"
-//    case rightNow = "right now"
-//}
-
+enum MessageType:String {
+    case newHour = "new hour"
+    //    case fiftyMinutes = "50 minutes"
+    case twentyMinutes = "20 minutes"
+    case rightNow = "right now"
+}

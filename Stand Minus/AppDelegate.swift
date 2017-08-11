@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     private(set) var session:WCSession!
+    private var lastUnconditionalQueryDate:Date!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -107,10 +108,32 @@ extension AppDelegate {
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        guard let rawValue = userInfo["type"] as? String,
+            let messageType = MessageType(rawValue:rawValue) else {
+                fatalError()
+        }
         
         let defaults = UserDefaults.standard
         let now = Date()
         defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
+            
+        switch messageType {
+        case .newHour, .rightNow:
+            lastUnconditionalQueryDate = now
+        case .twentyMinutes:
+            if session.activationState == .activated {
+                let calendar = Calendar(identifier: .gregorian)
+                let lastQueryHour = calendar.component(.hour, from: lastUnconditionalQueryDate)
+                let currentHour = calendar.component(.hour, from: Date())
+                
+                if lastQueryHour == currentHour {
+                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+                    completionHandler(.noData)
+                    
+                    return
+                }
+            }
+        }
     
         if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
             let info:[String:Any] = [:]
@@ -147,6 +170,10 @@ extension AppDelegate:WCSessionDelegate {
     /** Called when all delegate callbacks for the previously selected watch has occurred. The session can be re-activated for the now selected watch using activateSession. */
     @available(iOS 9.3, *)
     public func sessionDidDeactivate(_ session: WCSession) {
+        
+    }
+    
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         
     }
 }
