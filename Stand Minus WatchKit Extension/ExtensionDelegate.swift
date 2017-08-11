@@ -34,35 +34,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     private var semaphore = DispatchSemaphore(value: 1)
     private unowned var query = StandHourQuery.shared()
     
-    private lazy var sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-        defer {
-            self.semaphore.signal()
-        }
-        
-        if error == nil {
-            let todayStandData = TodayStandData.shared()
-            
-            if let samples = samples as? [HKCategorySample] {
-                todayStandData.samples = samples
-            } else {
-                todayStandData.samples = []
-            }
-            
-            self.updateComplications()
-            
-            if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
-                let calendar = Calendar(identifier: .gregorian)
-                var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
-                cps.minute = 50
-                let firedate = calendar.date(from: cps)!
-                
-                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: nil, scheduledCompletion: { (error) in
-                    
-                })
-            }
-        }
-    }
-    
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
         for task in backgroundTasks {
@@ -129,7 +100,36 @@ extension ExtensionDelegate:WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         synchronize { [unowned self] in
-            self.query.executeSampleQuery(resultsHandler: self.sessionResultsHandler)
+            let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                defer {
+                    self.semaphore.signal()
+                }
+                
+                if error == nil {
+                    let todayStandData = TodayStandData.shared()
+                    
+                    if let samples = samples as? [HKCategorySample] {
+                        todayStandData.samples = samples
+                    } else {
+                        todayStandData.samples = []
+                    }
+                    
+                    self.updateComplications()
+                    
+                    if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
+                        let calendar = Calendar(identifier: .gregorian)
+                        var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
+                        cps.minute = 50
+                        let firedate = calendar.date(from: cps)!
+                        
+                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: nil, scheduledCompletion: { (error) in
+                            
+                        })
+                    }
+                }
+            }
+            
+            self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
         }
     }
     
