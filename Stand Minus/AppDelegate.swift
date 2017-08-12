@@ -121,17 +121,20 @@ extension AppDelegate {
         case .newHour, .rightNow:
             lastUnconditionalQueryDate = now
         case .twentyMinutes:
-            if session.activationState == .activated {
-                let calendar = Calendar(identifier: .gregorian)
-                let lastQueryHour = calendar.component(.hour, from: lastUnconditionalQueryDate)
-                let currentHour = calendar.component(.hour, from: Date())
+            guard session.activationState == .activated else {
+                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
                 
-                if lastQueryHour == currentHour {
-                    defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-                    completionHandler(.noData)
-                    
-                    return
-                }
+                return
+            }
+            
+            let calendar = Calendar(identifier: .gregorian)
+            let lastQueryHour = calendar.component(.hour, from: lastUnconditionalQueryDate)
+            let currentHour = calendar.component(.hour, from: Date())
+            
+            if lastQueryHour == currentHour {
+                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
+                
+                return
             }
         }
     
@@ -143,9 +146,13 @@ extension AppDelegate {
             completionHandler(.newData)
         }
         else {
-            defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
-            completionHandler(.noData)
+            sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
         }
+    }
+    
+    private func sendNoDataToAppleWatch(defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+        completionHandler(.noData)
     }
 }
 
@@ -175,5 +182,9 @@ extension AppDelegate:WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        UIApplication.shared.registerForRemoteNotifications()
     }
 }

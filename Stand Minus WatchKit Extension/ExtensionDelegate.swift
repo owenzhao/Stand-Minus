@@ -41,26 +41,91 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             switch task {
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 // Be sure to complete the background task once you’re done.
-                let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-                    defer {
-                        backgroundTask.setTaskCompletedWithSnapshot(false)
-                    }
-                    
-                    if error == nil,
-                        let samples = samples,
-                        samples.isEmpty {
+                
+                guard let rawValue = backgroundTask.userInfo as? Int,
+                    let backgroundTaskType = BackgroundTaskType(rawValue:rawValue) else {
                         
-                        self.notifyUser()
+                    backgroundTask.setTaskCompletedWithSnapshot(false)
+                    return
+                }
+                
+                switch backgroundTaskType {
+                case .checkNofifyUser:
+                    let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                        defer {
+                            let fireDate = Date().addingTimeInterval(40 * 60)
+                            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                                
+                            })
+                            
+                            backgroundTask.setTaskCompletedWithSnapshot(false)
+                        }
+                        
+                        if error == nil,
+                            let samples = samples,
+                            samples.isEmpty {
+                            
+                            self.notifyUser()
+                        }
                     }
-                }
-                
-                let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
-                    let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
                     
-                    return predicate
+                    let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
+                        let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
+                        
+                        return predicate
+                    }
+                    
+                    query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
+                case .requestRemoteNotificationRegister:
+                    if session.activationState == .activated && session.isReachable {
+                        session.sendMessage([:], replyHandler: nil, errorHandler: nil)
+                    }
+                    else {
+                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 60), userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                            
+                        })
+                    }
+                    
+                    // run once to update the complication
+                    let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                        defer {
+                            backgroundTask.setTaskCompletedWithSnapshot(false)
+                        }
+                        
+                        if error == nil {
+                            let todayStandData = TodayStandData.shared()
+                            
+                            if let samples = samples as? [HKCategorySample] {
+                                todayStandData.samples = samples
+                            } else {
+                                todayStandData.samples = []
+                            }
+                            
+                            self.updateComplications()
+                            
+                            if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
+                                let calendar = Calendar(identifier: .gregorian)
+                                var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
+                                cps.minute = 50
+                                let firedate = calendar.date(from: cps)!
+                                
+                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                                    
+                                })
+                            }
+                            else {
+                                let firedate = Date().addingTimeInterval(90 * 60)
+                                
+                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                                    
+                                })
+                            }
+                        }
+                    }
+                    
+                    self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
                 }
                 
-                query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 // Snapshot tasks have a unique completion call, make sure to set your expiration date
                 snapshotTask.setTaskCompleted(restoredDefaultState: false, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
@@ -122,7 +187,14 @@ extension ExtensionDelegate:WCSessionDelegate {
                         cps.minute = 50
                         let firedate = calendar.date(from: cps)!
                         
-                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: nil, scheduledCompletion: { (error) in
+                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                            
+                        })
+                    }
+                    else {
+                        let firedate = Date().addingTimeInterval(90 * 60)
+                        
+                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
                             
                         })
                     }
@@ -170,4 +242,10 @@ class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert,.sound])
     }
+}
+
+// MARK: - Background task type
+enum BackgroundTaskType:Int {
+    case requestRemoteNotificationRegister
+    case checkNofifyUser
 }
