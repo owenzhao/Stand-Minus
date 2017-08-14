@@ -121,21 +121,22 @@ extension AppDelegate {
         case .newHour, .rightNow, .fiftyMinutes:
             lastUnconditionalQueryDate = now
         case .twentyMinutes:
-            guard session.activationState == .activated else {
-                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-                
-                return
-            }
-            
-            let calendar = Calendar(identifier: .gregorian)
-            let lastQueryHour = calendar.component(.hour, from: lastUnconditionalQueryDate)
-            let currentHour = calendar.component(.hour, from: Date())
-            
-            if lastQueryHour == currentHour {
-                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-                
-                return
-            }
+//            guard session.activationState == .activated else {
+//                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
+//
+//                return
+//            }
+//
+//            let calendar = Calendar(identifier: .gregorian)
+//            let lastQueryHour = calendar.component(.hour, from: lastUnconditionalQueryDate)
+//            let currentHour = calendar.component(.hour, from: Date())
+//
+//            if lastQueryHour == currentHour {
+//                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
+//
+//                return
+//            }
+            break
         }
     
         if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
