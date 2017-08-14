@@ -164,44 +164,76 @@ extension ExtensionDelegate:WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
+        guard let messageType = userInfo[DefaultsKey.messageType.key] as? MessageType else {
+            return
+        }
+        
         synchronize { [unowned self] in
-            let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-                defer {
-                    self.semaphore.signal()
+            switch messageType {
+            case .newHour, .rightNow:
+                let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                    defer {
+                        self.semaphore.signal()
+                    }
+                    
+                    if error == nil {
+                        let todayStandData = TodayStandData.shared()
+                        
+                        if let samples = samples as? [HKCategorySample] {
+                            todayStandData.samples = samples
+                        } else {
+                            todayStandData.samples = []
+                        }
+                        
+                        self.updateComplications()
+                        
+//                        if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
+//                            let calendar = Calendar(identifier: .gregorian)
+//                            var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
+//                            cps.minute = 50
+//                            let firedate = calendar.date(from: cps)!
+//
+//                            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+//
+//                            })
+//                        }
+//                        else {
+                        
+//                        }
+                    }
+                    
+                    let firedate = Date().addingTimeInterval(70 * 60)
+                    
+                    WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                        
+                    })
                 }
                 
-                if error == nil {
-                    let todayStandData = TodayStandData.shared()
-                    
-                    if let samples = samples as? [HKCategorySample] {
-                        todayStandData.samples = samples
-                    } else {
-                        todayStandData.samples = []
+                self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+            case .fiftyMinutes:
+                let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                    defer {
+                        self.semaphore.signal()
                     }
                     
-                    self.updateComplications()
-                    
-                    if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
-                        let calendar = Calendar(identifier: .gregorian)
-                        var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
-                        cps.minute = 50
-                        let firedate = calendar.date(from: cps)!
+                    if error == nil,
+                        let samples = samples,
+                        samples.isEmpty {
                         
-                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
-                            
-                        })
-                    }
-                    else {
-                        let firedate = Date().addingTimeInterval(90 * 60)
-                        
-                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
-                            
-                        })
+                        self.notifyUser()
                     }
                 }
+                
+                let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
+                    let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
+                    
+                    return predicate
+                }
+                
+                self.query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
+            case .twentyMinutes:
+                break
             }
-            
-            self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
         }
     }
     

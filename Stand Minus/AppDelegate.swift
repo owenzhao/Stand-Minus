@@ -118,7 +118,7 @@ extension AppDelegate {
         defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
             
         switch messageType {
-        case .newHour, .rightNow:
+        case .newHour, .rightNow, .fiftyMinutes:
             lastUnconditionalQueryDate = now
         case .twentyMinutes:
             guard session.activationState == .activated else {
@@ -139,7 +139,7 @@ extension AppDelegate {
         }
     
         if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-            let info:[String:Any] = [:]
+            let info:[String:Any] = [DefaultsKey.messageType.key : messageType]
             session.transferCurrentComplicationUserInfo(info)
             
             defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
