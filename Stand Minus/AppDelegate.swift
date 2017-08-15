@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     private(set) var session:WCSession!
-    private var lastUnconditionalQueryDate:Date!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -108,47 +107,41 @@ extension AppDelegate {
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
         guard let rawValue = userInfo["type"] as? String,
             let messageType = MessageType(rawValue:rawValue) else {
-                fatalError()
+            fatalError()
         }
         
         let defaults = UserDefaults.standard
         let now = Date()
         defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
-            
+        
         switch messageType {
-        case .newHour, .rightNow, .fiftyMinutes:
-            lastUnconditionalQueryDate = now
-        case .twentyMinutes:
-//            guard session.activationState == .activated else {
-//                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-//
-//                return
-//            }
-//
-//            let calendar = Calendar(identifier: .gregorian)
-//            let lastQueryHour = calendar.component(.hour, from: lastUnconditionalQueryDate)
-//            let currentHour = calendar.component(.hour, from: Date())
-//
-//            if lastQueryHour == currentHour {
-//                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-//
-//                return
-//            }
-            fatalError()
+        case .newHour, .rightNow:
+            if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
+                let userInfo:[String:Any] = ["rawValue":rawValue]
+                sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
+            }
+            else {
+                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
+            }
+        case .fiftyMinutes:
+            if session.activationState == .activated && session.isPaired {
+                let userInfo:[String:Any] = ["rawValue":rawValue]
+                sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
+            }
+            else {
+                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
+            }
         }
+    }
     
-        if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-            let info:[String:Any] = ["rawValue":rawValue]
-            session.transferCurrentComplicationUserInfo(info)
-            
-            defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
-            completionHandler(.newData)
-        }
-        else {
-            sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-        }
+    private func sendDataToAppleWatch(userInfo:[String:Any], defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        session.transferCurrentComplicationUserInfo(userInfo)
+        
+        defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
+        completionHandler(.newData)
     }
     
     private func sendNoDataToAppleWatch(defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -178,10 +171,6 @@ extension AppDelegate:WCSessionDelegate {
     /** Called when all delegate callbacks for the previously selected watch has occurred. The session can be re-activated for the now selected watch using activateSession. */
     @available(iOS 9.3, *)
     public func sessionDidDeactivate(_ session: WCSession) {
-        
-    }
-    
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         
     }
     
