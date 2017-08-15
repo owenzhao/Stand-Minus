@@ -36,21 +36,10 @@ class DebugViewController: UIViewController {
             hasNotifiedWatchSideLabel.text = "状态未知"
         }
         
-        if  let session = (UIApplication.shared.delegate as? AppDelegate)?.session {    
-//        },
-//            let total = session.receivedApplicationContext["total"] as? Int,
-//            let hasStoodInCurrentHour = session.receivedApplicationContext["hasStoodInCurrentHour"] as? Bool,
-//            let date = session.receivedApplicationContext["date"] as? Date {
-            
-//            totalLabel.text = String(total)
-//            hasStoodInCurrentHourLabel.text = hasStoodInCurrentHour ? "已站立" : "未站立"
-//            queryDateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .short)
+        if  let session = (UIApplication.shared.delegate as? AppDelegate)?.session {
             remainCountsLabel.text = String(session.remainingComplicationUserInfoTransfers)
         }
         else {
-//            totalLabel.text = "未知"
-//            hasStoodInCurrentHourLabel.text = "未知"
-//            queryDateLabel.text = "未知"
             remainCountsLabel.text = "未知"
         }
         
@@ -67,9 +56,6 @@ class DebugViewController: UIViewController {
     
     @IBOutlet weak var remoteNotificationArrivingDateLabel: UILabel!
     @IBOutlet weak var hasNotifiedWatchSideLabel: UILabel!
-//    @IBOutlet weak var totalLabel: UILabel!
-//    @IBOutlet weak var hasStoodInCurrentHourLabel: UILabel!
-//    @IBOutlet weak var queryDateLabel: UILabel!
     @IBOutlet weak var remainCountsLabel: UILabel!
     /*
     // MARK: - Navigation
