@@ -14,6 +14,9 @@ import WatchConnectivity
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     var session:WCSession!
+    
+    private lazy var defaults = UserDefaults.standard
+    
     func applicationDidFinishLaunching() {
         // Perform any final initialization of your application.
         UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .alert]) { (success, error) in
@@ -52,7 +55,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 case .checkNofifyUser:
                     let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                         defer {
-                            let fireDate = Date().addingTimeInterval(40 * 60)
+                            let fireDate = Date().addingTimeInterval(20 * 60)
                             WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
                                 
                             })
@@ -104,7 +107,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                             
                             if standData.total >= 12 && standData.hasStoodInCurrentHour == false {
                                 let calendar = Calendar(identifier: .gregorian)
-                                let timeInterval = UserDefaults.standard.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
+                                let timeInterval = self.defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
                                 let now = Date(timeIntervalSinceReferenceDate: timeInterval)
                                 var cps = calendar.dateComponents([.year, .month, .day, .hour], from: now)
                                 cps.minute = 50
@@ -115,7 +118,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                                 })
                             }
                             else {
-                                let firedate = Date().addingTimeInterval(90 * 60)
+                                let firedate = Date().addingTimeInterval(60 * 60)
                                 
                                 WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
                                     
@@ -199,26 +202,33 @@ extension ExtensionDelegate:WCSessionDelegate {
 
                 self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
             case .fiftyMinutes:
-                let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-                    defer {
-                        self.semaphore.signal()
+                let total = self.defaults.integer(forKey: DefaultsKey.total.key)
+                
+                if total >= 12 {
+                    let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                        defer {
+                            self.semaphore.signal()
+                        }
+                        
+                        if error == nil,
+                            let samples = samples,
+                            samples.isEmpty {
+                            
+                            self.notifyUser()
+                        }
                     }
-
-                    if error == nil,
-                        let samples = samples,
-                        samples.isEmpty {
-
-                        self.notifyUser()
+                    
+                    let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
+                        let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
+                        
+                        return predicate
                     }
+                    
+                    self.query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
                 }
-
-                let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
-                    let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
-
-                    return predicate
+                else {
+                    self.semaphore.signal()
                 }
-
-                self.query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
             }
         }
     }
