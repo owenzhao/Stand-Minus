@@ -27,14 +27,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         session.activate()
     }
     
-    deinit {
-        StandHourQuery.terminate()
-    }
-    
-//    var hasComplication:Bool!
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     private var semaphore = DispatchSemaphore(value: 1)
-    private unowned var query = StandHourQuery.shared()
+    private lazy var query = StandHourQuery()
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.

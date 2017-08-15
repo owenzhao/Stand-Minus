@@ -12,14 +12,10 @@ import HealthKit
 import WatchConnectivity
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-    deinit {
-        StandHourQuery.terminate()
-    }
-
-    unowned private let query = StandHourQuery.shared()
-    
     private var queryOnce:Bool = true
-    private var defaults = UserDefaults.standard
+
+    private lazy var query = StandHourQuery()
+    private lazy var defaults = UserDefaults.standard
     
     // MARK: - Timeline Configuration
     

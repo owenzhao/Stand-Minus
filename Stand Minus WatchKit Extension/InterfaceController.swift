@@ -13,9 +13,10 @@ import HealthKit
 
 class InterfaceController: WKInterfaceController {
     private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
-    private let defaults = UserDefaults.standard
+    private lazy var defaults = UserDefaults.standard
     private lazy var store = HKHealthStore()
-    private unowned let query = StandHourQuery.shared()
+    private lazy var query = StandHourQuery()
+    
     private var hasComplication:Bool {
         if let _ = CLKComplicationServer.sharedInstance().activeComplications {
             return true

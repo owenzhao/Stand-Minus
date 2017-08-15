@@ -8,45 +8,29 @@
 
 import Foundation
 import HealthKit
-//import WatchKit
 import UserNotifications
 
 class StandHourQuery {
-    private static var instance:StandHourQuery? = nil
-    
-    private init() { }
-    
-    class func shared() -> StandHourQuery {
-        if instance == nil { instance = StandHourQuery() }
-        return instance!
-    }
-    
-    class func terminate() {
-        instance = nil
-    }
-    
-    private var anchor:HKQueryAnchor? = nil
-    private var predicate:NSPredicate! = nil
-    private let calendar = Calendar(identifier: .gregorian)
-    private let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
-    private let store = HKHealthStore()
+    private static let calendar = Calendar(identifier: .gregorian)
+    private static let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
+    private static let store = HKHealthStore()
     
     func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
         let now = Date()
-        createPredicate(at: now)
+        let predicate = createPredicate(at: now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now))
+        let query = HKSampleQuery(sampleType: StandHourQuery.sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now))
         
         executeHKQuery(query, at: now)
     }
     
     func executeSampleQuery(resultsHandler:@escaping HKSampleQuery.ResultsHandler) {
         let now = Date()
-        createPredicate(at: now)
+        let predicate = createPredicate(at: now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
+        let query = HKSampleQuery(sampleType: StandHourQuery.sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
         
         executeHKQuery(query, at: now)
     }
@@ -56,7 +40,7 @@ class StandHourQuery {
         let predicate = predicate(now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
-        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
+        let query = HKSampleQuery(sampleType: StandHourQuery.sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
         
         executeHKQuery(query, at: now)
     }
@@ -66,18 +50,20 @@ class StandHourQuery {
         defaults.removeObject(forKey: DefaultsKey.hasStoodInCurrentHour.key)
         defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeInterval.key)
         
-        store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
+        StandHourQuery.store.requestAuthorization(toShare: nil, read: [StandHourQuery.sampleType]) { (success, error) in
             if error == nil && success {
-                self.store.execute(query)
+                StandHourQuery.store.execute(query)
             }
         }
     }
     
-    private func createPredicate(at now:Date) {
-        let cps = calendar.dateComponents([.year, .month, .day], from: now)
-        let zeroHour = calendar.date(from: cps)
+    private func createPredicate(at now:Date) -> NSPredicate {
+        let cps = StandHourQuery.calendar.dateComponents([.year, .month, .day], from: now)
+        let zeroHour = StandHourQuery.calendar.date(from: cps)
         
-        predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: nil, options: .strictStartDate)
+        let predicate = HKQuery.predicateForSamples(withStart: zeroHour, end: nil, options: .strictStartDate)
+        
+        return predicate
     }
 }
 
