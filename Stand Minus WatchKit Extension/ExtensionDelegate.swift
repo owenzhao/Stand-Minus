@@ -187,20 +187,6 @@ extension ExtensionDelegate:WCSessionDelegate {
                         }
 
                         self.updateComplications()
-
-//                        if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
-//                            let calendar = Calendar(identifier: .gregorian)
-//                            var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
-//                            cps.minute = 50
-//                            let firedate = calendar.date(from: cps)!
-//
-//                            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
-//
-//                            })
-//                        }
-//                        else {
-
-//                        }
                     }
 
                     let firedate = Date().addingTimeInterval(70 * 60)
@@ -232,8 +218,6 @@ extension ExtensionDelegate:WCSessionDelegate {
                 }
 
                 self.query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
-            case .twentyMinutes:
-                break
             }
         }
     }

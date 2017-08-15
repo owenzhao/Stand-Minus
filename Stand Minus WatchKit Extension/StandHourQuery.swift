@@ -14,7 +14,6 @@ import UserNotifications
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
     unowned private let data = TodayStandData.shared()
-    private var state:ExtensionCurrentHourState = .notSet
     
     private init() { }
     
@@ -88,54 +87,4 @@ class StandHourQuery {
 extension HKSampleQuery {
     typealias ResultsHandler = (HKSampleQuery, [HKSample]?, Error?) -> Void
     typealias PreResultsHandler = (Date) -> ResultsHandler
-}
-
-extension HKAnchoredObjectQuery {
-    typealias ResultsHandler = (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void
-    typealias PreResultsHandler = (Date, Bool) -> ResultsHandler
-}
-
-// MARK: - ExtensionCurrentHourState
-enum ExtensionCurrentHourState {
-    case notSet
-    case notNotifyUser(at:Date)
-    case alreadyNotifyUser(at:Date)
-    
-    static func == (left:ExtensionCurrentHourState, right:ExtensionCurrentHourState) -> Bool {
-        func inTheSampeHour(_ last:Date, _ now:Date) -> Bool {
-            let calendar = Calendar(identifier: .gregorian)
-            let hourInLast = calendar.component(.hour, from: last)
-            let hourNow = calendar.component(.hour, from: now)
-            
-            return hourInLast == hourNow && now.timeIntervalSince(last) < 60 * 60
-        }
-        
-        switch left {
-        case .notSet:
-            switch right {
-            case .notSet:
-                return true
-            default:
-                return false
-            }
-        case .notNotifyUser(let last):
-            switch right {
-            case .notNotifyUser(let now):
-                return inTheSampeHour(last, now)
-            default:
-                return false
-            }
-        case .alreadyNotifyUser(let last):
-            switch right {
-            case .alreadyNotifyUser(let now):
-                return inTheSampeHour(last, now)
-            default:
-                return false
-            }
-        }
-    }
-    
-    static func != (left:ExtensionCurrentHourState, right:ExtensionCurrentHourState) -> Bool {
-        return !(left == right)
-    }
 }
