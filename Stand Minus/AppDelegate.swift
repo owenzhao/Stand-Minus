@@ -136,11 +136,11 @@ extension AppDelegate {
 //
 //                return
 //            }
-            break
+            fatalError()
         }
     
         if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-            let info:[String:Any] = [DefaultsKey.messageType.key : messageType]
+            let info:[String:Any] = ["rawValue":rawValue]
             session.transferCurrentComplicationUserInfo(info)
             
             defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
