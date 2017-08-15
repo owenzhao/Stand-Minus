@@ -54,7 +54,7 @@
 		DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF61E41824D00C7ED60 /* HealthKit.framework */; };
 		DC7C4F4E1F371B18001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
 		DC7C4F4F1F371B3A001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
-		DC9AC4811E480D8000F52028 /* TodayStandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* TodayStandData.swift */; };
+		DC9AC4811E480D8000F52028 /* StandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* StandData.swift */; };
 		DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */; };
 		DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA8E9B21E5188BD004A3979 /* PageViewController.swift */; };
 		DCC18A551E52DBB200A0BA79 /* step_two_tw.png in Resources */ = {isa = PBXBuildFile; fileRef = DCC18A541E52DBB200A0BA79 /* step_two_tw.png */; };
@@ -188,7 +188,7 @@
 		DC788AF51E41824D00C7ED60 /* Stand Minus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus.entitlements"; sourceTree = "<group>"; };
 		DC788AF61E41824D00C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		DC7C4F4D1F371B18001BFF83 /* MessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageType.swift; sourceTree = "<group>"; };
-		DC9AC4801E480D8000F52028 /* TodayStandData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TodayStandData.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		DC9AC4801E480D8000F52028 /* StandData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StandData.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StandHourQuery.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DCA8E9B21E5188BD004A3979 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		DCC18A541E52DBB200A0BA79 /* step_two_tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = step_two_tw.png; path = tw/step_two_tw.png; sourceTree = "<group>"; };
@@ -328,7 +328,7 @@
 				DC0831911E407B8000A62520 /* Assets.xcassets */,
 				DC0831931E407B8000A62520 /* Info.plist */,
 				DC0831871E407B8000A62520 /* Supporting Files */,
-				DC9AC4801E480D8000F52028 /* TodayStandData.swift */,
+				DC9AC4801E480D8000F52028 /* StandData.swift */,
 				DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */,
 				DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */,
 			);
@@ -680,7 +680,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC9AC4811E480D8000F52028 /* TodayStandData.swift in Sources */,
+				DC9AC4811E480D8000F52028 /* StandData.swift in Sources */,
 				DC0200091F0EF95C00ECA5EA /* DefaultsKey.swift in Sources */,
 				DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */,
 				DC7C4F4F1F371B3A001BFF83 /* MessageType.swift in Sources */,

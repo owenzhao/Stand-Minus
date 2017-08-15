@@ -14,10 +14,10 @@ import WatchConnectivity
 class ComplicationController: NSObject, CLKComplicationDataSource {
     deinit {
         StandHourQuery.terminate()
-        TodayStandData.terminate()
+        StandData.terminate()
     }
 
-    unowned private var todayStandData = TodayStandData.shared()
+    unowned private var standData = StandData.shared()
     unowned private let query = StandHourQuery.shared()
     
     private var queryOnce:Bool = true
@@ -52,10 +52,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     
                     if error == nil {
                         if let samples = samples as? [HKCategorySample] {
-                            self.todayStandData.samples = samples
+                            self.standData.samples = samples
                         }
                         else {
-                            self.todayStandData.samples = []
+                            self.standData.samples = []
                         }
     
                         handler(self.entry(complication: complication))
@@ -72,7 +72,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     
     private func entry(complication: CLKComplication) -> CLKComplicationTimelineEntry {
         let template:CLKComplicationTemplate
-        let textProvider = CLKSimpleTextProvider(text: String(todayStandData.total))
+        let textProvider = CLKSimpleTextProvider(text: String(standData.total))
         switch complication.family {
         case .circularSmall:
             template = CLKComplicationTemplateCircularSmallRingText()
@@ -86,14 +86,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
             let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
-            let imageProvider = CLKImageProvider(onePieceImage: todayStandData.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+            let imageProvider = CLKImageProvider(onePieceImage: standData.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
             smallFlattemplate.imageProvider = imageProvider
             smallFlattemplate.textProvider = textProvider
         }
         else {
             let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
             smallRingTextTemplate.ringStyle = .closed
-            smallRingTextTemplate.fillFraction = todayStandData.hasStoodInCurrentHour ? 1.0 : 0.5
+            smallRingTextTemplate.fillFraction = standData.hasStoodInCurrentHour ? 1.0 : 0.5
             smallRingTextTemplate.textProvider = textProvider
         }
         

@@ -26,7 +26,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     
     deinit {
         StandHourQuery.terminate()
-        TodayStandData.terminate()
+        StandData.terminate()
     }
     
 //    var hasComplication:Bool!
@@ -93,19 +93,21 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         }
                         
                         if error == nil {
-                            let todayStandData = TodayStandData.shared()
+                            let standData = StandData.shared()
                             
                             if let samples = samples as? [HKCategorySample] {
-                                todayStandData.samples = samples
+                                standData.samples = samples
                             } else {
-                                todayStandData.samples = []
+                                standData.samples = []
                             }
                             
                             self.updateComplications()
                             
-                            if todayStandData.total >= 12 && todayStandData.hasStoodInCurrentHour == false {
+                            if standData.total >= 12 && standData.hasStoodInCurrentHour == false {
                                 let calendar = Calendar(identifier: .gregorian)
-                                var cps = calendar.dateComponents([.year, .month, .day, .hour], from: todayStandData.now)
+                                let timeInterval = UserDefaults.standard.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
+                                let now = Date(timeIntervalSinceReferenceDate: timeInterval)
+                                var cps = calendar.dateComponents([.year, .month, .day, .hour], from: now)
                                 cps.minute = 50
                                 let firedate = calendar.date(from: cps)!
                                 
@@ -178,12 +180,12 @@ extension ExtensionDelegate:WCSessionDelegate {
                     }
 
                     if error == nil {
-                        let todayStandData = TodayStandData.shared()
+                        let standData = StandData.shared()
 
                         if let samples = samples as? [HKCategorySample] {
-                            todayStandData.samples = samples
+                            standData.samples = samples
                         } else {
-                            todayStandData.samples = []
+                            standData.samples = []
                         }
 
                         self.updateComplications()

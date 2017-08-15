@@ -15,7 +15,7 @@ class InterfaceController: WKInterfaceController {
     private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
     private let defaults = UserDefaults.standard
     private lazy var store = HKHealthStore()
-    private unowned let todayStandData = TodayStandData.shared()
+//    private unowned let standData = StandData.shared()
     private unowned let query = StandHourQuery.shared()
     private var hasComplication:Bool {
         if let _ = CLKComplicationServer.sharedInstance().activeComplications {
@@ -60,10 +60,11 @@ class InterfaceController: WKInterfaceController {
         let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now) -> HKSampleQuery.ResultsHandler in
             return { [unowned self] (_, samples, error) in
                 if error == nil {
+                    let standData = StandData()
                     if let samples = samples as? [HKCategorySample] {
-                        self.todayStandData.samples = samples
+                        standData.samples = samples
                     } else {
-                        self.todayStandData.samples = []
+                        standData.samples = []
                     }
                     
                     DispatchQueue.main.async { [unowned self] in

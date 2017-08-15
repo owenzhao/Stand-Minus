@@ -9,15 +9,15 @@
 import Foundation
 import HealthKit
 
-class TodayStandData {
-    private static var instance:TodayStandData? = nil
+class StandData {
+    private static var instance:StandData? = nil
     private let defaults = UserDefaults.standard
     
-    private init() { }
+//    private init() { }
     
-    class func shared() -> TodayStandData {
+    class func shared() -> StandData {
         if instance == nil {
-            instance = TodayStandData()
+            instance = StandData()
         }
         
         return instance!
