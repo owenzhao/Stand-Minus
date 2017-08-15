@@ -13,7 +13,6 @@ import UserNotifications
 
 class StandHourQuery {
     private static var instance:StandHourQuery? = nil
-    unowned private let data = TodayStandData.shared()
     
     private init() { }
     
@@ -66,7 +65,6 @@ class StandHourQuery {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: DefaultsKey.hasStoodInCurrentHour.key)
         defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeInterval.key)
-        data.now = now
         
         store.requestAuthorization(toShare: nil, read: [sampleType]) { [unowned self] (success, error) in
             if error == nil && success {

@@ -97,7 +97,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             smallRingTextTemplate.textProvider = textProvider
         }
         
-        let entry = CLKComplicationTimelineEntry(date: todayStandData.now, complicationTemplate: template)
+        let timeInterval = UserDefaults.standard.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
+        let now = Date(timeIntervalSinceReferenceDate: timeInterval)
+        
+        let entry = CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
         
         return entry
     }

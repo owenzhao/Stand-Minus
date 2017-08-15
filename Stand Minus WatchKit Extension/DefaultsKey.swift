@@ -9,11 +9,12 @@
 import Foundation
 
 enum DefaultsKey:String {
+    case total
     case lastQueryTimeInterval = "last query time interval"
     case hasStoodInCurrentHour = "has Stood in current hour"
+    
     case remoteNofiticationTimeInterval = "remote notification time intervals"
     case hasNotifedWatchSide = "has notifed watch side"
-    case messageType = "message type"
     
     var key:String {
         return self.rawValue

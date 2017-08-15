@@ -11,6 +11,7 @@ import HealthKit
 
 class TodayStandData {
     private static var instance:TodayStandData? = nil
+    private let defaults = UserDefaults.standard
     
     private init() { }
     
@@ -27,15 +28,16 @@ class TodayStandData {
     }
     
     private let calendar = Calendar(identifier: .gregorian)
-    private(set) var total = 0
+    private(set) var total = 0 {
+        didSet {
+            defaults.set(total, forKey: DefaultsKey.total.key)
+        }
+    }
     private(set) var hasStoodInCurrentHour = false {
         didSet {
-            let defaults = UserDefaults.standard
             defaults.set(hasStoodInCurrentHour, forKey: DefaultsKey.hasStoodInCurrentHour.key)
         }
     }
-    
-    lazy var now = Date()
     
     var shouldNotifyUser:Bool {
         return total >= 12
@@ -52,6 +54,8 @@ class TodayStandData {
                 
                 if lastSample.value == HKCategoryValueAppleStandHour.stood.rawValue {
                     let calendar = Calendar(identifier: .gregorian)
+                    let timeInterval = defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
+                    let now = Date(timeIntervalSinceReferenceDate: timeInterval)
                     let currentHour = calendar.component(.hour, from: now)
                     let lastSampleHour = calendar.component(.hour, from: lastSample.startDate)
                     hasStoodInCurrentHour = (currentHour == lastSampleHour)
