@@ -10,37 +10,18 @@ import Foundation
 import HealthKit
 
 class StandData {
-    private static var instance:StandData? = nil
     private let defaults = UserDefaults.standard
     
-//    private init() { }
-    
-    class func shared() -> StandData {
-        if instance == nil {
-            instance = StandData()
-        }
-        
-        return instance!
-    }
-    
-    class func terminate() {
-        instance = nil
-    }
-    
-    private let calendar = Calendar(identifier: .gregorian)
     private(set) var total = 0 {
         didSet {
             defaults.set(total, forKey: DefaultsKey.total.key)
         }
     }
+    
     private(set) var hasStoodInCurrentHour = false {
         didSet {
             defaults.set(hasStoodInCurrentHour, forKey: DefaultsKey.hasStoodInCurrentHour.key)
         }
-    }
-    
-    var shouldNotifyUser:Bool {
-        return total >= 12
     }
     
     var samples:[HKCategorySample] = [] {
@@ -70,5 +51,4 @@ class StandData {
             }
         }
     }
-
 }

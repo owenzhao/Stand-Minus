@@ -15,7 +15,6 @@ class InterfaceController: WKInterfaceController {
     private lazy var delegate = WKExtension.shared().delegate as! ExtensionDelegate
     private let defaults = UserDefaults.standard
     private lazy var store = HKHealthStore()
-//    private unowned let standData = StandData.shared()
     private unowned let query = StandHourQuery.shared()
     private var hasComplication:Bool {
         if let _ = CLKComplicationServer.sharedInstance().activeComplications {

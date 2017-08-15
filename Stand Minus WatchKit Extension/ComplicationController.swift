@@ -14,13 +14,12 @@ import WatchConnectivity
 class ComplicationController: NSObject, CLKComplicationDataSource {
     deinit {
         StandHourQuery.terminate()
-        StandData.terminate()
     }
 
-    unowned private var standData = StandData.shared()
     unowned private let query = StandHourQuery.shared()
     
     private var queryOnce:Bool = true
+    private var defaults = UserDefaults.standard
     
     // MARK: - Timeline Configuration
     
@@ -51,11 +50,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     }
                     
                     if error == nil {
+                        let standData = StandData()
                         if let samples = samples as? [HKCategorySample] {
-                            self.standData.samples = samples
+                            standData.samples = samples
                         }
                         else {
-                            self.standData.samples = []
+                            standData.samples = []
                         }
     
                         handler(self.entry(complication: complication))
@@ -71,8 +71,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     private func entry(complication: CLKComplication) -> CLKComplicationTimelineEntry {
+        let total = defaults.integer(forKey: DefaultsKey.total.key)
+        let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+        let timeInterval = defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
+        let now = Date(timeIntervalSinceReferenceDate: timeInterval)
+        
         let template:CLKComplicationTemplate
-        let textProvider = CLKSimpleTextProvider(text: String(standData.total))
+        let textProvider = CLKSimpleTextProvider(text: String(total))
         switch complication.family {
         case .circularSmall:
             template = CLKComplicationTemplateCircularSmallRingText()
@@ -86,19 +91,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
             let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
-            let imageProvider = CLKImageProvider(onePieceImage: standData.hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+            let imageProvider = CLKImageProvider(onePieceImage: hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
             smallFlattemplate.imageProvider = imageProvider
             smallFlattemplate.textProvider = textProvider
         }
         else {
             let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
             smallRingTextTemplate.ringStyle = .closed
-            smallRingTextTemplate.fillFraction = standData.hasStoodInCurrentHour ? 1.0 : 0.5
+            smallRingTextTemplate.fillFraction = hasStoodInCurrentHour ? 1.0 : 0.5
             smallRingTextTemplate.textProvider = textProvider
         }
-        
-        let timeInterval = UserDefaults.standard.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
-        let now = Date(timeIntervalSinceReferenceDate: timeInterval)
         
         let entry = CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
         
