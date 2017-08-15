@@ -88,7 +88,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
 }
 
 // MARK: - Xinge push
