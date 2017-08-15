@@ -59,7 +59,8 @@ class InterfaceController: WKInterfaceController {
         let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now) -> HKSampleQuery.ResultsHandler in
             return { [unowned self] (_, samples, error) in
                 if error == nil {
-                    let standData = StandData()
+                    var standData = StandData()
+                    
                     if let samples = samples as? [HKCategorySample] {
                         standData.samples = samples
                     } else {

@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 
-class StandData {
+struct StandData {
     private let defaults = UserDefaults.standard
     
     private(set) var total = 0 {

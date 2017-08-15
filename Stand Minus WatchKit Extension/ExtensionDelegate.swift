@@ -92,7 +92,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         }
                         
                         if error == nil {
-                            let standData = StandData()
+                            var standData = StandData()
                             
                             if let samples = samples as? [HKCategorySample] {
                                 standData.samples = samples
@@ -179,7 +179,7 @@ extension ExtensionDelegate:WCSessionDelegate {
                     }
 
                     if error == nil {
-                        let standData = StandData()
+                        var standData = StandData()
 
                         if let samples = samples as? [HKCategorySample] {
                             standData.samples = samples

@@ -50,7 +50,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     }
                     
                     if error == nil {
-                        let standData = StandData()
+                        var standData = StandData()
+                        
                         if let samples = samples as? [HKCategorySample] {
                             standData.samples = samples
                         }
