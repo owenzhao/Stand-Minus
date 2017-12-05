@@ -23,8 +23,6 @@
 		DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08318D1E407B8000A62520 /* NotificationController.swift */; };
 		DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08318F1E407B8000A62520 /* ComplicationController.swift */; };
 		DC0831921E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831911E407B8000A62520 /* Assets.xcassets */; };
-		DC0BAF881E50620F0030C18C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831911E407B8000A62520 /* Assets.xcassets */; };
-		DC0BAF891E5062640030C18C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC08317B1E407B8000A62520 /* Assets.xcassets */; };
 		DC0E8AE31E527B7500C2ACE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8AE51E527B7500C2ACE3 /* Localizable.strings */; };
 		DC0E8AF71E52AFE700C2ACE3 /* StepTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0E8AF61E52AFE700C2ACE3 /* StepTwoViewController.swift */; };
 		DC0E8AF91E52AFF400C2ACE3 /* StepThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0E8AF81E52AFF400C2ACE3 /* StepThreeViewController.swift */; };
@@ -573,10 +571,10 @@
 			projectRoot = "";
 			targets = (
 				DC08314A1E407B7F00A62520 /* Stand Minus */,
-				DC08315E1E407B8000A62520 /* Stand MinusTests */,
-				DC0831691E407B8000A62520 /* Stand MinusUITests */,
 				DC0831721E407B8000A62520 /* Stand Minus WatchKit App */,
 				DC0831811E407B8000A62520 /* Stand Minus WatchKit Extension */,
+				DC08315E1E407B8000A62520 /* Stand MinusTests */,
+				DC0831691E407B8000A62520 /* Stand MinusUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -625,7 +623,6 @@
 			files = (
 				DC08317C1E407B8000A62520 /* Assets.xcassets in Resources */,
 				DC0E8B301E52BABE00C2ACE3 /* InfoPlist.strings in Resources */,
-				DC0BAF881E50620F0030C18C /* Assets.xcassets in Resources */,
 				DC08317A1E407B8000A62520 /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -634,7 +631,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC0BAF891E5062640030C18C /* Assets.xcassets in Resources */,
 				DC0E8B3A1E52BABF00C2ACE3 /* InfoPlist.strings in Resources */,
 				DC0E8AE31E527B7500C2ACE3 /* Localizable.strings in Resources */,
 				DC0831921E407B8000A62520 /* Assets.xcassets in Resources */,
@@ -964,7 +960,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				DEVELOPMENT_TEAM = 96NM39SGJ5;
 				IBSC_MODULE = Stand_Minus_WatchKit_Extension;
 				INFOPLIST_FILE = "Stand Minus WatchKit App/Info.plist";
@@ -983,7 +979,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				DEVELOPMENT_TEAM = 96NM39SGJ5;
 				IBSC_MODULE = Stand_Minus_WatchKit_Extension;
 				INFOPLIST_FILE = "Stand Minus WatchKit App/Info.plist";
