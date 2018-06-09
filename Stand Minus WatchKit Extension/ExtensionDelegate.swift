@@ -51,7 +51,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                         defer {
                             let fireDate = Date().addingTimeInterval(20 * 60)
-                            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
                                 
                             })
                             
@@ -78,7 +78,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         session.sendMessage([:], replyHandler: nil, errorHandler: nil)
                     }
                     else {
-                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 60), userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(60 * 60), userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
                             
                         })
                     }
@@ -108,14 +108,14 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                                 cps.minute = 50
                                 let firedate = calendar.date(from: cps)!
                                 
-                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSNumber, scheduledCompletion: { (error) in
                                     
                                 })
                             }
                             else {
                                 let firedate = Date().addingTimeInterval(60 * 60)
                                 
-                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
                                     
                                 })
                             }
@@ -190,7 +190,7 @@ extension ExtensionDelegate:WCSessionDelegate {
 
                     let firedate = Date().addingTimeInterval(70 * 60)
 
-                    WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSSecureCoding, scheduledCompletion: { (error) in
+                    WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
 
                     })
                 }
