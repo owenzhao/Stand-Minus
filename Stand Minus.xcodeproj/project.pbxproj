@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DC0200091F0EF95C00ECA5EA /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
+		DC0307FA20DCFA0000B4E8CE /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DC0307F920DCFA0000B4E8CE /* libsqlite3.0.tbd */; };
 		DC08314F1E407B7F00A62520 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08314E1E407B7F00A62520 /* AppDelegate.swift */; };
 		DC0831541E407B8000A62520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC0831521E407B8000A62520 /* Main.storyboard */; };
 		DC0831561E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831551E407B8000A62520 /* Assets.xcassets */; };
@@ -44,7 +45,6 @@
 		DC0E8B501E52D07F00C2ACE3 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */; };
 		DC38DC911F33EDDC002AE212 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */; };
 		DC38DC921F33EDE6002AE212 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */; };
-		DC38DC9C1F33F0E8002AE212 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC38DC941F33EEB3002AE212 /* libXG-SDK.a */; };
 		DC38DC9D1F33F0FB002AE212 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5C11E432508004D6F10 /* libz.tbd */; };
 		DC468CB51F38248B002BAC42 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC468CB41F38248B002BAC42 /* DebugViewController.swift */; };
 		DC468CB61F382CE6002BAC42 /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
@@ -55,6 +55,8 @@
 		DC9AC4811E480D8000F52028 /* StandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* StandData.swift */; };
 		DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */; };
 		DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA8E9B21E5188BD004A3979 /* PageViewController.swift */; };
+		DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221C20DCEEEE00491892 /* UserNotifications.framework */; };
+		DCB0222120DCF7F300491892 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221E20DCEF6200491892 /* libXG-SDK.a */; };
 		DCC18A551E52DBB200A0BA79 /* step_two_tw.png in Resources */ = {isa = PBXBuildFile; fileRef = DCC18A541E52DBB200A0BA79 /* step_two_tw.png */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +118,7 @@
 
 /* Begin PBXFileReference section */
 		DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsKey.swift; sourceTree = "<group>"; };
+		DC0307F920DCFA0000B4E8CE /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		DC08314B1E407B7F00A62520 /* Stand Minus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stand Minus.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC08314E1E407B7F00A62520 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC0831551E407B8000A62520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -177,9 +180,6 @@
 		DC38DC8B1F33EDCB002AE212 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libXG-SDK.a"; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/libXG-SDK.a"; sourceTree = "<group>"; };
 		DC38DC8C1F33EDCB002AE212 /* XGSetting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XGSetting.h; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/XGSetting.h"; sourceTree = "<group>"; };
 		DC38DC8D1F33EDCB002AE212 /* XGPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XGPush.h; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/XGPush.h"; sourceTree = "<group>"; };
-		DC38DC941F33EEB3002AE212 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
-		DC38DC961F33EEB3002AE212 /* XGPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
-		DC38DC971F33EEB3002AE212 /* XGSetting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
 		DC468CB41F38248B002BAC42 /* DebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		DC788AF11E417BD000C7ED60 /* Stand Minus WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Stand Minus WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		DC788AF31E417BD000C7ED60 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.1.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -189,6 +189,10 @@
 		DC9AC4801E480D8000F52028 /* StandData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StandData.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StandHourQuery.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		DCA8E9B21E5188BD004A3979 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		DCB0221A20DCEEC900491892 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		DCB0221C20DCEEEE00491892 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		DCB0221E20DCEF6200491892 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
+		DCB0221F20DCEF6200491892 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		DCC18A541E52DBB200A0BA79 /* step_two_tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = step_two_tw.png; path = tw/step_two_tw.png; sourceTree = "<group>"; };
 		DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -201,8 +205,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC0307FA20DCFA0000B4E8CE /* libsqlite3.0.tbd in Frameworks */,
+				DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */,
+				DCB0222120DCF7F300491892 /* libXG-SDK.a in Frameworks */,
 				DC38DC9D1F33F0FB002AE212 /* libz.tbd in Frameworks */,
-				DC38DC9C1F33F0E8002AE212 /* libXG-SDK.a in Frameworks */,
 				DC38DC921F33EDE6002AE212 /* SystemConfiguration.framework in Frameworks */,
 				DC38DC911F33EDDC002AE212 /* CoreTelephony.framework in Frameworks */,
 				DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */,
@@ -370,9 +376,8 @@
 		DC38DC931F33EEB3002AE212 /* sdk */ = {
 			isa = PBXGroup;
 			children = (
-				DC38DC941F33EEB3002AE212 /* libXG-SDK.a */,
-				DC38DC961F33EEB3002AE212 /* XGPush.h */,
-				DC38DC971F33EEB3002AE212 /* XGSetting.h */,
+				DCB0221E20DCEF6200491892 /* libXG-SDK.a */,
+				DCB0221F20DCEF6200491892 /* XGPush.h */,
 			);
 			path = sdk;
 			sourceTree = "<group>";
@@ -380,6 +385,9 @@
 		DC788AF21E417BD000C7ED60 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DC0307F920DCFA0000B4E8CE /* libsqlite3.0.tbd */,
+				DCB0221C20DCEEEE00491892 /* UserNotifications.framework */,
+				DCB0221A20DCEEC900491892 /* libsqlite3.tbd */,
 				DC38DC8B1F33EDCB002AE212 /* libXG-SDK.a */,
 				DC38DC8D1F33EDCB002AE212 /* XGPush.h */,
 				DC38DC8C1F33EDCB002AE212 /* XGSetting.h */,
@@ -1011,6 +1019,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/sdk",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-Minus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Stand Minus/Stand Minus-Bridging-Header.h";
@@ -1033,6 +1042,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/sdk",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-Minus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Stand Minus/Stand Minus-Bridging-Header.h";

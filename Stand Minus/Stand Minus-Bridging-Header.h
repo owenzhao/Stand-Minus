@@ -3,5 +3,4 @@
 //
 
 #import "../sdk/XGPush.h"
-#import "../sdk/XGSetting.h"
 #import <CommonCrypto/CommonCrypto.h>

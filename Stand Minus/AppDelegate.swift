@@ -15,6 +15,7 @@ import WatchConnectivity
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    lazy var xgPush = XGPush.defaultManager()
     
     private(set) var session:WCSession!
 
@@ -42,10 +43,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        let setting = XGSetting.getInstance() as! XGSetting
-        setting.enableDebug(true)
+        xgPush.isEnableDebug = true
         
-        XGPush.startApp(2200249931, appKey: "I2V4HX465IMJ")
+        // remove badge
+        let configuration = XGNotificationConfigure(notificationWithCategories: nil, types: [])
+        xgPush.notificationConfigure = configuration
+        
+        xgPush.startXG(withAppID: 2200249931, appKey: "I2V4HX465IMJ", delegate: self)
+        
+        // report info
+        xgPush.reportXGNotificationInfo(launchOptions ?? [:])
         
         if WCSession.isSupported() {
             session = WCSession.default
@@ -90,20 +97,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-// MARK: - Xinge push
+// MARK: - Apple push
 extension AppDelegate {
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print(deviceToken.debugDescription)
-        
-        let token = XGPush.registerDevice(deviceToken, account: "Zhao Xin", successCallback: {
-            NSLog("register to XG success.")
-        }) {
-            NSLog("register ot XG failed.")
-        }
-        
-        NSLog("XG device token is %@", token!)
-        UserDefaults.standard.set(token, forKey: "token")
-    }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
@@ -146,6 +141,20 @@ extension AppDelegate {
     private func sendNoDataToAppleWatch(defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
         completionHandler(.noData)
+    }
+}
+
+// MARK: - Xinge Push Delegate v3.0
+// 信鸽的这套API完全是画蛇添足，增加无用的信息。
+extension AppDelegate:XGPushDelegate {
+    // 应用在后台时的推送
+    func xgPush(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse?, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+    }
+    
+    // 应用在前台时也能推送
+    func xgPush(_ center: UNUserNotificationCenter, willPresent notification: UNNotification?, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
     }
 }
 
