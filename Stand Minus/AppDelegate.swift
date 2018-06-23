@@ -99,6 +99,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // MARK: - Apple push
 extension AppDelegate {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenManager = XGPushTokenManager.default()
+        let account = "Zhao Xin"
+        // FIXME: Workaround: unbind first or may not register successfully
+        tokenManager.unbind(withIdentifer: account, type: .account)
+        tokenManager.bind(withIdentifier: account, type: .account)
+    }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
