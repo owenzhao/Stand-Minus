@@ -205,9 +205,9 @@ typedef NS_ENUM(NSUInteger, XGPushTokenBindType) {
 /**
  @brief 监控token对象解绑的情况
 
- @param identifier token对象绑定的标识
- @param type token对象绑定的类型
- @param error token对象绑定的结果信息
+ @param identifier token对象解绑的标识
+ @param type token对象解绑的类型
+ @param error token对象解绑的结果信息
  */
 - (void)xgPushDidUnbindWithIdentifier:(nullable NSString *)identifier type:(XGPushTokenBindType)type error:(nullable NSError *)error;
 
@@ -235,19 +235,18 @@ typedef NS_ENUM(NSUInteger, XGPushTokenBindType) {
 @property (copy, nonatomic, nullable, readonly) NSString *deviceTokenString;
 
 /**
- @brief 为token对象设置绑定类型和标识
-
+ @brief 为token对象指定绑定类型和标识
+ 
  @param identifier 指定绑定标识
  @param type 指定绑定类型
- @note  对于账号类型的绑定，信鸽服务只会绑定最新账号，重复设置账号会导致之前的账号失效
  */
 - (void)bindWithIdentifier:(nullable NSString *)identifier type:(XGPushTokenBindType)type;
 
 /**
- @brief 为token对象解除绑定类型和标识
+ @brief 为token对象指定解绑类型和标识
 
- @param identifier 指定绑定标识
- @param type 指定绑定类型
+ @param identifier 指定解绑标识
+ @param type 指定解绑类型
  */
 - (void)unbindWithIdentifer:(nullable NSString *)identifier type:(XGPushTokenBindType)type;
 
@@ -443,3 +442,4 @@ typedef NS_ENUM(NSUInteger, XGPushTokenBindType) {
 - (nonnull NSString *)sdkVersion;
 
 @end
+			

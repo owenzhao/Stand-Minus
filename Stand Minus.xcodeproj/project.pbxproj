@@ -56,8 +56,8 @@
 		DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */; };
 		DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA8E9B21E5188BD004A3979 /* PageViewController.swift */; };
 		DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221C20DCEEEE00491892 /* UserNotifications.framework */; };
-		DCB0222120DCF7F300491892 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221E20DCEF6200491892 /* libXG-SDK.a */; };
 		DCC18A551E52DBB200A0BA79 /* step_two_tw.png in Resources */ = {isa = PBXBuildFile; fileRef = DCC18A541E52DBB200A0BA79 /* step_two_tw.png */; };
+		DCFF1DF420DDEB450094CDEC /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFF1DF320DDEB450094CDEC /* libXG-SDK.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,13 +191,13 @@
 		DCA8E9B21E5188BD004A3979 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		DCB0221A20DCEEC900491892 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		DCB0221C20DCEEEE00491892 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
-		DCB0221E20DCEF6200491892 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
-		DCB0221F20DCEF6200491892 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		DCC18A541E52DBB200A0BA79 /* step_two_tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = step_two_tw.png; path = tw/step_two_tw.png; sourceTree = "<group>"; };
 		DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DCDAC5C11E432508004D6F10 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DCDAC5C31E434660004D6F10 /* Stand Minus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stand Minus-Bridging-Header.h"; sourceTree = "<group>"; };
+		DCFF1DF220DDEB450094CDEC /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
+		DCFF1DF320DDEB450094CDEC /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,8 +207,8 @@
 			files = (
 				DC0307FA20DCFA0000B4E8CE /* libsqlite3.0.tbd in Frameworks */,
 				DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */,
-				DCB0222120DCF7F300491892 /* libXG-SDK.a in Frameworks */,
 				DC38DC9D1F33F0FB002AE212 /* libz.tbd in Frameworks */,
+				DCFF1DF420DDEB450094CDEC /* libXG-SDK.a in Frameworks */,
 				DC38DC921F33EDE6002AE212 /* SystemConfiguration.framework in Frameworks */,
 				DC38DC911F33EDDC002AE212 /* CoreTelephony.framework in Frameworks */,
 				DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */,
@@ -376,8 +376,8 @@
 		DC38DC931F33EEB3002AE212 /* sdk */ = {
 			isa = PBXGroup;
 			children = (
-				DCB0221E20DCEF6200491892 /* libXG-SDK.a */,
-				DCB0221F20DCEF6200491892 /* XGPush.h */,
+				DCFF1DF320DDEB450094CDEC /* libXG-SDK.a */,
+				DCFF1DF220DDEB450094CDEC /* XGPush.h */,
 			);
 			path = sdk;
 			sourceTree = "<group>";

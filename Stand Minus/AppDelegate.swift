@@ -99,14 +99,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // MARK: - Apple push
 extension AppDelegate {
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let tokenManager = XGPushTokenManager.default()
-        let account = "Zhao Xin"
-        // FIXME: Workaround: unbind first or may not register successfully
-        tokenManager.unbind(withIdentifer: account, type: .account)
-        tokenManager.bind(withIdentifier: account, type: .account)
-    }
-    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         guard let rawValue = userInfo["type"] as? String,
@@ -154,6 +146,15 @@ extension AppDelegate {
 // MARK: - Xinge Push Delegate v3.0
 // 信鸽的这套API完全是画蛇添足，增加无用的信息。
 extension AppDelegate:XGPushDelegate {
+    //推送注册完成
+    func xgPushDidFinishStart(_ isSuccess: Bool, error: Error?) {
+        let tokenManager = XGPushTokenManager.default()
+        let account = "Zhao Xin"
+        // FIXME: Workaround: unbind first or may not register successfully
+        tokenManager.unbind(withIdentifer: account, type: .account)
+        tokenManager.bind(withIdentifier: account, type: .account)
+    }
+    
     // 应用在后台时的推送
     func xgPush(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse?, withCompletionHandler completionHandler: @escaping () -> Void) {
         
