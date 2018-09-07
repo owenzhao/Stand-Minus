@@ -44,6 +44,6 @@ class AboutViewController: UIViewController {
     */
     @IBAction func privacyNoticeButtonClicked(_ sender: Any) {
         let url = URL(string: "http://parussoft.com/en/Stand_Minus/privacy_notice.html")!
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        UIApplication.shared.open(url)
     }
 }

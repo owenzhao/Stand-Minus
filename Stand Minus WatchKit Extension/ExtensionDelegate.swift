@@ -249,7 +249,7 @@ extension ExtensionDelegate:WCSessionDelegate {
                 mc.categoryIdentifier = "notify_user_category"
                 
                 if notificationSettings.soundSetting == .enabled {
-                    mc.sound = UNNotificationSound.default()
+                    mc.sound = UNNotificationSound.default
                 }
                 
                 return mc
