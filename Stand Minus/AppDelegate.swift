@@ -19,6 +19,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private(set) var session:WCSession!
 
+    private func registerXinGePushService() { //(_ launchOptions: [UIApplication.LaunchOptionsKey : Any]?) {
+        xgPush.isEnableDebug = true
+        
+        // remove badge
+        let configuration = XGNotificationConfigure(notificationWithCategories: nil, types: [])
+        xgPush.notificationConfigure = configuration
+        
+        xgPush.startXG(withAppID: 2200249931, appKey: "I2V4HX465IMJ", delegate: self)
+        
+//         report info
+//        xgPush.reportXGNotificationInfo(launchOptions ?? [:])
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -43,16 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        xgPush.isEnableDebug = true
-        
-        // remove badge
-        let configuration = XGNotificationConfigure(notificationWithCategories: nil, types: [])
-        xgPush.notificationConfigure = configuration
-        
-        xgPush.startXG(withAppID: 2200249931, appKey: "I2V4HX465IMJ", delegate: self)
-        
-        // report info
-        xgPush.reportXGNotificationInfo(launchOptions ?? [:])
+        registerXinGePushService()
         
         if WCSession.isSupported() {
             session = WCSession.default
@@ -192,5 +196,6 @@ extension AppDelegate:WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         UIApplication.shared.registerForRemoteNotifications()
+        registerXinGePushService()
     }
 }
