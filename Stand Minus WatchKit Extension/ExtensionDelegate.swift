@@ -48,31 +48,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 
                 switch backgroundTaskType {
                 case .checkNofifyUser:
-                    let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-                        defer {
-                            let fireDate = Date().addingTimeInterval(20 * 60)
-                            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: fireDate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
-                                
-                            })
-                            
-                            backgroundTask.setTaskCompletedWithSnapshot(false)
-                        }
-                        
-                        if error == nil,
-                            let samples = samples,
-                            samples.isEmpty {
-                            
-                            self.notifyUser()
-                        }
-                    }
-                    
-                    let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
-                        let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
-                        
-                        return predicate
-                    }
-                    
-                    query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
+                    break
                 case .requestRemoteNotificationRegister:
                     if session.activationState == .activated && session.isReachable {
                         session.sendMessage([:], replyHandler: nil, errorHandler: nil)
@@ -83,7 +59,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         })
                     }
                     
-                    // run once to update the complication
+                    // update the complication at the very beginning time of the hour as soon as possible
                     let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                         defer {
                             backgroundTask.setTaskCompletedWithSnapshot(false)
@@ -99,26 +75,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                             }
                             
                             self.updateComplications()
-                            
-                            if standData.total >= 12 && standData.hasStoodInCurrentHour == false {
-                                let calendar = Calendar(identifier: .gregorian)
-                                let timeInterval = self.defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
-                                let now = Date(timeIntervalSinceReferenceDate: timeInterval)
-                                var cps = calendar.dateComponents([.year, .month, .day, .hour], from: now)
-                                cps.minute = 50
-                                let firedate = calendar.date(from: cps)!
-                                
-                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSNumber, scheduledCompletion: { (error) in
-                                    
-                                })
-                            }
-                            else {
-                                let firedate = Date().addingTimeInterval(60 * 60)
-                                
-                                WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
-                                    
-                                })
-                            }
                         }
                     }
                     
