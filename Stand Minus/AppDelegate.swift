@@ -105,6 +105,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        // remove previous untransferred current complication userinfo if there was.
+        session.outstandingUserInfoTransfers.forEach { transfer in
+            if transfer.isCurrentComplicationInfo && transfer.isTransferring {
+                transfer.cancel()
+            }
+        }
+        
         guard let rawValue = userInfo["type"] as? String,
             let messageType = MessageType(rawValue:rawValue) else {
             fatalError()
@@ -135,6 +142,7 @@ extension AppDelegate {
     }
     
     private func sendDataToAppleWatch(userInfo:[String:Any], defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
         session.transferCurrentComplicationUserInfo(userInfo)
         
         defaults.set(true, forKey: DefaultsKey.hasNotifiedWatchSide.key)
@@ -142,6 +150,7 @@ extension AppDelegate {
     }
     
     private func sendNoDataToAppleWatch(defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
         defaults.set(false, forKey: DefaultsKey.hasNotifiedWatchSide.key)
         completionHandler(.noData)
     }
