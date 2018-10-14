@@ -29,7 +29,7 @@ class DebugViewController: UIViewController {
             remoteNotificationArrivingDateLabel.text = "尚无通知到达"
         }
         
-        if let hasNotifiedWatchSide = defaults.object(forKey: DefaultsKey.hasNotifedWatchSide.key) as? Bool {
+        if let hasNotifiedWatchSide = defaults.object(forKey: DefaultsKey.hasNotifiedWatchSide.key) as? Bool {
             hasNotifiedWatchSideLabel.text = hasNotifiedWatchSide ? "已通知" : "未通知"
         }
         else {

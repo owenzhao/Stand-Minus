@@ -14,7 +14,7 @@ enum DefaultsKey:String {
     case hasStoodInCurrentHour = "has Stood in current hour"
     
     case remoteNofiticationTimeInterval = "remote notification time intervals"
-    case hasNotifedWatchSide = "has notifed watch side"
+    case hasNotifiedWatchSide = "has notified watch side"
     
     var key:String {
         return self.rawValue

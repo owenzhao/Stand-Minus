@@ -137,12 +137,12 @@ extension AppDelegate {
     private func sendDataToAppleWatch(userInfo:[String:Any], defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         session.transferCurrentComplicationUserInfo(userInfo)
         
-        defaults.set(true, forKey: DefaultsKey.hasNotifedWatchSide.key)
+        defaults.set(true, forKey: DefaultsKey.hasNotifiedWatchSide.key)
         completionHandler(.newData)
     }
     
     private func sendNoDataToAppleWatch(defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        defaults.set(false, forKey: DefaultsKey.hasNotifedWatchSide.key)
+        defaults.set(false, forKey: DefaultsKey.hasNotifiedWatchSide.key)
         completionHandler(.noData)
     }
 }
