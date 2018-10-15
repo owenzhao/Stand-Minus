@@ -10,27 +10,13 @@ import UIKit
 import HealthKit
 import UserNotifications
 import WatchConnectivity
+import OneSignal
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    lazy var xgPush = XGPush.defaultManager()
-    
     private(set) var session:WCSession!
-
-    private func registerXinGePushService() { //(_ launchOptions: [UIApplication.LaunchOptionsKey : Any]?) {
-        xgPush.isEnableDebug = true
-        
-        // remove badge
-        let configuration = XGNotificationConfigure(notificationWithCategories: nil, types: [])
-        xgPush.notificationConfigure = configuration
-        
-        xgPush.startXG(withAppID: 2200249931, appKey: "I2V4HX465IMJ", delegate: self)
-        
-//         report info
-//        xgPush.reportXGNotificationInfo(launchOptions ?? [:])
-    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -56,13 +42,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        registerXinGePushService()
-        
         if WCSession.isSupported() {
             session = WCSession.default
             session.delegate = self
             session.activate()
         }
+        
+        // register OneSignal
+        
+        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+        
+        // Replace 'YOUR_APP_ID' with your OneSignal App ID.
+        OneSignal.initWithLaunchOptions(launchOptions,
+                                        appId: "bb94f238-18db-434f-90b9-527a068664aa",
+                                        handleNotificationAction: nil,
+                                        settings: onesignalInitSettings)
+        
+        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+        
+        // Recommend moving the below line to prompt for push after informing the user about
+        //   how your app will use them.
+        OneSignal.promptForPushNotifications(userResponse: { accepted in
+            print("User accepted notifications: \(accepted)")
+        })
         
         return true
     }
@@ -156,29 +158,6 @@ extension AppDelegate {
     }
 }
 
-// MARK: - Xinge Push Delegate v3.0
-// 信鸽的这套API完全是画蛇添足，增加无用的信息。
-extension AppDelegate:XGPushDelegate {
-    //推送注册完成
-    func xgPushDidFinishStart(_ isSuccess: Bool, error: Error?) {
-        let tokenManager = XGPushTokenManager.default()
-        let account = "Zhao Xin"
-        // FIXME: Workaround: unbind first or may not register successfully
-        tokenManager.unbind(withIdentifer: account, type: .account)
-        tokenManager.bind(withIdentifier: account, type: .account)
-    }
-    
-    // 应用在后台时的推送
-    func xgPush(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse?, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-    }
-    
-    // 应用在前台时也能推送
-    func xgPush(_ center: UNUserNotificationCenter, willPresent notification: UNNotification?, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-    }
-}
-
 // MARK: - WCSessionDelegate
 extension AppDelegate:WCSessionDelegate {
     /** Called when the session has completed activation. If session state is WCSessionActivationStateNotActivated there will be an error with more details. */
@@ -205,6 +184,5 @@ extension AppDelegate:WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         UIApplication.shared.registerForRemoteNotifications()
-        registerXinGePushService()
     }
 }

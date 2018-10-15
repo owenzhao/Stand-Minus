@@ -18,8 +18,6 @@ class AboutViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        tokenLabel.text = XGPushTokenManager.default().deviceTokenString ?? NSLocalizedString("not defined", comment: "not defined")
     }
 
     override func didReceiveMemoryWarning() {
