@@ -8,13 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		DC0200091F0EF95C00ECA5EA /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
-		DC0307FA20DCFA0000B4E8CE /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DC0307F920DCFA0000B4E8CE /* libsqlite3.0.tbd */; };
 		DC08314F1E407B7F00A62520 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08314E1E407B7F00A62520 /* AppDelegate.swift */; };
 		DC0831541E407B8000A62520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC0831521E407B8000A62520 /* Main.storyboard */; };
 		DC0831561E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC0831551E407B8000A62520 /* Assets.xcassets */; };
 		DC0831591E407B8000A62520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC0831571E407B8000A62520 /* LaunchScreen.storyboard */; };
-		DC0831641E407B8000A62520 /* Stand_MinusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0831631E407B8000A62520 /* Stand_MinusTests.swift */; };
-		DC08316F1E407B8000A62520 /* Stand_MinusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC08316E1E407B8000A62520 /* Stand_MinusUITests.swift */; };
 		DC0831741E407B8000A62520 /* Stand Minus WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DC0831731E407B8000A62520 /* Stand Minus WatchKit App.app */; };
 		DC08317A1E407B8000A62520 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC0831781E407B8000A62520 /* Interface.storyboard */; };
 		DC08317C1E407B8000A62520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC08317B1E407B8000A62520 /* Assets.xcassets */; };
@@ -40,12 +37,7 @@
 		DC0E8B301E52BABE00C2ACE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B321E52BABE00C2ACE3 /* InfoPlist.strings */; };
 		DC0E8B351E52BABF00C2ACE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B371E52BABF00C2ACE3 /* Localizable.strings */; };
 		DC0E8B3A1E52BABF00C2ACE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B3C1E52BABF00C2ACE3 /* InfoPlist.strings */; };
-		DC0E8B3F1E52BAC000C2ACE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B411E52BAC000C2ACE3 /* InfoPlist.strings */; };
-		DC0E8B441E52BAC000C2ACE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B461E52BAC000C2ACE3 /* InfoPlist.strings */; };
 		DC0E8B501E52D07F00C2ACE3 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */; };
-		DC38DC911F33EDDC002AE212 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */; };
-		DC38DC921F33EDE6002AE212 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */; };
-		DC38DC9D1F33F0FB002AE212 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DCDAC5C11E432508004D6F10 /* libz.tbd */; };
 		DC468CB51F38248B002BAC42 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC468CB41F38248B002BAC42 /* DebugViewController.swift */; };
 		DC468CB61F382CE6002BAC42 /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
@@ -57,24 +49,10 @@
 		DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA8E9B21E5188BD004A3979 /* PageViewController.swift */; };
 		DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221C20DCEEEE00491892 /* UserNotifications.framework */; };
 		DCC18A551E52DBB200A0BA79 /* step_two_tw.png in Resources */ = {isa = PBXBuildFile; fileRef = DCC18A541E52DBB200A0BA79 /* step_two_tw.png */; };
-		DCFF1DF420DDEB450094CDEC /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFF1DF320DDEB450094CDEC /* libXG-SDK.a */; };
+		EF6A4D32E4438B536F1CFD49 /* Pods_Stand_Minus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66C8AB701BEBFB017403CE77 /* Pods_Stand_Minus.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		DC0831601E407B8000A62520 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DC0831431E407B7F00A62520 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DC08314A1E407B7F00A62520;
-			remoteInfo = "Stand Minus";
-		};
-		DC08316B1E407B8000A62520 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DC0831431E407B7F00A62520 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DC08314A1E407B7F00A62520;
-			remoteInfo = "Stand Minus";
-		};
 		DC0831751E407B8000A62520 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DC0831431E407B7F00A62520 /* Project object */;
@@ -117,6 +95,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		66C8AB701BEBFB017403CE77 /* Pods_Stand_Minus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stand_Minus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C0916C057917A8B09D73890 /* Pods-Stand Minus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stand Minus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Stand Minus/Pods-Stand Minus.debug.xcconfig"; sourceTree = "<group>"; };
+		9D6EB5774404A8C8B1C2AC55 /* Pods-Stand Minus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stand Minus.release.xcconfig"; path = "Pods/Target Support Files/Pods-Stand Minus/Pods-Stand Minus.release.xcconfig"; sourceTree = "<group>"; };
 		DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsKey.swift; sourceTree = "<group>"; };
 		DC0307F920DCFA0000B4E8CE /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		DC08314B1E407B7F00A62520 /* Stand Minus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stand Minus.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,10 +105,8 @@
 		DC0831551E407B8000A62520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DC0831581E407B8000A62520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DC08315A1E407B8000A62520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DC08315F1E407B8000A62520 /* Stand MinusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Stand MinusTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC0831631E407B8000A62520 /* Stand_MinusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stand_MinusTests.swift; sourceTree = "<group>"; };
 		DC0831651E407B8000A62520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DC08316A1E407B8000A62520 /* Stand MinusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Stand MinusUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC08316E1E407B8000A62520 /* Stand_MinusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stand_MinusUITests.swift; sourceTree = "<group>"; };
 		DC0831701E407B8000A62520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC0831731E407B8000A62520 /* Stand Minus WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stand Minus WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,36 +175,23 @@
 		DCDAC5B81E43247D004D6F10 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DCDAC5C11E432508004D6F10 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DCDAC5C31E434660004D6F10 /* Stand Minus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stand Minus-Bridging-Header.h"; sourceTree = "<group>"; };
-		DCFF1DF220DDEB450094CDEC /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
-		DCFF1DF320DDEB450094CDEC /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1037E2C613BE2FC34A852045 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DC0831481E407B7F00A62520 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC0307FA20DCFA0000B4E8CE /* libsqlite3.0.tbd in Frameworks */,
 				DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */,
-				DC38DC9D1F33F0FB002AE212 /* libz.tbd in Frameworks */,
-				DCFF1DF420DDEB450094CDEC /* libXG-SDK.a in Frameworks */,
-				DC38DC921F33EDE6002AE212 /* SystemConfiguration.framework in Frameworks */,
-				DC38DC911F33EDDC002AE212 /* CoreTelephony.framework in Frameworks */,
 				DC788AF71E41824D00C7ED60 /* HealthKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC08315C1E407B8000A62520 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC0831671E407B8000A62520 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				EF6A4D32E4438B536F1CFD49 /* Pods_Stand_Minus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,10 +206,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		025EF2CDE6C973922EB7513D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6C0916C057917A8B09D73890 /* Pods-Stand Minus.debug.xcconfig */,
+				9D6EB5774404A8C8B1C2AC55 /* Pods-Stand Minus.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		DC0831421E407B7F00A62520 = {
 			isa = PBXGroup;
 			children = (
-				DC38DC931F33EEB3002AE212 /* sdk */,
 				DC08314D1E407B7F00A62520 /* Stand Minus */,
 				DC0831621E407B8000A62520 /* Stand MinusTests */,
 				DC08316D1E407B8000A62520 /* Stand MinusUITests */,
@@ -251,6 +225,7 @@
 				DC0831861E407B8000A62520 /* Stand Minus WatchKit Extension */,
 				DC08314C1E407B7F00A62520 /* Products */,
 				DC788AF21E417BD000C7ED60 /* Frameworks */,
+				025EF2CDE6C973922EB7513D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -258,8 +233,6 @@
 			isa = PBXGroup;
 			children = (
 				DC08314B1E407B7F00A62520 /* Stand Minus.app */,
-				DC08315F1E407B8000A62520 /* Stand MinusTests.xctest */,
-				DC08316A1E407B8000A62520 /* Stand MinusUITests.xctest */,
 				DC0831731E407B8000A62520 /* Stand Minus WatchKit App.app */,
 				DC0831821E407B8000A62520 /* Stand Minus WatchKit Extension.appex */,
 			);
@@ -373,15 +346,6 @@
 			name = images;
 			sourceTree = "<group>";
 		};
-		DC38DC931F33EEB3002AE212 /* sdk */ = {
-			isa = PBXGroup;
-			children = (
-				DCFF1DF320DDEB450094CDEC /* libXG-SDK.a */,
-				DCFF1DF220DDEB450094CDEC /* XGPush.h */,
-			);
-			path = sdk;
-			sourceTree = "<group>";
-		};
 		DC788AF21E417BD000C7ED60 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -396,6 +360,7 @@
 				DCDAC5B61E43246B004D6F10 /* CoreTelephony.framework */,
 				DC788AF61E41824D00C7ED60 /* HealthKit.framework */,
 				DC788AF31E417BD000C7ED60 /* HealthKit.framework */,
+				66C8AB701BEBFB017403CE77 /* Pods_Stand_Minus.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -407,6 +372,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DC08319E1E407B8000A62520 /* Build configuration list for PBXNativeTarget "Stand Minus" */;
 			buildPhases = (
+				4F27AB52017FEAED7C9588FF /* [CP] Check Pods Manifest.lock */,
 				DC0831471E407B7F00A62520 /* Sources */,
 				DC0831481E407B7F00A62520 /* Frameworks */,
 				DC0831491E407B7F00A62520 /* Resources */,
@@ -422,48 +388,13 @@
 			productReference = DC08314B1E407B7F00A62520 /* Stand Minus.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DC08315E1E407B8000A62520 /* Stand MinusTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DC0831A11E407B8000A62520 /* Build configuration list for PBXNativeTarget "Stand MinusTests" */;
-			buildPhases = (
-				DC08315B1E407B8000A62520 /* Sources */,
-				DC08315C1E407B8000A62520 /* Frameworks */,
-				DC08315D1E407B8000A62520 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DC0831611E407B8000A62520 /* PBXTargetDependency */,
-			);
-			name = "Stand MinusTests";
-			productName = "Stand MinusTests";
-			productReference = DC08315F1E407B8000A62520 /* Stand MinusTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		DC0831691E407B8000A62520 /* Stand MinusUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DC0831A41E407B8000A62520 /* Build configuration list for PBXNativeTarget "Stand MinusUITests" */;
-			buildPhases = (
-				DC0831661E407B8000A62520 /* Sources */,
-				DC0831671E407B8000A62520 /* Frameworks */,
-				DC0831681E407B8000A62520 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DC08316C1E407B8000A62520 /* PBXTargetDependency */,
-			);
-			name = "Stand MinusUITests";
-			productName = "Stand MinusUITests";
-			productReference = DC08316A1E407B8000A62520 /* Stand MinusUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		DC0831721E407B8000A62520 /* Stand Minus WatchKit App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DC08319A1E407B8000A62520 /* Build configuration list for PBXNativeTarget "Stand Minus WatchKit App" */;
 			buildPhases = (
 				DC0831711E407B8000A62520 /* Resources */,
 				DC0831991E407B8000A62520 /* Embed App Extensions */,
+				1037E2C613BE2FC34A852045 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -519,20 +450,6 @@
 							};
 						};
 					};
-					DC08315E1E407B8000A62520 = {
-						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 96NM39SGJ5;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Automatic;
-						TestTargetID = DC08314A1E407B7F00A62520;
-					};
-					DC0831691E407B8000A62520 = {
-						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 96NM39SGJ5;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Automatic;
-						TestTargetID = DC08314A1E407B7F00A62520;
-					};
 					DC0831721E407B8000A62520 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 96NM39SGJ5;
@@ -581,8 +498,6 @@
 				DC08314A1E407B7F00A62520 /* Stand Minus */,
 				DC0831721E407B8000A62520 /* Stand Minus WatchKit App */,
 				DC0831811E407B8000A62520 /* Stand Minus WatchKit Extension */,
-				DC08315E1E407B8000A62520 /* Stand MinusTests */,
-				DC0831691E407B8000A62520 /* Stand MinusUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -609,22 +524,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DC08315D1E407B8000A62520 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DC0E8B441E52BAC000C2ACE3 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC0831681E407B8000A62520 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DC0E8B3F1E52BAC000C2ACE3 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DC0831711E407B8000A62520 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -647,6 +546,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4F27AB52017FEAED7C9588FF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Stand Minus-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		DC0831471E407B7F00A62520 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -661,22 +581,6 @@
 				DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */,
 				DC08314F1E407B7F00A62520 /* AppDelegate.swift in Sources */,
 				DC0E8AF71E52AFE700C2ACE3 /* StepTwoViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC08315B1E407B8000A62520 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DC0831641E407B8000A62520 /* Stand_MinusTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DC0831661E407B8000A62520 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DC08316F1E407B8000A62520 /* Stand_MinusUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,16 +602,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DC0831611E407B8000A62520 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DC08314A1E407B7F00A62520 /* Stand Minus */;
-			targetProxy = DC0831601E407B8000A62520 /* PBXContainerItemProxy */;
-		};
-		DC08316C1E407B8000A62520 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DC08314A1E407B7F00A62520 /* Stand Minus */;
-			targetProxy = DC08316B1E407B8000A62520 /* PBXContainerItemProxy */;
-		};
 		DC0831761E407B8000A62520 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DC0831721E407B8000A62520 /* Stand Minus WatchKit App */;
@@ -1006,6 +900,7 @@
 		};
 		DC08319F1E407B8000A62520 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C0916C057917A8B09D73890 /* Pods-Stand Minus.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1017,7 +912,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/sdk",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-Minus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Stand Minus/Stand Minus-Bridging-Header.h";
@@ -1028,6 +923,7 @@
 		};
 		DC0831A01E407B8000A62520 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9D6EB5774404A8C8B1C2AC55 /* Pods-Stand Minus.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1039,69 +935,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/sdk",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-Minus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Stand Minus/Stand Minus-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
-			};
-			name = Release;
-		};
-		DC0831A21E407B8000A62520 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 96NM39SGJ5;
-				INFOPLIST_FILE = "Stand MinusTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-MinusTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stand Minus.app/Stand Minus";
-			};
-			name = Debug;
-		};
-		DC0831A31E407B8000A62520 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 96NM39SGJ5;
-				INFOPLIST_FILE = "Stand MinusTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-MinusTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stand Minus.app/Stand Minus";
-			};
-			name = Release;
-		};
-		DC0831A51E407B8000A62520 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				DEVELOPMENT_TEAM = 96NM39SGJ5;
-				INFOPLIST_FILE = "Stand MinusUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-MinusUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_TARGET_NAME = "Stand Minus";
-			};
-			name = Debug;
-		};
-		DC0831A61E407B8000A62520 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				DEVELOPMENT_TEAM = 96NM39SGJ5;
-				INFOPLIST_FILE = "Stand MinusUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.parussoft.Stand-MinusUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_TARGET_NAME = "Stand Minus";
 			};
 			name = Release;
 		};
@@ -1140,24 +978,6 @@
 			buildConfigurations = (
 				DC08319F1E407B8000A62520 /* Debug */,
 				DC0831A01E407B8000A62520 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DC0831A11E407B8000A62520 /* Build configuration list for PBXNativeTarget "Stand MinusTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DC0831A21E407B8000A62520 /* Debug */,
-				DC0831A31E407B8000A62520 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DC0831A41E407B8000A62520 /* Build configuration list for PBXNativeTarget "Stand MinusUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DC0831A51E407B8000A62520 /* Debug */,
-				DC0831A61E407B8000A62520 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
