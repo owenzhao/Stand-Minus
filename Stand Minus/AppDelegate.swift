@@ -64,6 +64,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //   how your app will use them.
         OneSignal.promptForPushNotifications(userResponse: { accepted in
             print("User accepted notifications: \(accepted)")
+            
+            // add tag
+            OneSignal.sendTag("user_name", value: "Zhao Xin")
         })
         
         return true
