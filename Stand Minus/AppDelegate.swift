@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     private(set) var session:WCSession!
+    private var messageTypeRawValue:String? = nil
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -49,15 +50,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // register OneSignal
-        
+        let notificationReceivedBlock: OSHandleNotificationReceivedBlock = { [unowned self] notification in
+            self.messageTypeRawValue = notification?.payload.additionalData["type"] as? String
+        }
         let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
         
         // Replace 'YOUR_APP_ID' with your OneSignal App ID.
         OneSignal.initWithLaunchOptions(launchOptions,
                                         appId: "bb94f238-18db-434f-90b9-527a068664aa",
+                                        handleNotificationReceived: notificationReceivedBlock,
                                         handleNotificationAction: nil,
                                         settings: onesignalInitSettings)
-        
+
         OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
         
         // Recommend moving the below line to prompt for push after informing the user about
@@ -117,9 +121,13 @@ extension AppDelegate {
             }
         }
         
-        guard let rawValue = userInfo["type"] as? String,
-            let messageType = MessageType(rawValue:rawValue) else {
-            fatalError()
+        guard let messageTypeRawValue = self.messageTypeRawValue,
+            let messageType = MessageType(rawValue:messageTypeRawValue) else {
+                fatalError()
+        }
+        
+        defer {
+            self.messageTypeRawValue = nil
         }
         
         let defaults = UserDefaults.standard
@@ -129,7 +137,7 @@ extension AppDelegate {
         switch messageType {
         case .newHour, .rightNow:
             if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-                let userInfo:[String:Any] = ["rawValue":rawValue]
+                let userInfo:[String:Any] = ["rawValue":messageTypeRawValue]
                 sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
             }
             else {
@@ -137,7 +145,7 @@ extension AppDelegate {
             }
         case .fiftyMinutes:
             if session.activationState == .activated && session.isPaired {
-                let userInfo:[String:Any] = ["rawValue":rawValue]
+                let userInfo:[String:Any] = ["rawValue":messageTypeRawValue]
                 sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
             }
             else {
