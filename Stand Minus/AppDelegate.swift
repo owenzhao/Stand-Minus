@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     private(set) var session:WCSession!
     private var messageTypeRawValue:String? = nil
+    lazy private var calendar = Calendar(identifier: .gregorian)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -114,6 +115,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        func predictMessageType() -> MessageType {
+            let now = Date()
+            let cps = calendar.dateComponents([.hour, .minute], from: now)
+            
+            switch cps.hour! {
+            case 0..<12:
+                return .newHour
+            default:
+                switch cps.minute! {
+                case 0..<50:
+                    return .newHour
+                default:
+                    return .fiftyMinutes
+                }
+            }
+        }
         // remove previous untransferred current complication userinfo if there was.
         session.outstandingUserInfoTransfers.forEach { transfer in
             if transfer.isCurrentComplicationInfo && transfer.isTransferring {
@@ -121,10 +138,11 @@ extension AppDelegate {
             }
         }
         
-        guard let messageTypeRawValue = self.messageTypeRawValue,
-            let messageType = MessageType(rawValue:messageTypeRawValue) else {
-                fatalError()
+        guard self.messageTypeRawValue == MessageType.pushServerNotify.rawValue else { // ignore bad type
+            return
         }
+        
+        let messageType = predictMessageType()
         
         defer {
             self.messageTypeRawValue = nil
@@ -135,9 +153,9 @@ extension AppDelegate {
         defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
         
         switch messageType {
-        case .newHour, .rightNow:
+        case .newHour:
             if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
-                let userInfo:[String:Any] = ["rawValue":messageTypeRawValue]
+                let userInfo:[String:Any] = ["rawValue":messageType.rawValue]
                 sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
             }
             else {
@@ -145,12 +163,14 @@ extension AppDelegate {
             }
         case .fiftyMinutes:
             if session.activationState == .activated && session.isPaired {
-                let userInfo:[String:Any] = ["rawValue":messageTypeRawValue]
+                let userInfo:[String:Any] = ["rawValue":messageType.rawValue]
                 sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
             }
             else {
                 sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
             }
+        default:
+            fatalError("should never happens.")
         }
     }
     

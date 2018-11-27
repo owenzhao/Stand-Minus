@@ -126,7 +126,9 @@ extension ExtensionDelegate:WCSessionDelegate {
         
         synchronize { [unowned self] in
             switch messageType {
-            case .newHour, .rightNow:
+            case .newHour:
+                self.removeDeliveredNotificationIfThereIsAny()
+                
                 let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                     defer {
                         self.semaphore.signal()
@@ -180,6 +182,8 @@ extension ExtensionDelegate:WCSessionDelegate {
                 else {
                     self.semaphore.signal()
                 }
+            default:
+                fatalError("should never happens.")
             }
         }
     }
@@ -213,6 +217,11 @@ extension ExtensionDelegate:WCSessionDelegate {
             let request = UNNotificationRequest(identifier: id, content: content, trigger: nil) // nil means call the trigger immediately
             center.add(request, withCompletionHandler: nil)
         }
+    }
+    
+    private func removeDeliveredNotificationIfThereIsAny() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
     }
 }
 

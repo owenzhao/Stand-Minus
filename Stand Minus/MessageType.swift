@@ -9,7 +9,8 @@
 import Foundation
 
 enum MessageType:String {
+    case pushServerNotify = "Push Server Notify"
+    
     case newHour = "new hour"
     case fiftyMinutes = "50 minutes"
-    case rightNow = "right now"
 }
