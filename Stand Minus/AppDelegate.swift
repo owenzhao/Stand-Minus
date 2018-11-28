@@ -121,7 +121,11 @@ extension AppDelegate {
             
             switch cps.hour! {
             case 0..<12:
-                return .newHour
+                if cps.minute! < 50 {
+                    return .newHour
+                }
+                
+                return .ignoreMe
             default:
                 switch cps.minute! {
                 case 0..<50:
@@ -138,7 +142,11 @@ extension AppDelegate {
             }
         }
         
+        let defaults = UserDefaults.standard
+        
         guard self.messageTypeRawValue == MessageType.pushServerNotify.rawValue else { // ignore bad type
+            sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
+            
             return
         }
         
@@ -148,7 +156,6 @@ extension AppDelegate {
             self.messageTypeRawValue = nil
         }
         
-        let defaults = UserDefaults.standard
         let now = Date()
         defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
         
@@ -169,6 +176,8 @@ extension AppDelegate {
             else {
                 sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
             }
+        case .ignoreMe:
+            sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
         default:
             fatalError("should never happens.")
         }

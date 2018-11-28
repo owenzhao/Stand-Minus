@@ -13,4 +13,6 @@ enum MessageType:String {
     
     case newHour = "new hour"
     case fiftyMinutes = "50 minutes"
+    
+    case ignoreMe
 }
