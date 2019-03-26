@@ -62,7 +62,7 @@ extension PageViewController:UIPageViewControllerDataSource {
     // For gesture-initiated transitions, the page view controller obtains view controllers via these methods, so use of setViewControllers:direction:animated:completion: is not required.
     @available(iOS 5.0, *)
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let index = orderedViewControllers.index(of: viewController) {
+        if let index = orderedViewControllers.firstIndex(of: viewController) {
             if index == 0 { return nil}
             else { return orderedViewControllers[index - 1] }
         }
@@ -72,7 +72,7 @@ extension PageViewController:UIPageViewControllerDataSource {
     
     @available(iOS 5.0, *)
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let index = orderedViewControllers.index(of: viewController) {
+        if let index = orderedViewControllers.firstIndex(of: viewController) {
             if index == orderedViewControllers.count - 1 {
 //                self.setViewControllers([orderedViewControllers.first!], direction: .forward, animated: true, completion: nil)
                 return nil

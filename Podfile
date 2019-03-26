@@ -4,7 +4,7 @@ source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 target 'Stand Minus' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  platform :ios, '11.0'
+  platform :ios, '12.2'
   use_frameworks!
 
   # Pods for Stand Minus

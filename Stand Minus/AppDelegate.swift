@@ -130,11 +130,14 @@ extension AppDelegate {
                 switch cps.minute! {
                 case 0..<50:
                     return .newHour
-                default:
+                case 50...58:
                     return .fiftyMinutes
+                default:
+                    return .ignoreMe
                 }
             }
         }
+        
         // remove previous untransferred current complication userinfo if there was.
         session.outstandingUserInfoTransfers.forEach { transfer in
             if transfer.isCurrentComplicationInfo && transfer.isTransferring {
