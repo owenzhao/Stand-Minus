@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.7.1</string>
 	<key>CFBundleVersion</key>
-	<string>20190626</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -28,6 +28,8 @@
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Poster can share tweets with location infomation when you are in a tour.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
