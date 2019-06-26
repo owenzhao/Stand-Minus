@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hBo-BL-9PV">
-    <device id="retina5_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14810.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hBo-BL-9PV">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.15"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,12 +11,12 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="hBo-BL-9PV" customClass="PageViewController" customModule="Stand_Minus" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="ghH-Z5-KVe" kind="show" identifier="quitPageViewControllerSegue" id="Etp-GG-PRJ"/>
+                        <segue destination="ghH-Z5-KVe" kind="presentation" identifier="quitPageViewControllerSegue" modalPresentationStyle="fullScreen" id="Etp-GG-PRJ"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nZ2-FF-nNC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-523" y="-225"/>
+            <point key="canvasLocation" x="-1332" y="-165"/>
         </scene>
         <!--Step One View Controller-->
         <scene sceneID="omZ-Ta-ClT">
@@ -34,7 +31,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 1:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mBy-lm-hb0">
-                                <rect key="frame" x="168.66666666666666" y="80" width="76.666666666666657" height="34"/>
+                                <rect key="frame" x="168.66666666666666" y="60" width="76.666666666666657" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="tGM-37-n3Y"/>
                                 </constraints>
@@ -43,7 +40,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open Stand- on your watch." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OFp-oo-8fw">
-                                <rect key="frame" x="99" y="137" width="216" height="21"/>
+                                <rect key="frame" x="99" y="117" width="216" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="tRx-ms-Elj"/>
                                 </constraints>
@@ -52,10 +49,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lki-bf-x0p">
-                                <rect key="frame" x="20" y="198" width="390" height="460"/>
+                                <rect key="frame" x="20" y="178" width="390" height="480"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling Stand- on your watch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgs-Dq-gTc">
-                                <rect key="frame" x="89.666666666666686" y="38" width="235" height="20"/>
+                                <rect key="frame" x="89.666666666666686" y="18" width="235" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="aTN-RW-ghX"/>
                                 </constraints>
@@ -84,7 +81,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j8W-Ah-59T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-523" y="585"/>
+            <point key="canvasLocation" x="-941" y="585"/>
         </scene>
         <!--Step Two View Controller-->
         <scene sceneID="Rh5-Il-0n9">
@@ -99,7 +96,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 2:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WIV-kD-qs1">
-                                <rect key="frame" x="167" y="80" width="80" height="34"/>
+                                <rect key="frame" x="167" y="60" width="80" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="lPz-NQ-vzQ"/>
                                 </constraints>
@@ -108,7 +105,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Press side button of your watch." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBk-VJ-ZzQ">
-                                <rect key="frame" x="83.666666666666686" y="137" width="247" height="21"/>
+                                <rect key="frame" x="83.666666666666686" y="117" width="247" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="Y2g-g3-P5M"/>
                                 </constraints>
@@ -117,10 +114,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SuS-Yd-npY">
-                                <rect key="frame" x="20" y="198" width="390" height="460"/>
+                                <rect key="frame" x="20" y="178" width="390" height="480"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling Stand- on your watch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gti-XT-kXa">
-                                <rect key="frame" x="89.666666666666686" y="38" width="235" height="20"/>
+                                <rect key="frame" x="89.666666666666686" y="18" width="235" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="fa3-AV-ZdD"/>
                                 </constraints>
@@ -149,7 +146,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aaL-0o-hIl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5" y="585"/>
+            <point key="canvasLocation" x="-222" y="585"/>
         </scene>
         <!--About View Controller-->
         <scene sceneID="9X9-4H-FsQ">
@@ -167,7 +164,7 @@
                                 <rect key="frame" x="152" y="350" width="110" height="30"/>
                                 <state key="normal" title="Enabling Stand-"/>
                                 <connections>
-                                    <segue destination="hBo-BL-9PV" kind="show" id="dza-7G-ab7"/>
+                                    <segue destination="hBo-BL-9PV" kind="presentation" modalPresentationStyle="fullScreen" id="dza-7G-ab7"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="42mm Home Screen" translatesAutoresizingMaskIntoConstraints="NO" id="g3u-tx-8xJ">
@@ -226,13 +223,14 @@
                             <constraint firstItem="Y8e-B9-5Fb" firstAttribute="top" secondItem="C8M-WU-qpL" secondAttribute="bottom" constant="8" symbolic="YES" id="zZ6-8o-eV9"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="Fah-q3-IM1"/>
                     <connections>
                         <outlet property="tokenLabel" destination="C8M-WU-qpL" id="L4U-ys-cNa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q9V-fC-Vgw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="50" y="-225"/>
+            <point key="canvasLocation" x="-271" y="-165"/>
         </scene>
         <!--Debug View Controller-->
         <scene sceneID="bkW-ub-5X6">
@@ -243,48 +241,48 @@
                         <viewControllerLayoutGuide type="bottom" id="3sS-d9-rq9"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Fd8-CV-gxC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="通知到达" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FFE-1F-h54">
-                                <rect key="frame" x="172" y="203" width="70" height="21"/>
+                                <rect key="frame" x="172" y="183" width="70" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="时间" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FjQ-Fk-hSw">
-                                <rect key="frame" x="189.66666666666666" y="232" width="35" height="21"/>
+                                <rect key="frame" x="189.66666666666666" y="212" width="35" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="是否通知手机" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kY1-WA-kfe">
-                                <rect key="frame" x="155" y="261" width="104" height="21"/>
+                                <rect key="frame" x="155" y="241" width="104" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2bD-Kk-aRp">
-                                <rect key="frame" x="189.66666666666666" y="290" width="35" height="21"/>
+                                <rect key="frame" x="189.66666666666666" y="270" width="35" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="剩余次数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bpa-l9-rMY">
-                                <rect key="frame" x="172" y="364" width="70" height="21"/>
+                                <rect key="frame" x="172" y="344" width="70" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VgW-Pc-voM">
-                                <rect key="frame" x="191.66666666666666" y="455" width="31" height="30"/>
+                                <rect key="frame" x="191.66666666666666" y="435" width="31" height="30"/>
                                 <state key="normal" title="返回"/>
                                 <connections>
                                     <action selector="returnButtonClicked:" destination="R9U-fa-udu" eventType="touchUpInside" id="Dz5-xG-0eC"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EKH-tO-mNf">
-                                <rect key="frame" x="195.66666666666666" y="393" width="23" height="21"/>
+                                <rect key="frame" x="195.66666666666666" y="373" width="23" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="23" id="MeP-OB-FkL"/>
                                 </constraints>
@@ -319,7 +317,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dec-De-yPQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="656.52173913043487" y="-225.00000000000003"/>
+            <point key="canvasLocation" x="577" y="-165"/>
         </scene>
         <!--Step Three View Controller-->
         <scene sceneID="wYP-LD-pbt">
@@ -334,7 +332,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 3:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFY-Sn-O77">
-                                <rect key="frame" x="167" y="80" width="80.333333333333314" height="34"/>
+                                <rect key="frame" x="167" y="60" width="80.333333333333314" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="psR-xD-dKM"/>
                                 </constraints>
@@ -343,7 +341,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find Stand-, then press &quot;Keep in Dock&quot;." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNK-BR-Bks">
-                                <rect key="frame" x="56" y="137" width="302" height="21"/>
+                                <rect key="frame" x="56" y="117" width="302" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="pbe-kB-AxF"/>
                                 </constraints>
@@ -352,10 +350,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="la7-cT-ysd">
-                                <rect key="frame" x="20" y="198" width="390" height="460"/>
+                                <rect key="frame" x="20" y="178" width="390" height="480"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling Stand- on your watch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAf-vX-M2h">
-                                <rect key="frame" x="89.666666666666686" y="38" width="235" height="20"/>
+                                <rect key="frame" x="89.666666666666686" y="18" width="235" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="gHT-V5-nb1"/>
                                 </constraints>

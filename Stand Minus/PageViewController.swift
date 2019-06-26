@@ -74,7 +74,6 @@ extension PageViewController:UIPageViewControllerDataSource {
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if let index = orderedViewControllers.firstIndex(of: viewController) {
             if index == orderedViewControllers.count - 1 {
-//                self.setViewControllers([orderedViewControllers.first!], direction: .forward, animated: true, completion: nil)
                 return nil
             }
             else { return orderedViewControllers[index + 1] }
@@ -93,6 +92,10 @@ extension PageViewController:UIPageViewControllerDataSource {
     
     @available(iOS 6.0, *)
     public func presentationIndex(for pageViewController: UIPageViewController) -> Int { // The selected item reflected in the page indicator.
+        if let vc = pageViewController.presentedViewController {
+            return orderedViewControllers.firstIndex(of: vc)!
+        }
+        
         return 0
     }
 }
