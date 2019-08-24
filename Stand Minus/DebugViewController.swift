@@ -36,8 +36,22 @@ class DebugViewController: UIViewController {
             hasNotifiedWatchSideLabel.text = "状态未知"
         }
         
-        if  let session = (UIApplication.shared.delegate as? AppDelegate)?.session {
-            remainCountsLabel.text = String(session.remainingComplicationUserInfoTransfers)
+        if let session = (UIApplication.shared.delegate as? AppDelegate)?.session {
+            remainCountsLabel.text = {
+                guard session.activationState == .activated else {
+                    return "Session状态不是.activated。"
+                }
+                
+                guard session.isWatchAppInstalled else {
+                    return String("对应手表应用正在安装中……")
+                }
+                
+                guard session.isComplicationEnabled else {
+                    return "错误：手表当前表盘未安装Stand-的小部件。"
+                }
+                
+                return String(session.remainingComplicationUserInfoTransfers)
+            }()
         }
         else {
             remainCountsLabel.text = "未知"

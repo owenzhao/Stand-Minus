@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let center = UNUserNotificationCenter.current()
+        center.delegate = self
         center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
             if error == nil && success {
                 DispatchQueue.main.async {
@@ -206,9 +207,22 @@ extension AppDelegate:WCSessionDelegate {
     /** Called when the session has completed activation. If session state is WCSessionActivationStateNotActivated there will be an error with more details. */
     @available(iOS 9.3, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if let error = error {
+            let content = UNMutableNotificationContent()
+            content.title = "发生错误"
+            content.body = "\(error)"
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        }
         
+        if activationState != .activated {
+            let content = UNMutableNotificationContent()
+            content.title = "未激活"
+            content.body = ""
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        }
     }
-    
     
     /** ------------------------- iOS App State For Watch ------------------------ */
     
@@ -227,5 +241,13 @@ extension AppDelegate:WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         UIApplication.shared.registerForRemoteNotifications()
+    }
+}
+
+// MARK: -
+extension AppDelegate:UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([.alert, .sound])
     }
 }
