@@ -103,12 +103,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
     }
 }
 
-// MARK: - UNUserNotificationCenterDelegate
-extension ExtensionDelegate:UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert,.sound])
-    }
-}
+//// MARK: - UNUserNotificationCenterDelegate
+//extension ExtensionDelegate:UNUserNotificationCenterDelegate {
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        completionHandler([.alert,.sound])
+//    }
+//}
 
 // MARK: - WKSessionDelegate
 extension ExtensionDelegate:WCSessionDelegate {
