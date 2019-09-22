@@ -47,7 +47,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription </key>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We doesn&apos;t require this permission.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We doesn&apos;t require this permission either.</string>
