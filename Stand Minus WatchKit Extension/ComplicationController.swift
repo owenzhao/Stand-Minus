@@ -70,34 +70,79 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     private func entry(complication: CLKComplication) -> CLKComplicationTimelineEntry {
         let total = defaults.integer(forKey: DefaultsKey.total.key)
         let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+        let left:Int, right:Int
+        
+        if hasStoodInCurrentHour {
+            left = total - 1
+            right = total
+        } else {
+            left = total
+            right = total + 1
+        }
+        
         let timeInterval = defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
         let now = Date(timeIntervalSinceReferenceDate: timeInterval)
         
-        let template:CLKComplicationTemplate
         let textProvider = CLKSimpleTextProvider(text: String(total))
-        switch complication.family {
-        case .circularSmall:
-            template = CLKComplicationTemplateCircularSmallRingText()
-        case .modularSmall:
-            template = CLKComplicationTemplateModularSmallRingText()
-        case .utilitarianSmallFlat:
-            template = CLKComplicationTemplateUtilitarianSmallFlat()
-        default: // utilitarianSmall
-            template = CLKComplicationTemplateUtilitarianSmallFlat()
-        }
         
-        if complication.family == .utilitarianSmall || complication.family == .utilitarianSmallFlat {
-            let smallFlattemplate = template as! CLKComplicationTemplateUtilitarianSmallFlat
-            let imageProvider = CLKImageProvider(onePieceImage: hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
-            smallFlattemplate.imageProvider = imageProvider
-            smallFlattemplate.textProvider = textProvider
-        }
-        else {
-            let smallRingTextTemplate = template as! SmallRingTextTemplateProtocol
-            smallRingTextTemplate.ringStyle = .closed
-            smallRingTextTemplate.fillFraction = hasStoodInCurrentHour ? 1.0 : 0.5
-            smallRingTextTemplate.textProvider = textProvider
-        }
+        let template:CLKComplicationTemplate = {
+            switch complication.family {
+            case .circularSmall:
+                let t = CLKComplicationTemplateCircularSmallRingText()
+                t.ringStyle = .closed
+                t.fillFraction = hasStoodInCurrentHour ? 1.0 : 0.5
+                t.textProvider = textProvider
+                
+                return t
+            case .extraLarge:
+                fatalError("doesn't do this")
+            case .modularSmall:
+                let t = CLKComplicationTemplateModularSmallRingText()
+                t.ringStyle = .closed
+                t.fillFraction = hasStoodInCurrentHour ? 1.0 : 0.5
+                t.textProvider = textProvider
+                
+                return t
+            case .modularLarge:
+                fatalError("doesn't do this")
+            case .utilitarianSmall:
+                fallthrough
+            case .utilitarianSmallFlat:
+                let t = CLKComplicationTemplateUtilitarianSmallFlat()
+                let imageProvider = CLKImageProvider(onePieceImage: hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
+                t.imageProvider = imageProvider
+                t.textProvider = textProvider
+                
+                return t
+            case .utilitarianLarge:
+                fatalError("doesn't do this")
+            case .graphicCorner:
+                let t = CLKComplicationTemplateGraphicCornerGaugeText()
+                t.outerTextProvider = {
+                    let tp = CLKTextProvider(format: "Stand -")
+                    tp.tintColor = .blue
+
+                    return tp
+                }()
+                t.leadingTextProvider = CLKSimpleTextProvider(text: String(left))
+                t.trailingTextProvider = CLKSimpleTextProvider(text: String(right))
+                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
+                
+                return t
+            case .graphicCircular:
+                let t = CLKComplicationTemplateGraphicCircularClosedGaugeText()
+                t.centerTextProvider = textProvider
+                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
+                
+                return t
+            case .graphicBezel:
+                fatalError("doesn't do this")
+            case .graphicRectangular:
+                fatalError("doesn't do this")
+            default: // utilitarianSmall
+                fatalError("doesn't do this")
+            }
+        }()
         
         let entry = CLKComplicationTimelineEntry(date: now, complicationTemplate: template)
         
