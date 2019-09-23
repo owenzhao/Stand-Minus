@@ -118,15 +118,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 fatalError("doesn't do this")
             case .graphicCorner:
                 let t = CLKComplicationTemplateGraphicCornerGaugeText()
-                t.outerTextProvider = {
-                    let tp = CLKTextProvider(format: "Stand -")
-                    tp.tintColor = .blue
-
-                    return tp
-                }()
+                t.outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .natural, units: [.hour, .minute])
                 t.leadingTextProvider = CLKSimpleTextProvider(text: String(left))
                 t.trailingTextProvider = CLKSimpleTextProvider(text: String(right))
-                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
+                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
                 
                 return t
             case .graphicCircular:
