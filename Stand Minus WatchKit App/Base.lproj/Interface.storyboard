@@ -11,7 +11,7 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Stand_Minus_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <imageView alignment="center" image="ViewController Image" id="Jez-rl-RW9"/>
+                        <imageView alignment="center" image="InterfaceContollerImage" id="Jez-rl-RW9"/>
                         <label width="1" height="10" alignment="left" id="XB6-Ak-6Oe"/>
                         <label width="1" alignment="left" text="Complications" textAlignment="center" id="T1X-tj-Hcx">
                             <color key="textColor" red="0.098417662079999996" green="0.29838591809999998" blue="0.66122227909999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -80,6 +80,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ViewController Image" width="24" height="24"/>
+        <image name="InterfaceContollerImage" width="32" height="32"/>
     </resources>
 </document>
