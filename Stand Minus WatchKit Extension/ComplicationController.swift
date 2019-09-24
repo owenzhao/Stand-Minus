@@ -120,14 +120,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 let t = CLKComplicationTemplateGraphicCornerGaugeText()
                 t.outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .natural, units: [.hour, .minute])
                 t.leadingTextProvider =  {
-                    let tp = CLKSimpleTextProvider(text: String(6))
+                    let tp = CLKSimpleTextProvider(text: String(left))
                     tp.tintColor = .red
                     
                     return tp
                 }()
                 
                 t.trailingTextProvider = {
-                    let tp = CLKSimpleTextProvider(text: String(10))
+                    let tp = CLKSimpleTextProvider(text: String(right))
                     tp.tintColor = .green
                     
                     return tp
