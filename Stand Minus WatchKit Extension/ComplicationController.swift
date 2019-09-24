@@ -119,8 +119,20 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             case .graphicCorner:
                 let t = CLKComplicationTemplateGraphicCornerGaugeText()
                 t.outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .natural, units: [.hour, .minute])
-                t.leadingTextProvider = CLKSimpleTextProvider(text: String(left))
-                t.trailingTextProvider = CLKSimpleTextProvider(text: String(right))
+                t.leadingTextProvider =  {
+                    let tp = CLKSimpleTextProvider(text: String(6))
+                    tp.tintColor = .red
+                    
+                    return tp
+                }()
+                
+                t.trailingTextProvider = {
+                    let tp = CLKSimpleTextProvider(text: String(10))
+                    tp.tintColor = .green
+                    
+                    return tp
+                }()
+                t.trailingTextProvider?.tintColor = .green
                 t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
                 
                 return t
