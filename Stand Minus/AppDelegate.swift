@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     private(set) var session:WCSession!
-    private var messageTypeRawValue:String? = nil
     lazy private var calendar = Calendar(identifier: .gregorian)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -37,13 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let center = UNUserNotificationCenter.current()
         center.delegate = self
-        center.requestAuthorization(options: [.alert, .sound]) { (success, error) in
-            if error == nil && success {
-                DispatchQueue.main.async {
-                    application.registerForRemoteNotifications()
-                }
-            }
-        }
+        center.requestAuthorization(options: [.alert, .sound]) { (_, _) in }
         
         if WCSession.isSupported() {
             session = WCSession.default
@@ -52,15 +45,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // register OneSignal
-        let notificationReceivedBlock: OSHandleNotificationReceivedBlock = { [unowned self] notification in
-            self.messageTypeRawValue = notification?.payload.additionalData["type"] as? String
-        }
         let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
         
         // Replace 'YOUR_APP_ID' with your OneSignal App ID.
         OneSignal.initWithLaunchOptions(launchOptions,
                                         appId: "bb94f238-18db-434f-90b9-527a068664aa",
-                                        handleNotificationReceived: notificationReceivedBlock,
                                         handleNotificationAction: nil,
                                         settings: onesignalInitSettings)
 
@@ -147,8 +136,10 @@ extension AppDelegate {
         }
         
         let defaults = UserDefaults.standard
+        let payload = ((userInfo["custom"] as? [AnyHashable:Any])?["a"] as? [AnyHashable:Any])!
         
-        guard self.messageTypeRawValue == MessageType.pushServerNotify.rawValue else { // ignore bad type
+        guard let type = payload["type"] as? String, type == MessageType.pushServerNotify.rawValue else {
+            // ignore bad type
             sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
             
             return
@@ -156,35 +147,24 @@ extension AppDelegate {
         
         let messageType = predictMessageType()
         
-        defer {
-            self.messageTypeRawValue = nil
-        }
-        
         let now = Date()
         defaults.set(now.timeIntervalSinceReferenceDate, forKey: DefaultsKey.remoteNofiticationTimeInterval.key)
         
-        switch messageType {
-        case .newHour:
-            if session.activationState == .activated && session.isPaired && session.isComplicationEnabled {
+        if session.activationState == .activated && session.isPaired {
+            switch messageType {
+            case .newHour, .fiftyMinutes:
                 let userInfo:[String:Any] = ["rawValue":messageType.rawValue]
                 sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
+                
+                return
+            case .ignoreMe:
+                break
+            default:
+                fatalError("should never happens.")
             }
-            else {
-                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-            }
-        case .fiftyMinutes:
-            if session.activationState == .activated && session.isPaired {
-                let userInfo:[String:Any] = ["rawValue":messageType.rawValue]
-                sendDataToAppleWatch(userInfo: userInfo, defaults: defaults, completionHandler: completionHandler)
-            }
-            else {
-                sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-            }
-        case .ignoreMe:
-            sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
-        default:
-            fatalError("should never happens.")
         }
+        
+        sendNoDataToAppleWatch(defaults: defaults, completionHandler: completionHandler)
     }
     
     private func sendDataToAppleWatch(userInfo:[String:Any], defaults:UserDefaults, completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
