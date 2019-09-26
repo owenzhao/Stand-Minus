@@ -83,7 +83,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         let timeInterval = defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key)
         let now = Date(timeIntervalSinceReferenceDate: timeInterval)
         
-        let textProvider = CLKSimpleTextProvider(text: String(total))
+        let textProvider:CLKTextProvider = {
+            let tp = CLKSimpleTextProvider(text: String(total))
+            tp.tintColor = hasStoodInCurrentHour ? .red : .green
+            
+            return tp
+        }()
         
         let template:CLKComplicationTemplate = {
             switch complication.family {
@@ -128,18 +133,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 
                 t.trailingTextProvider = {
                     let tp = CLKSimpleTextProvider(text: String(right))
-                    tp.tintColor = .green
+                    tp.tintColor = hasStoodInCurrentHour ? .red : .green
                     
                     return tp
                 }()
                 t.trailingTextProvider?.tintColor = .green
-                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
+                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .red, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
                 
                 return t
             case .graphicCircular:
                 let t = CLKComplicationTemplateGraphicCircularClosedGaugeText()
                 t.centerTextProvider = textProvider
-                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
+                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .red, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
                 
                 return t
             case .graphicBezel:
