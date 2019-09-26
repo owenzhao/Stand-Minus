@@ -5,7 +5,7 @@ DEPENDENCIES:
   - OneSignal (< 3.0, >= 2.6.2)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - OneSignal
 
 SPEC CHECKSUMS:
