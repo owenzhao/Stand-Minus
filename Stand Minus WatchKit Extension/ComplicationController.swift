@@ -137,7 +137,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                     
                     return tp
                 }()
-                t.trailingTextProvider?.tintColor = .green
+
                 t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .red, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
                 
                 return t
