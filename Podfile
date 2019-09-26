@@ -3,7 +3,7 @@
 
 target 'Stand Minus' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  platform :ios, '12.2'
+  platform :ios, '13.1'
   use_frameworks!
 
   # Pods for Stand Minus
