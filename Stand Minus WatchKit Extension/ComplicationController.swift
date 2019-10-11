@@ -38,29 +38,28 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Population
     
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
+        
         if queryOnce {
-            let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now) -> HKSampleQuery.ResultsHandler in
-                return { [unowned self] (_, samples, error) in
-                    defer {
-                        self.queryOnce = false
+            let resultHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                defer {
+                    self.queryOnce = false
+                }
+
+                if error == nil {
+                    var standData = StandData()
+
+                    if let samples = samples as? [HKCategorySample] {
+                        standData.samples = samples
                     }
-                    
-                    if error == nil {
-                        var standData = StandData()
-                        
-                        if let samples = samples as? [HKCategorySample] {
-                            standData.samples = samples
-                        }
-                        else {
-                            standData.samples = []
-                        }
-    
-                        handler(self.entry(complication: complication))
+                    else {
+                        standData.samples = []
                     }
+
+                    handler(self.entry(complication: complication))
                 }
             }
-    
-            query.executeSampleQuery(preResultsHandler: preResultsHandler)
+            
+            query.executeSampleQuery(resultsHandler: resultHandler)
         }
         else {
             handler(entry(complication: complication))

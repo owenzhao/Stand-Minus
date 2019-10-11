@@ -56,30 +56,28 @@ class InterfaceController: WKInterfaceController {
         queryCurrentStandUpInfo()
     }
     
-    private func queryCurrentStandUpInfo() {
-        let preResultsHandler:HKSampleQuery.PreResultsHandler = { [unowned self] (now) -> HKSampleQuery.ResultsHandler in
-            return { [unowned self] (_, samples, error) in
-                if error == nil {
-                    var standData = StandData()
-                    
-                    if let samples = samples as? [HKCategorySample] {
-                        standData.samples = samples
-                    } else {
-                        standData.samples = []
-                    }
-                    
-                    DispatchQueue.main.async { [unowned self] in
-                        self.updateUI()
-                    }
-                    
-                    if self.hasComplication {
-                        self.updateComplications()
-                    }
+    private func queryCurrentStandUpInfo() {        
+        let resultHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+            if error == nil {
+                var standData = StandData()
+                
+                if let samples = samples as? [HKCategorySample] {
+                    standData.samples = samples
+                } else {
+                    standData.samples = []
+                }
+                
+                DispatchQueue.main.async { [unowned self] in
+                    self.updateUI()
+                }
+                
+                if self.hasComplication {
+                    self.updateComplications()
                 }
             }
         }
         
-        query.executeSampleQuery(preResultsHandler: preResultsHandler)
+        query.executeSampleQuery(resultsHandler: resultHandler)
     }
     
     private func updateComplications() {

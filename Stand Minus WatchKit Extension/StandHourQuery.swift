@@ -11,33 +11,13 @@ import HealthKit
 import UserNotifications
 
 class StandHourQuery {
-    private static let calendar = Calendar(identifier: .gregorian)
+    static let calendar = Calendar(identifier: .gregorian)
     private static let sampleType = HKObjectType.categoryType(forIdentifier: .appleStandHour)!
     private static let store = HKHealthStore()
-    
-    func executeSampleQuery(preResultsHandler:@escaping HKSampleQuery.PreResultsHandler) {
-        let now = Date()
-        let predicate = createPredicate(at: now)
-        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        
-        let query = HKSampleQuery(sampleType: StandHourQuery.sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: preResultsHandler(now))
-        
-        executeHKQuery(query, at: now)
-    }
     
     func executeSampleQuery(resultsHandler:@escaping HKSampleQuery.ResultsHandler) {
         let now = Date()
         let predicate = createPredicate(at: now)
-        let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
-        
-        let query = HKSampleQuery(sampleType: StandHourQuery.sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
-        
-        executeHKQuery(query, at: now)
-    }
-    
-    func executeSampleQuery(resultsHandler:@escaping HKSampleQuery.ResultsHandler, with predicate:(Date) -> NSPredicate) {
-        let now = Date()
-        let predicate = predicate(now)
         let soreDescrptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
         
         let query = HKSampleQuery(sampleType: StandHourQuery.sampleType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [soreDescrptor], resultsHandler: resultsHandler)
@@ -70,5 +50,4 @@ class StandHourQuery {
 // MARK: - type alias
 extension HKSampleQuery {
     typealias ResultsHandler = (HKSampleQuery, [HKSample]?, Error?) -> Void
-    typealias PreResultsHandler = (Date) -> ResultsHandler
 }

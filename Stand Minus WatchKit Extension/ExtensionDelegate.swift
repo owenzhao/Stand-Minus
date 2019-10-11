@@ -14,6 +14,7 @@ import WatchConnectivity
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
     var session:WCSession!
+    var previousModel:ComplicationModel? = nil
     
     private lazy var defaults = UserDefaults.standard
     
@@ -158,26 +159,32 @@ extension ExtensionDelegate:WCSessionDelegate {
                 let total = self.defaults.integer(forKey: DefaultsKey.total.key)
                 
                 if total >= 12 {
-                    let resultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                    let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                         defer {
                             self.semaphore.signal()
                         }
-                        
-                        if error == nil,
-                            let samples = samples,
-                            samples.isEmpty {
+
+                        if error == nil {
+                            var standData = StandData()
+
+                            if let samples = samples as? [HKCategorySample] {
+                                standData.samples = samples
+                            } else {
+                                standData.samples = []
+                            }
                             
-                            self.notifyUser()
+                            if !standData.hasStoodInCurrentHour {
+                                let now = Date()
+                                let minute = StandHourQuery.calendar.component(.minute, from: now)
+                                
+                                if (50..<60).contains(minute) {
+                                    self.notifyUser()
+                                }
+                            }
                         }
                     }
-                    
-                    let predicate:(Date) -> NSPredicate = { (now) -> NSPredicate in
-                        let predicate = HKQuery.predicateForSamples(withStart: now, end: nil, options: [])
-                        
-                        return predicate
-                    }
-                    
-                    self.query.executeSampleQuery(resultsHandler: resultsHandler, with: predicate)
+
+                    self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
                 }
                 else {
                     self.semaphore.signal()
