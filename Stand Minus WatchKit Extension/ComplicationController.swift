@@ -123,7 +123,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                 fatalError("doesn't do this")
             case .graphicCorner:
                 let t = CLKComplicationTemplateGraphicCornerGaugeText()
-                t.outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .natural, units: [.hour, .minute])
+                t.outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .offsetShort, units: [.hour, .minute, .second])
                 t.leadingTextProvider =  {
                     let tp = CLKSimpleTextProvider(text: String(left))
                     tp.tintColor = .red
