@@ -38,12 +38,12 @@
 		DC0E8B351E52BABF00C2ACE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B371E52BABF00C2ACE3 /* Localizable.strings */; };
 		DC0E8B3A1E52BABF00C2ACE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B3C1E52BABF00C2ACE3 /* InfoPlist.strings */; };
 		DC0E8B501E52D07F00C2ACE3 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */; };
+		DC25A0B92351ED09004AE21C /* ComplicationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC25A0B82351ED09004AE21C /* ComplicationModel.swift */; };
 		DC468CB51F38248B002BAC42 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC468CB41F38248B002BAC42 /* DebugViewController.swift */; };
 		DC468CB61F382CE6002BAC42 /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
 		DC788AF41E417BD000C7ED60 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC788AF31E417BD000C7ED60 /* HealthKit.framework */; };
 		DC7C4F4E1F371B18001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
 		DC7C4F4F1F371B3A001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
-		DC9AC4811E480D8000F52028 /* StandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* StandData.swift */; };
 		DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */; };
 		DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA8E9B21E5188BD004A3979 /* PageViewController.swift */; };
 		DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221C20DCEEEE00491892 /* UserNotifications.framework */; };
@@ -156,6 +156,7 @@
 		DC0E8B4D1E52C11C00C2ACE3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		DC0E8B4E1E52C11D00C2ACE3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		DC25A0B82351ED09004AE21C /* ComplicationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationModel.swift; sourceTree = "<group>"; };
 		DC38DC8B1F33EDCB002AE212 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libXG-SDK.a"; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/libXG-SDK.a"; sourceTree = "<group>"; };
 		DC38DC8C1F33EDCB002AE212 /* XGSetting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XGSetting.h; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/XGSetting.h"; sourceTree = "<group>"; };
 		DC38DC8D1F33EDCB002AE212 /* XGPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XGPush.h; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/XGPush.h"; sourceTree = "<group>"; };
@@ -306,6 +307,7 @@
 				DC0831931E407B8000A62520 /* Info.plist */,
 				DC0831871E407B8000A62520 /* Supporting Files */,
 				DC9AC4801E480D8000F52028 /* StandData.swift */,
+				DC25A0B82351ED09004AE21C /* ComplicationModel.swift */,
 				DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */,
 				DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */,
 			);
@@ -588,8 +590,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC9AC4811E480D8000F52028 /* StandData.swift in Sources */,
 				DC0200091F0EF95C00ECA5EA /* DefaultsKey.swift in Sources */,
+				DC25A0B92351ED09004AE21C /* ComplicationModel.swift in Sources */,
 				DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */,
 				DC7C4F4F1F371B3A001BFF83 /* MessageType.swift in Sources */,
 				DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */,

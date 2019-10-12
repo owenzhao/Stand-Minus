@@ -29,7 +29,7 @@ class StandHourQuery {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: DefaultsKey.hasStoodInCurrentHour.key)
         defaults.set(now.timeIntervalSinceReferenceDate, forKey:DefaultsKey.lastQueryTimeInterval.key)
-        
+
         StandHourQuery.store.requestAuthorization(toShare: nil, read: [StandHourQuery.sampleType]) { (success, error) in
             if error == nil && success {
                 StandHourQuery.store.execute(query)
