@@ -45,6 +45,8 @@
 		DC7C4F4E1F371B18001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
 		DC7C4F4F1F371B3A001BFF83 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7C4F4D1F371B18001BFF83 /* MessageType.swift */; };
 		DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4821E480D8E00F52028 /* StandHourQuery.swift */; };
+		DCA0055E23B0FC95009403ED /* StandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* StandData.swift */; };
+		DCA0055F23B0FC9E009403ED /* StandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9AC4801E480D8000F52028 /* StandData.swift */; };
 		DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA8E9B21E5188BD004A3979 /* PageViewController.swift */; };
 		DCB0221D20DCEEEE00491892 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB0221C20DCEEEE00491892 /* UserNotifications.framework */; };
 		DCC18A551E52DBB200A0BA79 /* step_two_tw.png in Resources */ = {isa = PBXBuildFile; fileRef = DCC18A541E52DBB200A0BA79 /* step_two_tw.png */; };
@@ -582,6 +584,7 @@
 				DC0E8AFB1E52B00C00C2ACE3 /* StepOneViewController.swift in Sources */,
 				DCA8E9B31E5188BD004A3979 /* PageViewController.swift in Sources */,
 				DC08314F1E407B7F00A62520 /* AppDelegate.swift in Sources */,
+				DCA0055E23B0FC95009403ED /* StandData.swift in Sources */,
 				DC0E8AF71E52AFE700C2ACE3 /* StepTwoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -595,6 +598,7 @@
 				DC08318E1E407B8000A62520 /* NotificationController.swift in Sources */,
 				DC7C4F4F1F371B3A001BFF83 /* MessageType.swift in Sources */,
 				DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */,
+				DCA0055F23B0FC9E009403ED /* StandData.swift in Sources */,
 				DC08318C1E407B8000A62520 /* ExtensionDelegate.swift in Sources */,
 				DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */,
 				DC08318A1E407B8000A62520 /* InterfaceController.swift in Sources */,
