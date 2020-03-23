@@ -28,6 +28,10 @@
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We doesn't require this permission.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We doesn't require this permission either.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -47,9 +51,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We doesn&apos;t require this permission.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We doesn&apos;t require this permission either.</string>
 </dict>
 </plist>
