@@ -915,7 +915,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Stand Minus/Stand Minus.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200917;
+				CURRENT_PROJECT_VERSION = 20200918;
 				DEVELOPMENT_TEAM = 96NM39SGJ5;
 				INFOPLIST_FILE = "Stand Minus/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -939,7 +939,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Stand Minus/Stand Minus.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200917;
+				CURRENT_PROJECT_VERSION = 20200918;
 				DEVELOPMENT_TEAM = 96NM39SGJ5;
 				INFOPLIST_FILE = "Stand Minus/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
