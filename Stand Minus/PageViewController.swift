@@ -26,10 +26,9 @@ class PageViewController: UIPageViewController {
         delegate = self
         
         let pageControl:UIPageControl = UIPageControl.appearance()
-        pageControl.backgroundColor = UIColor.clear
-        pageControl.pageIndicatorTintColor = UIColor.systemGray
-        pageControl.currentPageIndicatorTintColor = UIColor.label
-        self.view.backgroundColor = .systemBackground
+        pageControl.pageIndicatorTintColor = .systemGray
+        pageControl.currentPageIndicatorTintColor = .label
+        self.view.backgroundColor = .secondarySystemBackground
         
         if let firstViewController = orderedViewControllers.first {
             setViewControllers([firstViewController],
