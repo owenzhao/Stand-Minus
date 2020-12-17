@@ -9,7 +9,7 @@ target 'Stand Minus' do
   use_frameworks!
 
   # Pods for Stand Minus
-  pod 'OneSignal', '>= 2.6.2', '< 3.0'
+  pod 'OneSignal', '>= 3.0.0', '< 4.0'
 
 end
 
