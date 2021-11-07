@@ -171,7 +171,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
 }
 
-protocol SmallRingTextTemplateProtocol:class {
+protocol SmallRingTextTemplateProtocol:AnyObject {
     var textProvider: CLKTextProvider { get set }
     var ringStyle: CLKComplicationRingStyle { get set }
     var fillFraction: Float { get set }

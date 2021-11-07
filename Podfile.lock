@@ -1,5 +1,5 @@
 PODS:
-  - OneSignal (3.6.0)
+  - OneSignal (3.8.1)
 
 DEPENDENCIES:
   - OneSignal (< 4.0, >= 3.0.0)
@@ -9,8 +9,8 @@ SPEC REPOS:
     - OneSignal
 
 SPEC CHECKSUMS:
-  OneSignal: fba3971064be02510de1d8b9c90fabd749da2e52
+  OneSignal: b44755cd425704bdef8d8912030ed26619446773
 
 PODFILE CHECKSUM: c105ca50ccc955a5d3871e67047cc079f9e4488d
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
