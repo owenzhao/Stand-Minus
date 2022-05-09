@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.0.2</string>
+	<string>$(APP_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>20211107</string>
+	<string>$(APP_BUILD)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -29,9 +29,9 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We doesn&apos;t require this permission.</string>
+	<string>We doesn't require this permission.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We doesn&apos;t require this permission either.</string>
+	<string>We doesn't require this permission either.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

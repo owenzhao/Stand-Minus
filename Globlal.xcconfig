@@ -1,0 +1,13 @@
+//
+//  Globlal.xcconfig
+//  Stand Minus
+//
+//  Created by zhaoxin on 2022/2/7.
+//  Copyright © 2022 ParusSoft.com. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+APP_VERSION = 4.0.3
+APP_BUILD = 20220509
