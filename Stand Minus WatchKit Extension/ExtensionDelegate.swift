@@ -89,35 +89,36 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 
                 switch backgroundTaskType {
                 case .checkNofifyUser:
-                    // update the complication at the very beginning time of the hour as soon as possible
-                    let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
-                        defer {
-                            backgroundTask.setTaskCompletedWithSnapshot(false)
-                        }
-                        
-                        if error == nil {
-                            var standData = StandData()
-                            
-                            if let samples = samples as? [HKCategorySample] {
-                                standData.samples = samples
-                            } else {
-                                standData.samples = []
-                            }
-                            
-                            let defaults = UserDefaults.standard
-                            let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
-                            
-                            if !hasStoodInCurrentHour {
-                                DispatchQueue.main.async {
-                                    self.notifyUser()
-                                }
-                            }
-                            
-                            self.updateComplications()
-                        }
-                    }
-                    
-                    self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+//                    // update the complication at the very beginning time of the hour as soon as possible
+//                    let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+//                        defer {
+//                            backgroundTask.setTaskCompletedWithSnapshot(false)
+//                        }
+//
+//                        if error == nil {
+//                            var standData = StandData()
+//
+//                            if let samples = samples as? [HKCategorySample] {
+//                                standData.samples = samples
+//                            } else {
+//                                standData.samples = []
+//                            }
+//
+//                            let defaults = UserDefaults.standard
+//                            let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+//
+//                            if !hasStoodInCurrentHour {
+//                                DispatchQueue.main.async {
+//                                    self.notifyUser()
+//                                }
+//                            }
+//
+//                            self.updateComplications()
+//                        }
+//                    }
+//
+//                    self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+                    break
                 case .requestRemoteNotificationRegister:
                     if session.activationState == .activated && session.isReachable {
                         session.sendMessage([:], replyHandler: nil, errorHandler: nil)
@@ -128,8 +129,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         })
                     }
                     
-                    fallthrough
-                case .watchOSAlone:
                     // update the complication at the very beginning time of the hour as soon as possible
                     let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                         defer {
@@ -150,6 +149,30 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     }
                     
                     self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+                    
+                    fallthrough
+                case .watchOSAlone:
+//                    // update the complication at the very beginning time of the hour as soon as possible
+//                    let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+//                        defer {
+//                            backgroundTask.setTaskCompletedWithSnapshot(false)
+//                        }
+//
+//                        if error == nil {
+//                            var standData = StandData()
+//
+//                            if let samples = samples as? [HKCategorySample] {
+//                                standData.samples = samples
+//                            } else {
+//                                standData.samples = []
+//                            }
+//
+//                            self.updateComplications()
+//                        }
+//                    }
+//
+//                    self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+                    break
                 }
                 
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
@@ -217,11 +240,11 @@ extension ExtensionDelegate:WCSessionDelegate {
                         self.updateComplications()
                     }
 
-                    let firedate = Date().addingTimeInterval(70 * 60)
-
-                    WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
-
-                    })
+//                    let firedate = Date().addingTimeInterval(70 * 60)
+//
+//                    WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: firedate, userInfo: BackgroundTaskType.requestRemoteNotificationRegister.rawValue as NSNumber, scheduledCompletion: { (error) in
+//
+//                    })
                 }
 
                 self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
