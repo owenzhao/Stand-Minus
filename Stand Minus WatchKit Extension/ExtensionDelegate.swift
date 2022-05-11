@@ -26,11 +26,51 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         session = WCSession.default
         session.delegate = self
         session.activate()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(arrangeNextBackgroundUpdate(_:)),
+                                               name: ComplicationController.complicationWillUpdate, object: nil)
     }
     
     private lazy var userNotificationCenterDelegate = UserNotificationCenterDelegate()
     private var semaphore = DispatchSemaphore(value: 1)
     private lazy var query = StandHourQuery()
+    
+    @objc private func arrangeNextBackgroundUpdate(_ notification:Notification) {
+        func arrangeAtNextHour(_ cps:DateComponents) {
+            let date = StandHourQuery.calendar.date(from: cps)!
+            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: date, userInfo: BackgroundTaskType.watchOSAlone.rawValue as NSNumber, scheduledCompletion: { _ in })
+        }
+        func arrangeAtFiftyMinute(_ cps:DateComponents) {
+            let date = StandHourQuery.calendar.date(from: cps)!
+            WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: date, userInfo: BackgroundTaskType.checkNofifyUser.rawValue as NSNumber, scheduledCompletion: { _ in })
+        }
+        
+        let defaults = UserDefaults.standard
+        let total = defaults.integer(forKey: DefaultsKey.total.key)
+        let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+        let now = Date(timeIntervalSinceReferenceDate: defaults.double(forKey: DefaultsKey.lastQueryTimeInterval.key))
+        
+        if hasStoodInCurrentHour {
+            // arrange at next hour
+        } else {
+            var cps = StandHourQuery.calendar.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+            let minute = cps.minute!
+            
+            if minute < 50 {
+                if total >= 12 {
+                    // arrange at 50
+                    cps.minute = 50
+                    arrangeAtFiftyMinute(cps)
+                } else {
+                    // arrange at next hour
+                    cps.hour! += 1
+                    cps.minute = 0
+                }
+            } else {
+                // arrange at next hour
+            }
+        }
+    }
     
     func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
         // Sent when the system needs to launch the application in the background to process tasks. Tasks arrive in a set, so loop through and process each one.
@@ -49,7 +89,35 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 
                 switch backgroundTaskType {
                 case .checkNofifyUser:
-                    break
+                    // update the complication at the very beginning time of the hour as soon as possible
+                    let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                        defer {
+                            backgroundTask.setTaskCompletedWithSnapshot(false)
+                        }
+                        
+                        if error == nil {
+                            var standData = StandData()
+                            
+                            if let samples = samples as? [HKCategorySample] {
+                                standData.samples = samples
+                            } else {
+                                standData.samples = []
+                            }
+                            
+                            let defaults = UserDefaults.standard
+                            let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+                            
+                            if !hasStoodInCurrentHour {
+                                DispatchQueue.main.async {
+                                    self.notifyUser()
+                                }
+                            }
+                            
+                            self.updateComplications()
+                        }
+                    }
+                    
+                    self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
                 case .requestRemoteNotificationRegister:
                     if session.activationState == .activated && session.isReachable {
                         session.sendMessage([:], replyHandler: nil, errorHandler: nil)
@@ -60,6 +128,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                         })
                     }
                     
+                    fallthrough
+                case .watchOSAlone:
                     // update the complication at the very beginning time of the hour as soon as possible
                     let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
                         defer {
@@ -235,7 +305,7 @@ extension ExtensionDelegate:WCSessionDelegate {
 // MARK: - UNUserNotificationCenterDelegate
 class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert,.sound])
+        completionHandler([.banner,.sound])
     }
 }
 
@@ -243,4 +313,5 @@ class UserNotificationCenterDelegate:NSObject, UNUserNotificationCenterDelegate 
 enum BackgroundTaskType:Int {
     case requestRemoteNotificationRegister
     case checkNofifyUser
+    case watchOSAlone
 }

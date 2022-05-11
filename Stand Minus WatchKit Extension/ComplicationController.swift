@@ -12,10 +12,27 @@ import HealthKit
 import WatchConnectivity
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
+    static let complicationWillUpdate = Notification.Name("complicationWillUpdate")
+    
     private var queryOnce:Bool = true
 
     private lazy var query = StandHourQuery()
     private lazy var defaults = UserDefaults.standard
+    
+    func getComplicationDescriptors(handler: @escaping ([CLKComplicationDescriptor]) -> Void) {
+        let supportedFamilies:[CLKComplicationFamily] = [
+            .circularSmall,
+            .modularSmall,
+            .utilitarianSmall,
+            .utilitarianSmallFlat,
+            .graphicCorner,
+            .graphicCircular,
+        ]
+        
+        let standDescriptor = CLKComplicationDescriptor(identifier: "stand minus", displayName: "Stand Minus", supportedFamilies: supportedFamilies)
+        
+        handler([standDescriptor])
+    }
     
     // MARK: - Timeline Configuration
     
@@ -55,6 +72,8 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
                         standData.samples = []
                     }
 
+                    
+                    NotificationCenter.default.post(name: ComplicationController.complicationWillUpdate, object: nil)
                     handler(self.entry(complication: complication))
                 }
             }
@@ -62,6 +81,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             query.executeSampleQuery(resultsHandler: resultHandler)
         }
         else {
+            NotificationCenter.default.post(name: ComplicationController.complicationWillUpdate, object: nil)
             handler(entry(complication: complication))
         }
     }
@@ -92,60 +112,52 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         let template:CLKComplicationTemplate = {
             switch complication.family {
             case .circularSmall:
-                let t = CLKComplicationTemplateCircularSmallRingText()
-                t.ringStyle = .closed
-                t.fillFraction = hasStoodInCurrentHour ? 1.0 : 0.5
-                t.textProvider = textProvider
-                
-                return t
+                return CLKComplicationTemplateCircularSmallRingText(textProvider: textProvider,
+                                                                    fillFraction: hasStoodInCurrentHour ? 1.0 : 0.5,
+                                                                    ringStyle: .closed)
             case .extraLarge:
                 fatalError("doesn't do this")
             case .modularSmall:
-                let t = CLKComplicationTemplateModularSmallRingText()
-                t.ringStyle = .closed
-                t.fillFraction = hasStoodInCurrentHour ? 1.0 : 0.5
-                t.textProvider = textProvider
-                
-                return t
+                return CLKComplicationTemplateModularSmallRingText(textProvider: textProvider,
+                                                                   fillFraction: hasStoodInCurrentHour ? 1.0 : 0.5,
+                                                                   ringStyle: .closed)
             case .modularLarge:
                 fatalError("doesn't do this")
             case .utilitarianSmall:
                 fallthrough
             case .utilitarianSmallFlat:
-                let t = CLKComplicationTemplateUtilitarianSmallFlat()
                 let imageProvider = CLKImageProvider(onePieceImage: hasStoodInCurrentHour ? #imageLiteral(resourceName: "has stood") : #imageLiteral(resourceName: "not stood"))
-                t.imageProvider = imageProvider
-                t.textProvider = textProvider
-                
-                return t
+                return CLKComplicationTemplateUtilitarianSmallFlat(textProvider: textProvider,
+                                                                   imageProvider: imageProvider)
             case .utilitarianLarge:
                 fatalError("doesn't do this")
             case .graphicCorner:
-                let t = CLKComplicationTemplateGraphicCornerGaugeText()
-                t.outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .offsetShort, units: [.hour, .minute, .second])
-                t.leadingTextProvider =  {
+                let outerTextProvider = CLKRelativeDateTextProvider(date: now, style: .offsetShort, units: [.hour, .minute, .second])
+                let leadingTextProvider:CLKTextProvider =  {
                     let tp = CLKSimpleTextProvider(text: String(left))
                     tp.tintColor = .red
                     
                     return tp
                 }()
                 
-                t.trailingTextProvider = {
+                let trailingTextProvider:CLKTextProvider = {
                     let tp = CLKSimpleTextProvider(text: String(right))
                     tp.tintColor = hasStoodInCurrentHour ? .red : .green
                     
                     return tp
                 }()
 
-                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
+                let gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .ring, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 0.5)
                 
-                return t
+
+                return CLKComplicationTemplateGraphicCornerGaugeText(gaugeProvider: gaugeProvider,
+                                                                     leadingTextProvider: leadingTextProvider,
+                                                                     trailingTextProvider: trailingTextProvider,
+                                                                     outerTextProvider: outerTextProvider)
             case .graphicCircular:
-                let t = CLKComplicationTemplateGraphicCircularClosedGaugeText()
-                t.centerTextProvider = textProvider
-                t.gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
-                
-                return t
+                let gaugeProvider = hasStoodInCurrentHour ? CLKSimpleGaugeProvider(style: .fill, gaugeColor: .green, fillFraction: 1.0) : CLKSimpleGaugeProvider(style: .fill, gaugeColors: [.red, .green], gaugeColorLocations: [0.0, 1.0], fillFraction: 1.0)
+                return CLKComplicationTemplateGraphicCircularClosedGaugeText(gaugeProvider: gaugeProvider,
+                                                                             centerTextProvider: textProvider)
             case .graphicBezel:
                 fatalError("doesn't do this")
             case .graphicRectangular:
