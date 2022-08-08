@@ -36,6 +36,14 @@
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Stand- will use apple stand hour to calculate your stand up hours</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>WKBackgroundModes</key>
+	<array>
+		<string>self-care</string>
+	</array>
 	<key>WKExtensionDelegateClassName</key>
 	<string>$(PRODUCT_MODULE_NAME).ExtensionDelegate</string>
 	<key>WKRunsIndependentlyOfCompanionApp</key>

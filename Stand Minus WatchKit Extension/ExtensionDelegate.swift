@@ -338,3 +338,101 @@ enum BackgroundTaskType:Int {
     case checkNofifyUser
     case watchOSAlone
 }
+
+// MARK: - Remote notification registration
+extension ExtensionDelegate {
+    func didRegisterForRemoteNotifications(withDeviceToken deviceToken: Data) {
+        // run onesignal restAPI to register this device
+        let userInfo = ["device_token" : deviceToken]
+        NotificationCenter.default.post(name: OneSignalRestAPI.registerDevice, object: nil, userInfo: userInfo)
+    }
+    
+    func didFailToRegisterForRemoteNotificationsWithError(_ error: Error) {
+        // show alert
+        fatalError()
+    }
+    
+    func didReceiveRemoteNotification(_ userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (WKBackgroundFetchResult) -> Void) {
+        
+        func predictMessageType() -> MessageType {
+            let now = Date()
+            let cps = StandHourQuery.calendar.dateComponents([.hour, .minute], from: now)
+            
+            switch cps.hour! {
+            case 0..<12:
+                if cps.minute! < 50 {
+                    return .newHour
+                }
+                
+                return .ignoreMe
+            default:
+                switch cps.minute! {
+                case 0..<50:
+                    return .newHour
+                case 50...58:
+                    return .fiftyMinutes
+                default:
+                    return .ignoreMe
+                }
+            }
+        }
+        
+        let messageType = predictMessageType()
+        switch messageType {
+        case .pushServerNotify:
+            completionHandler(.noData)
+            // fatalError("should never happens.")
+        case .newHour:
+            // update the complication at the very beginning time of the hour as soon as possible
+            let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                if error == nil {
+                    var standData = StandData()
+                    
+                    if let samples = samples as? [HKCategorySample] {
+                        standData.samples = samples
+                    } else {
+                        standData.samples = []
+                    }
+                    
+                    self.updateComplications()
+                    completionHandler(.newData)
+                }
+            }
+            
+            self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+        case .fiftyMinutes:
+            // update the complication at the very beginning time of the hour as soon as possible
+            let sessionResultsHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
+                if error == nil {
+                    var standData = StandData()
+
+                    if let samples = samples as? [HKCategorySample] {
+                        standData.samples = samples
+                    } else {
+                        standData.samples = []
+                    }
+
+                    let defaults = UserDefaults.standard
+                    let hasStoodInCurrentHour = defaults.bool(forKey: DefaultsKey.hasStoodInCurrentHour.key)
+
+                    if !hasStoodInCurrentHour {
+                        DispatchQueue.main.async {
+                            self.notifyUser()
+                            self.updateComplications()
+                            completionHandler(.noData)
+                        }
+                    } else {
+                        self.updateComplications()
+                        completionHandler(.newData)
+                    }
+                } else {
+                    completionHandler(.failed)
+                }
+            }
+
+            self.query.executeSampleQuery(resultsHandler: sessionResultsHandler)
+        case .ignoreMe:
+            break
+        }
+    }
+}

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14868" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
-    <device id="watch38"/>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="20037" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch44"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="14643"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="20006"/>
     </dependencies>
     <scenes>
         <!--Interface Controller-->
@@ -32,6 +32,11 @@
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
                         <label width="1" alignment="left" text="date" textAlignment="center" id="Y2v-iO-2R6"/>
+                        <button width="1" alignment="left" title="Update" id="sJN-bQ-uIJ">
+                            <connections>
+                                <action selector="updateButtonClicked" destination="AgC-eL-Hgc" id="y8L-no-obe"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="complicationsLabel" destination="C5a-uD-hh4" id="WZR-iO-DkU"/>
@@ -80,6 +85,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="InterfaceContollerImage" width="32" height="32"/>
+        <image name="InterfaceContollerImage" width="40" height="40"/>
     </resources>
 </document>

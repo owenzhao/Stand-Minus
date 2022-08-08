@@ -38,6 +38,7 @@
 		DC0E8B351E52BABF00C2ACE3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B371E52BABF00C2ACE3 /* Localizable.strings */; };
 		DC0E8B3A1E52BABF00C2ACE3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC0E8B3C1E52BABF00C2ACE3 /* InfoPlist.strings */; };
 		DC0E8B501E52D07F00C2ACE3 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */; };
+		DC100269282BC2660047F0B5 /* OneSignalRestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC100268282BC2650047F0B5 /* OneSignalRestAPI.swift */; };
 		DC25A0B92351ED09004AE21C /* ComplicationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC25A0B82351ED09004AE21C /* ComplicationModel.swift */; };
 		DC468CB51F38248B002BAC42 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC468CB41F38248B002BAC42 /* DebugViewController.swift */; };
 		DC468CB61F382CE6002BAC42 /* DefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0200081F0EF95C00ECA5EA /* DefaultsKey.swift */; };
@@ -158,6 +159,7 @@
 		DC0E8B4D1E52C11C00C2ACE3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		DC0E8B4E1E52C11D00C2ACE3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		DC0E8B4F1E52D07F00C2ACE3 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		DC100268282BC2650047F0B5 /* OneSignalRestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneSignalRestAPI.swift; sourceTree = "<group>"; };
 		DC1F116227B0F6AE001F08BD /* Globlal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Globlal.xcconfig; sourceTree = "<group>"; };
 		DC25A0B82351ED09004AE21C /* ComplicationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationModel.swift; sourceTree = "<group>"; };
 		DC38DC8B1F33EDCB002AE212 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libXG-SDK.a"; path = "../../Downloads/Xg-Push-SDK-iOS-2.5.0/demo/sdk/libXG-SDK.a"; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				DC788AF11E417BD000C7ED60 /* Stand Minus WatchKit Extension.entitlements */,
 				DC0831891E407B8000A62520 /* InterfaceController.swift */,
 				DC08318B1E407B8000A62520 /* ExtensionDelegate.swift */,
+				DC100268282BC2650047F0B5 /* OneSignalRestAPI.swift */,
 				DC08318D1E407B8000A62520 /* NotificationController.swift */,
 				DC08318F1E407B8000A62520 /* ComplicationController.swift */,
 				DC0831911E407B8000A62520 /* Assets.xcassets */,
@@ -627,6 +630,7 @@
 				DC0831901E407B8000A62520 /* ComplicationController.swift in Sources */,
 				DCA0055F23B0FC9E009403ED /* StandData.swift in Sources */,
 				DC08318C1E407B8000A62520 /* ExtensionDelegate.swift in Sources */,
+				DC100269282BC2660047F0B5 /* OneSignalRestAPI.swift in Sources */,
 				DC9AC4831E480D8E00F52028 /* StandHourQuery.swift in Sources */,
 				DC08318A1E407B8000A62520 /* InterfaceController.swift in Sources */,
 			);

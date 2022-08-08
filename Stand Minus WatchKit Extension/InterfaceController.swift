@@ -29,14 +29,14 @@ class InterfaceController: WKInterfaceController {
         return defaults.object(forKey: DefaultsKey.hasStoodInCurrentHour.key) as? Bool
     }
     
-    private func addMeneItemOfUpdate() {
-        return addMenuItem(with: .resume, title: NSLocalizedString("Update", comment: "Update"), action: #selector(updateButtonClicked))
-    }
+//    private func addMeneItemOfUpdate() {
+//        return addMenuItem(with: .resume, title: NSLocalizedString("Update", comment: "Update"), action: #selector(updateButtonClicked))
+//    }
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        addMeneItemOfUpdate()
+//        addMeneItemOfUpdate()
     }
     
     override func willActivate() {
@@ -55,6 +55,53 @@ class InterfaceController: WKInterfaceController {
     @IBAction func updateButtonClicked() {
         queryCurrentStandUpInfo()
     }
+    
+//    @IBAction func registerDeviceButtonClicked() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(registerOneSignalDevice(_:)), name: OneSignalRestAPI.registerDevice, object: nil)
+//        WKExtension.shared().registerForRemoteNotifications()
+//    }
+//
+//    @objc private func registerOneSignalDevice(_ notification:Notification) {
+//        if let userInfo = notification.userInfo as? [String:Data], let deviceToken = userInfo["device_token"] {
+//            let deviceID = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+//            
+//            #if DEBUG
+//            print("Device id is \(deviceID).")
+//            #endif
+//            
+//            Task {
+//                do {
+//                    let restAPI = OneSignalRestAPI(deviceID: deviceID)
+//                    let request = restAPI.request
+//                    let (data, urlResponse) = try await URLSession.shared.data(for: request)
+//                    
+//                    guard let httpResponse = urlResponse as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+//                        DispatchQueue.main.async {
+//                            let alertAction = WKAlertAction(title: NSLocalizedString("OK", comment: ""), style: .cancel, handler: {})
+//                            self.presentAlert(withTitle: "Register Device Failed!", message: "http status code: \((urlResponse as! HTTPURLResponse).statusCode)", preferredStyle: .alert, actions: [alertAction])
+//                        }
+//                        
+//                        return
+//                    }
+//                    
+//                    let decoder = JSONDecoder()
+//                    let respone = try decoder.decode(Response.self, from: data)
+//                    
+//                    if respone.success {
+//                        DispatchQueue.main.async {
+//                            let alertAction = WKAlertAction(title: NSLocalizedString("OK", comment: ""), style: .cancel, handler: {})
+//                            self.presentAlert(withTitle: "Register Device Succeed!", message: "Device id: \(respone.id)", preferredStyle: .alert, actions: [alertAction])
+//                        }
+//                    }
+//                } catch {
+//                    DispatchQueue.main.async {
+//                        let alertAction = WKAlertAction(title: NSLocalizedString("OK", comment: ""), style: .cancel, handler: {})
+//                        self.presentAlert(withTitle: "Register Device Failed!", message: "\(error)", preferredStyle: .alert, actions: [alertAction])
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     private func queryCurrentStandUpInfo() {        
         let resultHandler:HKSampleQuery.ResultsHandler = { [unowned self] (_, samples, error) in
