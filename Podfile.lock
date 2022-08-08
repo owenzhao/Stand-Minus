@@ -1,13 +1,13 @@
 PODS:
-  - OneSignal (3.11.0):
-    - OneSignal/OneSignalCore (= 3.11.0)
-    - OneSignal/OneSignalExtension (= 3.11.0)
-    - OneSignal/OneSignalOutcomes (= 3.11.0)
-  - OneSignal/OneSignalCore (3.11.0)
-  - OneSignal/OneSignalExtension (3.11.0):
+  - OneSignal (3.11.2):
+    - OneSignal/OneSignalCore (= 3.11.2)
+    - OneSignal/OneSignalExtension (= 3.11.2)
+    - OneSignal/OneSignalOutcomes (= 3.11.2)
+  - OneSignal/OneSignalCore (3.11.2)
+  - OneSignal/OneSignalExtension (3.11.2):
     - OneSignal/OneSignalCore
     - OneSignal/OneSignalOutcomes
-  - OneSignal/OneSignalOutcomes (3.11.0):
+  - OneSignal/OneSignalOutcomes (3.11.2):
     - OneSignal/OneSignalCore
 
 DEPENDENCIES:
@@ -18,7 +18,7 @@ SPEC REPOS:
     - OneSignal
 
 SPEC CHECKSUMS:
-  OneSignal: e27934f1c9d1a1e6d9d6fc84d2c82912c16ce282
+  OneSignal: 8861a1407c321ca1ae59d3adca6286eb7caf9d6e
 
 PODFILE CHECKSUM: c105ca50ccc955a5d3871e67047cc079f9e4488d
 
