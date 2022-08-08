@@ -56,8 +56,10 @@
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "8"
       notificationPayloadFile = "Stand Minus WatchKit Extension/PushNotificationPayload.apns">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/Stand-">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DC0831721E407B8000A62520"
@@ -65,7 +67,7 @@
             BlueprintName = "Stand Minus WatchKit App"
             ReferencedContainer = "container:Stand Minus.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -75,8 +77,10 @@
       debugDocumentVersioning = "YES"
       launchAutomaticallySubstyle = "8"
       notificationPayloadFile = "Stand Minus WatchKit Extension/PushNotificationPayload.apns">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/Stand-">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DC0831721E407B8000A62520"
@@ -84,7 +88,16 @@
             BlueprintName = "Stand Minus WatchKit App"
             ReferencedContainer = "container:Stand Minus.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "DC0831721E407B8000A62520"
+            BuildableName = "Stand Minus WatchKit App.app"
+            BlueprintName = "Stand Minus WatchKit App"
+            ReferencedContainer = "container:Stand Minus.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
