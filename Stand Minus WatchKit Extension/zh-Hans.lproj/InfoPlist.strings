@@ -1,1 +1,12 @@
-/* No Localized Strings */
+/* Bundle display name */
+"CFBundleDisplayName" = "Stand-";
+
+/* Bundle name */
+"CFBundleName" = "Stand Minus手表扩展";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Stand-使用苹果站立时间来计算您的站立时长";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "Stand-使用苹果站立时间来计算您的站立时长";
+

@@ -1,3 +1,12 @@
+/* Class = "WKInterfaceLabel"; text = "None"; ObjectID = "C5a-uD-hh4"; */
+"C5a-uD-hh4.text" = "无";
+
+/* Class = "WKInterfaceLabel"; text = "Stood"; ObjectID = "dPT-Jh-SBU"; */
+"dPT-Jh-SBU.text" = "已站立";
+
+/* Class = "WKInterfaceLabel"; text = "Body"; ObjectID = "fVF-Ur-ZQq"; */
+"fVF-Ur-ZQq.text" = "Body";
+
 /* Class = "WKInterfaceLabel"; text = "Alert Label"; ObjectID = "IdU-wH-bcW"; */
 "IdU-wH-bcW.text" = "Alert Label";
 
@@ -7,15 +16,15 @@
 /* Class = "WKInterfaceLabel"; text = "Status"; ObjectID = "Sea-cl-H3q"; */
 "Sea-cl-H3q.text" = "状态";
 
+/* Class = "WKInterfaceButton"; title = "Update"; ObjectID = "sJN-bQ-uIJ"; */
+"sJN-bQ-uIJ.title" = "更新";
+
 /* Class = "WKInterfaceLabel"; text = "Complications"; ObjectID = "T1X-tj-Hcx"; */
 "T1X-tj-Hcx.text" = "表盘小部件";
 
-/* Class = "WKInterfaceLabel"; text = "date"; ObjectID = "Y2v-iO-2R6"; */
-"Y2v-iO-2R6.text" = "date";
-
-/* Class = "WKInterfaceLabel"; text = "Body"; ObjectID = "fVF-Ur-ZQq"; */
-"fVF-Ur-ZQq.text" = "Body";
-
 /* Class = "WKInterfaceLabel"; text = "Title"; ObjectID = "wkK-ml-v5L"; */
 "wkK-ml-v5L.text" = "Title";
+
+/* Class = "WKInterfaceLabel"; text = "date"; ObjectID = "Y2v-iO-2R6"; */
+"Y2v-iO-2R6.text" = "date";
 

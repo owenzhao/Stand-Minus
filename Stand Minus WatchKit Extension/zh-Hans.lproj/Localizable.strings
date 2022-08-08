@@ -7,8 +7,17 @@
 /* Stand Up Notification Body */
 "Is the time to move up about your body!" = "是时间起来活动一下身体啦！";
 
+/* None */
+"None" = "无";
+
+/* Not Query yet. */
+"Not Query yet." = "尚未查询。";
+
 /* Not stood yet. */
 "Not stood yet" = "未站立";
+
+/* No comment provided by engineer. */
+"OK" = "好";
 
 /* Stand Up Notification Title */
 "Please Stand Up!" = "请起立！";
